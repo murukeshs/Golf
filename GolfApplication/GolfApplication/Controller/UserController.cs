@@ -88,7 +88,7 @@ namespace GolfApplication.Controller
                 }
 
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-                Match match = regex.Match(userCreate.email);
+                System.Text.RegularExpressions.Match match = regex.Match(userCreate.email);
 
                 if (match.Success)
                 {
@@ -159,7 +159,7 @@ namespace GolfApplication.Controller
                 }
 
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-                Match match = regex.Match(userUpdate.email);
+                System.Text.RegularExpressions.Match match = regex.Match(userUpdate.email);
                 if (match.Success)
                 {
                     string row = Data.User.updateUser(userUpdate);
@@ -365,7 +365,7 @@ namespace GolfApplication.Controller
                 }
 
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-                Match match = regex.Match(updatePassword.email);
+                System.Text.RegularExpressions.Match match = regex.Match(updatePassword.email);
                 if (match.Success)
                 {
                     string row = Data.User.updatePassword(updatePassword);
@@ -409,7 +409,7 @@ namespace GolfApplication.Controller
                 int OTPValue = Common.GenerateOTP();
 
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-                Match match = regex.Match(otp.email);
+                System.Text.RegularExpressions.Match match = regex.Match(otp.email);
                 if(otp.type == "" || otp.type == "string")
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a type" } });
@@ -460,7 +460,7 @@ namespace GolfApplication.Controller
             try
             {
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-                Match match = regex.Match(otp.email);
+                System.Text.RegularExpressions.Match match = regex.Match(otp.email);
                 if (otp.OTPValue <= 0)
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter OTP Value" } });

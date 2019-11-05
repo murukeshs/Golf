@@ -9,6 +9,6 @@ namespace GolfApplication.Models
     {
         public int stateId { get; set; }
         public int countryId { get; set; }
-        public string CountryName { get; set; }
+        public string countryName { get; set; }
     }
 }

@@ -68,7 +68,7 @@ namespace GolfApplication.Controller
             try
             {
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-                Match match = regex.Match(login.email);
+               System.Text.RegularExpressions.Match match = regex.Match(login.email);
 
                 if (match.Success)
                 {

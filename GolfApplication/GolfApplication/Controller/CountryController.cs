@@ -12,10 +12,7 @@ using System.Data;
 
 namespace GolfApplication.Controller
 {
-    [EnableCors("AllowAll")]
-    [Route("api/[controller]")]
-    [ApiController]
-   // [Authorize]
+   
     public class CountryController : ControllerBase
     {
         #region GetCountryList
@@ -34,7 +31,7 @@ namespace GolfApplication.Controller
                         CountryModel countries = new CountryModel();
                         countries.stateId = (dt.Rows[i]["stateId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["stateId"]);
                         countries.countryId = (dt.Rows[i]["countryId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["countryId"]);
-                        countries.CountryName = dt.Rows[i]["CountryName"].ToString();
+                        countries.countryName = dt.Rows[i]["countryName"].ToString();
                         countryList.Add(countries);
                     }
                     return StatusCode((int)HttpStatusCode.OK, countryList);
@@ -46,7 +43,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                //string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -80,7 +77,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("GetStateList", e.Message);
+                //string SaveErrorLog = Data.Common.SaveErrorLog("GetStateList", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
