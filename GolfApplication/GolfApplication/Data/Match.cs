@@ -48,6 +48,24 @@ namespace GolfApplication.Data
                 throw e;
             }
         }
+
+        public static DataTable getMatchRulesList()
+        {
+            try
+            {
+                string ConnectionString = Common.GetConnectionString();
+                //Execute the query
+                using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spListRule").Tables[0])
+                {
+                    return dt;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+        }
         #endregion
 
         #region Upsert Match

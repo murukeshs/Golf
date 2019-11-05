@@ -8,12 +8,14 @@ using GolfApplication.Data;
 using System.Net;
 using System.Data;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GolfApplication.Controller
 {
     [EnableCors("AllowAll")]
     [Route("api/[controller]")]
     [ApiController]
+    //[Authorize]
     public class MatchController : ControllerBase
     {
         #region matchRules
@@ -31,6 +33,37 @@ namespace GolfApplication.Controller
                 else
                 {
                     return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { message = "Failed" } });
+                }
+            }
+            catch (Exception e)
+            {
+                //string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
+            }
+        }
+
+        [HttpGet, Route("getMatchRulesList")]
+        public IActionResult getMatchRulesList()
+        {
+            List<MatchRulesList> ruleList = new List<MatchRulesList>();
+            try
+            {
+                DataTable dt = Data.Match.getMatchRulesList();
+
+                if (dt.Rows.Count > 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        MatchRulesList Rules = new MatchRulesList();
+                        Rules.matchRuleId = (dt.Rows[i]["matchRuleId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["matchRuleId"]);
+                        Rules.ruleName = (dt.Rows[i]["ruleName"] == DBNull.Value ? "" : dt.Rows[i]["ruleName"].ToString());
+                        ruleList.Add(Rules);
+                    }
+                    return StatusCode((int)HttpStatusCode.OK, ruleList);
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.OK, new { });
                 }
             }
             catch (Exception e)
@@ -136,7 +169,7 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { message = dt } });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { message = "MatchId is already present" } });
                 }
             }
             catch (Exception e)
