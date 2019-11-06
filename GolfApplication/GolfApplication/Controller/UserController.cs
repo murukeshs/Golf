@@ -250,7 +250,9 @@ namespace GolfApplication.Controller
                     user.password = DecryptPassword;
                     user.phoneNumber = (dt.Rows[0]["phoneNumber"] == DBNull.Value ? "" : dt.Rows[0]["phoneNumber"].ToString());
                     user.countryId = (dt.Rows[0]["countryId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["countryId"]);
+                    user.countryName = (dt.Rows[0]["countryName"] == DBNull.Value ? "" : dt.Rows[0]["countryName"].ToString());
                     user.stateId = (dt.Rows[0]["stateId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["stateId"]);
+                    user.stateName = (dt.Rows[0]["stateName"] == DBNull.Value ? "" : dt.Rows[0]["stateName"].ToString());
                     user.city = (dt.Rows[0]["city"] == DBNull.Value ? "" : dt.Rows[0]["city"].ToString());
                     user.address = (dt.Rows[0]["address"] == DBNull.Value ? "" : dt.Rows[0]["address"].ToString());
                     user.pinCode = (dt.Rows[0]["pinCode"] == DBNull.Value ? "" : dt.Rows[0]["pinCode"].ToString());

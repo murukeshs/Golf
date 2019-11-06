@@ -33,7 +33,7 @@ namespace GolfApplication.Models
         public string phoneNumber { get; set; }
         public string password { get; set; }
         public int countryId { get; set; }
-        public int stateId { get; set; }
+        public int stateId { get; set; }        
         public string city { get; set; }
         public string address { get; set; }
         public string pinCode { get; set; }
@@ -49,6 +49,8 @@ namespace GolfApplication.Models
     public class getUser : createUser
     {
         public string userType { get; set; }
+        public string countryName { get; set; }
+        public string stateName { get; set; }
         public string userCreatedDate { get; set; }
         public string userUpdatedDate { get; set; }
         public string passwordUpdatedDate { get; set; }
