@@ -22,14 +22,13 @@ namespace GolfApplication.Controller
             List<CountryModel> countryList = new List<CountryModel>();
             try
             {
-                DataTable dt = Data.Country.GetCountryList();
+                DataTable dt = Data.CountryState.GetCountryList();
 
                 if (dt.Rows.Count > 0)
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         CountryModel countries = new CountryModel();
-                        countries.stateId = (dt.Rows[i]["stateId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["stateId"]);
                         countries.countryId = (dt.Rows[i]["countryId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["countryId"]);
                         countries.countryName = dt.Rows[i]["countryName"].ToString();
                         countryList.Add(countries);
@@ -56,7 +55,7 @@ namespace GolfApplication.Controller
             List<StateModel> StateList = new List<StateModel>();
             try
             {
-                DataTable dt = Data.State.GetStateList(CountryId);
+                DataTable dt = Data.CountryState.GetStateList(CountryId);
 
                 if (dt.Rows.Count > 0)
                 {

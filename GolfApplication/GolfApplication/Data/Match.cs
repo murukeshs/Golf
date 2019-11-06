@@ -143,7 +143,7 @@ namespace GolfApplication.Data
         #endregion
 
         #region getMatchById
-        public static DataTable getMatchById(int matchId)
+        public static DataSet getMatchById(int matchId)
         {
             try
             {
@@ -151,7 +151,7 @@ namespace GolfApplication.Data
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("@matchId", matchId));
                 //Execute the query
-                using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spSelectMatchById", parameters.ToArray()).Tables[0])
+                using (DataSet dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spSelectMatchById", parameters.ToArray()))
                 {
                     return dt;
                 }
