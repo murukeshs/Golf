@@ -208,6 +208,7 @@ namespace GolfApplication.Controller
                     MatchList.createdDate = (dt1.Rows[0]["createdDate"] == DBNull.Value ? "" : dt1.Rows[0]["createdDate"].ToString());
                     MatchList.matchStatus = (dt1.Rows[0]["matchStatus"] == DBNull.Value ? "" : dt1.Rows[0]["matchStatus"].ToString());
                     MatchList.competitionTypeId = (dt1.Rows[0]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["competitionTypeId"]);
+                    MatchList.competitionName = (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
                     if (MatchList.matchType == "Teams")
                     {
                         if (dt2.Rows.Count > 0)
@@ -219,6 +220,7 @@ namespace GolfApplication.Controller
                                 Teams.matchId = (dt2.Rows[i]["matchId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["matchId"]);
                                 Teams.userId = (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
                                 Teams.teamName = (dt2.Rows[i]["teamName"] == DBNull.Value ? "" : dt2.Rows[i]["teamName"].ToString());
+                                Teams.teamIcon = (dt2.Rows[i]["teamIcon"] == DBNull.Value ? "" : dt2.Rows[i]["teamIcon"].ToString());
                                 TeamsPlayers.Add(Teams);
                             }
                         }
@@ -235,6 +237,9 @@ namespace GolfApplication.Controller
                                 Players.matchId = (dt2.Rows[i]["matchId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["matchId"]);
                                 Players.userId = (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
                                 Players.teamName = (dt2.Rows[i]["teamName"] == DBNull.Value ? "" : dt2.Rows[i]["teamName"].ToString());
+                                Players.playerName = (dt2.Rows[i]["playerName"] == DBNull.Value ? "" : dt2.Rows[i]["playerName"].ToString());
+                                Players.gender = (dt2.Rows[i]["gender"] == DBNull.Value ? "" : dt2.Rows[i]["gender"].ToString());
+                                Players.profileImage = (dt2.Rows[i]["profileImage"] == DBNull.Value ? "" : dt2.Rows[i]["profileImage"].ToString());
                                 TeamsPlayers.Add(Players);
                             }
                         }
@@ -246,7 +251,7 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.OK, new { });
+                    return StatusCode((int)HttpStatusCode.OK, new { error = new { message = "MatchId not found" } });
                 }
             }
             catch (Exception e)
@@ -285,6 +290,7 @@ namespace GolfApplication.Controller
                         Matches.createdDate = (dt.Rows[i]["createdDate"] == DBNull.Value ? "" : dt.Rows[i]["createdDate"].ToString());
                         Matches.matchStatus = (dt.Rows[i]["matchStatus"] == DBNull.Value ? "" : dt.Rows[i]["matchStatus"].ToString());
                         Matches.competitionTypeId = (dt.Rows[i]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["competitionTypeId"]);
+                        Matches.competitionName = (dt.Rows[i]["competitionName"] == DBNull.Value ? "" : dt.Rows[i]["competitionName"].ToString());
                         matchList.Add(Matches);
                     }
                     return StatusCode((int)HttpStatusCode.OK, matchList);
