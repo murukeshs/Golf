@@ -33,7 +33,7 @@ namespace GolfApplication.Data
                 #region EmailTemplate for Content of the Mail
                 string Body = string.Empty;
 
-                mail.HtmlContent = Body;
+                mail.HtmlContent = BodyContent;
                 #endregion
 
                 mail.From = new EmailAddress(from);
@@ -44,7 +44,7 @@ namespace GolfApplication.Data
                 }
                 
                 mail.Subject = subject;
-                mail.PlainTextContent = BodyContent;
+                //mail.PlainTextContent = BodyContent;
 
                 var status = await client.SendEmailAsync(mail);
                 return status.StatusCode.ToString();
