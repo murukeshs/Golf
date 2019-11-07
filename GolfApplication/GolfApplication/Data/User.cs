@@ -206,7 +206,7 @@ namespace GolfApplication.Data
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("@Email", userlogin.email));
                 parameters.Add(new SqlParameter("@Password", encryptPassword)); 
-                    parameters.Add(new SqlParameter("@userTypeid", userlogin.userTypeid));
+                parameters.Add(new SqlParameter("@userTypeid", userlogin.userTypeid));
 
                 DataSet ds = new DataSet();
                 using (ds = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spLogin", parameters.ToArray()))
@@ -228,6 +228,8 @@ namespace GolfApplication.Data
             parameters.Add(new SqlParameter("@OTPValue", updatePassword.OTPValue));
             parameters.Add(new SqlParameter("@email", updatePassword.email));
             parameters.Add(new SqlParameter("@password", encryptPassword));
+            parameters.Add(new SqlParameter("@sourceType", updatePassword.sourceType));
+            parameters.Add(new SqlParameter("@source", updatePassword.source));
 
             try
             {
@@ -250,6 +252,8 @@ namespace GolfApplication.Data
             parameters.Add(new SqlParameter("@OTPValue", OTPValue));
             parameters.Add(new SqlParameter("@email", otp.email));
             parameters.Add(new SqlParameter("@type", otp.type));
+            parameters.Add(new SqlParameter("@sourceType", otp.sourceType));
+            parameters.Add(new SqlParameter("@source", otp.source));
 
             try
             {
@@ -272,6 +276,8 @@ namespace GolfApplication.Data
             parameters.Add(new SqlParameter("@OTPValue", otp.OTPValue));
             parameters.Add(new SqlParameter("@email", otp.email));
             parameters.Add(new SqlParameter("@type", otp.type));
+            parameters.Add(new SqlParameter("@sourceType", otp.sourceType));
+            parameters.Add(new SqlParameter("@source", otp.source));
 
             try
             {
@@ -287,6 +293,25 @@ namespace GolfApplication.Data
             }
         }
 
+        public static int updateUserCommunicationinfo([FromBody]updateUser user)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@userId", user.userId));
+            parameters.Add(new SqlParameter("@stateId", user.stateId));
+            parameters.Add(new SqlParameter("@userID", user.countryId));
+            parameters.Add(new SqlParameter("@userID", user.address));
 
+            try
+            {
+                string ConnectionString = Common.GetConnectionString();
+                int rowsAffected = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, "spUpdateUserCommunicationinfo", parameters.ToArray());
+                return rowsAffected;
+            }
+            catch (Exception e)
+            {
+                //loggerErr.Error(e.Message + " - " + e.StackTrace);
+                throw e;
+            }
+        }
     }
 }

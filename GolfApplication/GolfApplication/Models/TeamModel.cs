@@ -34,7 +34,7 @@ namespace GolfApplication.Models
     {
         public int teamId { get; set; }
         public int scoreKeeperID { get; set; }
-        public string userId { get; set; }
+        public string playerId { get; set; }
     }
 
 }

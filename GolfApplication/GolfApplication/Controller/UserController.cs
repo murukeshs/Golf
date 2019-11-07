@@ -239,7 +239,15 @@ namespace GolfApplication.Controller
                 if (dt.Rows.Count > 0)
                 {
 
-                    var DecryptPassword = Common.DecryptData(dt.Rows[0]["password"] == DBNull.Value ? "" : dt.Rows[0]["password"].ToString());
+                    var DecryptPassword = "";
+                    if (dt.Rows[0]["password"].ToString() != "")
+                    {
+                        DecryptPassword = Common.DecryptData(dt.Rows[0]["password"] == DBNull.Value ? "" : dt.Rows[0]["password"].ToString());
+                    }
+                    else
+                    {
+                        DecryptPassword = "";
+                    }
 
                     user.userId = (int)dt.Rows[0]["userId"];
                     user.firstName = (dt.Rows[0]["firstName"] == DBNull.Value ? "" : dt.Rows[0]["firstName"].ToString());
@@ -264,7 +272,7 @@ namespace GolfApplication.Controller
                     user.userCreatedDate = (dt.Rows[0]["userCreatedDate"] == DBNull.Value ? "" : dt.Rows[0]["userCreatedDate"].ToString());
                     user.isPublicProfile = (dt.Rows[0]["isPublicProfile"] == DBNull.Value ? false : (bool)dt.Rows[0]["isPublicProfile"]);
                     user.userUpdatedDate = (dt.Rows[0]["userUpdatedDate"] == DBNull.Value ? "" : dt.Rows[0]["userUpdatedDate"].ToString());
-                    user.passwordUpdatedDate = (dt.Rows[0]["passwordUpdatedDate"] == DBNull.Value ? "" : dt.Rows[0]["passwordUpdatedDate"].ToString());
+                    //user.passwordUpdatedDate = (dt.Rows[0]["passwordUpdatedDate"] == DBNull.Value ? "" : dt.Rows[0]["passwordUpdatedDate"].ToString());
                     userList.Add(user);
 
                     return StatusCode((int)HttpStatusCode.OK, new { user });
@@ -300,7 +308,15 @@ namespace GolfApplication.Controller
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         userList user = new userList();
-                        var DecryptPassword = Common.DecryptData(dt.Rows[i]["password"] == DBNull.Value ? "" : dt.Rows[i]["password"].ToString());
+                        var DecryptPassword = "";
+                        if (dt.Rows[i]["password"].ToString() != "" )
+                        {
+                            DecryptPassword = Common.DecryptData(dt.Rows[i]["password"] == DBNull.Value ? "" : dt.Rows[i]["password"].ToString());
+                        }
+                        else
+                        {
+                            DecryptPassword = "";
+                        }
 
                         user.userId = (int)dt.Rows[i]["userId"];
                         user.firstName = (dt.Rows[i]["firstName"] == DBNull.Value ? "" : dt.Rows[i]["firstName"].ToString());
@@ -322,7 +338,7 @@ namespace GolfApplication.Controller
                         user.userCreatedDate = (dt.Rows[i]["userCreatedDate"] == DBNull.Value ? "" : dt.Rows[i]["userCreatedDate"].ToString());
                         user.isPublicProfile = (dt.Rows[i]["isPublicProfile"] == DBNull.Value ? false : (bool)dt.Rows[i]["isPublicProfile"]);
                         user.userUpdatedDate = (dt.Rows[i]["userUpdatedDate"] == DBNull.Value ? "" : dt.Rows[i]["userUpdatedDate"].ToString());
-                        user.passwordUpdatedDate = (dt.Rows[i]["passwordUpdatedDate"] == DBNull.Value ? "" : dt.Rows[i]["passwordUpdatedDate"].ToString());
+                        //user.passwordUpdatedDate = (dt.Rows[i]["passwordUpdatedDate"] == DBNull.Value ? "" : dt.Rows[i]["passwordUpdatedDate"].ToString());
                         user.userTypeId = (dt.Rows[i]["userTypeId"] == DBNull.Value ? "" : dt.Rows[i]["userTypeId"].ToString());
                         user.userType = (dt.Rows[i]["userType"] == DBNull.Value ? "" : dt.Rows[i]["userType"].ToString());
                         userList.Add(user);
@@ -364,6 +380,14 @@ namespace GolfApplication.Controller
                 else if (updatePassword.OTPValue <= 0 || updatePassword.OTPValue == null)
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter OTPValue" } });
+                }
+                else if (updatePassword.sourceType == "" || updatePassword.sourceType == "string")
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a sourceType" } });
+                }
+                else if (updatePassword.source == "" || updatePassword.sourceType == "string")
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a source" } });
                 }
 
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
@@ -416,8 +440,16 @@ namespace GolfApplication.Controller
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a type" } });
                 }
-                else if (match.Success)
+                else if (otp.sourceType == "" || otp.sourceType == "string")
                 {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a sourceType" } });
+                }
+                else if (otp.source == "" || otp.sourceType == "string")
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a source" } });
+                }
+                else if (match.Success)
+                {                   
                     string row = Data.User.generateOTP(OTPValue, otp);
 
                     if (row == "Success")
@@ -471,6 +503,14 @@ namespace GolfApplication.Controller
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a type" } });
                 }
+                else if (otp.sourceType == "" || otp.sourceType == "string")
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a sourceType" } });
+                }
+                else if (otp.source == "" || otp.source == "string")
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a source" } });
+                }
                 else if (match.Success)
                 {
                     string row = Data.User.verifyOTP(otp);
@@ -499,6 +539,41 @@ namespace GolfApplication.Controller
             }
         }
         #endregion
+
+        #region updateUserCommunicationinfo
+        [HttpPut, Route("updateUserCommunicationinfo")]
+        public IActionResult updateUserCommunicationinfo([FromBody]updateUser user)
+        {
+            //updateUser user = new updateUser();
+            try
+            {
+                if (user.userId <= 0 || user.userId == null)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter userId" } });
+                }
+                else
+                {
+                    int row = Data.User.updateUserCommunicationinfo(user);
+
+                    if (row > 0)
+                    {
+                        return StatusCode((int)HttpStatusCode.OK, "Updated Successfully");
+                    }
+                    else
+                    {
+                        return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = "Error while Updating the User Communication info" } });
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                string SaveErrorLog = Data.Common.SaveErrorLog("updateUserCommunicationinfo", e.Message.ToString());
+
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message.ToString() } });
+            }
+        }
+        #endregion
+
 
 
         //#region login

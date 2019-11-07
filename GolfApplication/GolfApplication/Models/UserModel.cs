@@ -68,6 +68,9 @@ namespace GolfApplication.Models
        public int OTPValue { get; set; }
        public string email { get; set; }
        public string type { get; set; }
+       public string sourceType { get; set; }
+       public string source { get; set; }
+
     }
 
     public class updatePassword
@@ -75,14 +78,25 @@ namespace GolfApplication.Models
         public int OTPValue { get; set; }
         public string email { get; set; }
         public string password { get; set; }
+        public string sourceType { get; set; }
+        public string source { get; set; }
     }
 
     public class GenOTP
     { 
         public string email { get; set; }
         public string type { get; set; }
+        public string sourceType { get; set; }
+        public string source { get; set; }
     }
 
+    public class updateUser
+    {
+        public int userId { get; set; }
+        public string address { get; set; }
+        public int stateId { get; set; }
+        public int countryId { get; set; }
+    }
 
     class Global
     {

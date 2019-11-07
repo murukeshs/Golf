@@ -58,4 +58,10 @@ namespace GolfApplication.Models
         public string ruleName { get; set; }
     }
 
+    public class CompetitionType
+    {
+        public int competitionTypeId { get; set; }
+        public string CompetitionName { get; set; }
+    }
+
 }

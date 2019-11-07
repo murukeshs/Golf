@@ -134,15 +134,15 @@ namespace GolfApplication.Controller
                 }                
                 else
                 {
-                    int row = Data.Team.deleteTeam(teamId);
+                    string row = Data.Team.deleteTeam(teamId);
 
-                    if (row > 0)
+                    if (row == "Success")
                     {
                         return StatusCode((int)HttpStatusCode.OK, "Deleted Successfully");
                     }
                     else
                     {
-                        return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = "Error while Deleting the team" } });
+                        return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = "Team is already enrolled" } });
                     }
                 }
             }
@@ -287,7 +287,7 @@ namespace GolfApplication.Controller
 
         #region deleteTeamPlayers
         [HttpDelete, Route("deleteTeamPlayers")]
-        public IActionResult deleteTeamPlayers(int teamPlayerListId, int updateBy)
+        public IActionResult deleteTeamPlayers(int teamPlayerListId)
         {
             try
             {
@@ -295,21 +295,21 @@ namespace GolfApplication.Controller
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter teamPlayerListId" } });
                 }
-                else if (updateBy <= 0 || updateBy == null)
-                {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter updated By value" } });
-                }
+                //else if (updateBy <= 0 || updateBy == null)
+                //{
+                //    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter updated By value" } });
+                //}
                 else
                 {
-                    int row = Data.Team.deleteTeamPlayers(teamPlayerListId, updateBy);
+                    string row = Data.Team.deleteTeamPlayers(teamPlayerListId);
 
-                    if (row > 0)
+                    if (row == "Success")
                     {
                         return StatusCode((int)HttpStatusCode.OK, "Deleted Successfully");
                     }
                     else
                     {
-                        return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = "Error while Deleting the team player" } });
+                        return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = "Team player is already enrolled" } });
                     }
                 }
             }

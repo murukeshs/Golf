@@ -104,7 +104,7 @@ namespace GolfApplication.Controller
                             user.userCreatedDate = (dt.Rows[0]["userCreatedDate"] == DBNull.Value ? "" : dt.Rows[0]["userCreatedDate"].ToString());
                             user.isPublicProfile = (dt.Rows[0]["isPublicProfile"] == DBNull.Value ? false : (bool)dt.Rows[0]["isPublicProfile"]);
                             user.userUpdatedDate = (dt.Rows[0]["userUpdatedDate"] == DBNull.Value ? "" : dt.Rows[0]["userUpdatedDate"].ToString());
-                            user.passwordUpdatedDate = (dt.Rows[0]["passwordUpdatedDate"] == DBNull.Value ? "" : dt.Rows[0]["passwordUpdatedDate"].ToString());
+                            //user.passwordUpdatedDate = (dt.Rows[0]["passwordUpdatedDate"] == DBNull.Value ? "" : dt.Rows[0]["passwordUpdatedDate"].ToString());
                             userList.Add(user);
 
                             var token = GenerateJSONWebToken();

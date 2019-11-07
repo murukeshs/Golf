@@ -57,16 +57,19 @@ namespace GolfApplication.Data
             }
         }
 
-        public static int deleteTeam(int teamID)
+        public static string deleteTeam(int teamID)
         {
             try
             {
                 string ConnectionString = Common.GetConnectionString();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("@teamId", teamID));
-                
-                int rowsAffected = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, "spDeleteTeam", parameters.ToArray());
-                return rowsAffected;
+
+                using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spDeleteTeam", parameters.ToArray()).Tables[0])
+                {
+                    string rowsAffected = dt.Rows[0]["Status"].ToString();
+                    return rowsAffected;
+                }
             }
             catch (Exception e)
             {
@@ -120,7 +123,7 @@ namespace GolfApplication.Data
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("@teamId", teamPlayer.teamId));
                 parameters.Add(new SqlParameter("@scoreKeeperID", teamPlayer.scoreKeeperID));
-                parameters.Add(new SqlParameter("@userId", teamPlayer.userId));
+                parameters.Add(new SqlParameter("@playerId", teamPlayer.playerId));
 
                 using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spCreateTeamPlayers", parameters.ToArray()).Tables[0])
                 {
@@ -134,17 +137,22 @@ namespace GolfApplication.Data
             }
         }
 
-        public static int deleteTeamPlayers(int teamPlayerListId, int updateBy)
+        public static string deleteTeamPlayers(int teamPlayerListId)
         {
             try
             {
                 string ConnectionString = Common.GetConnectionString();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("@teamPlayerListId", teamPlayerListId));
-                parameters.Add(new SqlParameter("@updateBy", updateBy));
+                //parameters.Add(new SqlParameter("@updateBy", updateBy));
 
-                int rowsAffected = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, "spDeleteTeamPlayers", parameters.ToArray());
-                return rowsAffected;
+                using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spDeleteTeamPlayers", parameters.ToArray()).Tables[0])
+                {
+                    string rowsAffected = dt.Rows[0]["Status"].ToString();
+                    return rowsAffected;
+                }
+                //int rowsAffected = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, "spDeleteTeamPlayers", parameters.ToArray());
+                //return rowsAffected;
             }
             catch (Exception e)
             {

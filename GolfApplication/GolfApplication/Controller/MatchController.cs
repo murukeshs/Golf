@@ -267,5 +267,41 @@ namespace GolfApplication.Controller
             }
         }
         #endregion
+
+        #region getCompetitionType
+        [HttpGet, Route("getCompetitionType")]
+        public IActionResult getCompetitionType()
+        {
+            List<CompetitionType> typeList = new List<CompetitionType>();
+            try
+            {
+                DataTable dt = Data.Match.getCompetitionType();
+                if (dt.Rows.Count > 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        CompetitionType type = new CompetitionType();
+
+                        type.competitionTypeId = (dt.Rows[i]["CompetitionName"] == DBNull.Value ? 0 : (int)dt.Rows[i]["competitionTypeId"]);
+                        type.CompetitionName = (dt.Rows[i]["CompetitionName"] == DBNull.Value ? "" : dt.Rows[i]["CompetitionName"].ToString());
+
+                        typeList.Add(type);
+                    }
+                    return StatusCode((int)HttpStatusCode.OK, typeList);
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.OK, typeList);
+                }
+
+            }
+            catch (Exception e)
+            {
+                string SaveErrorLog = Data.Common.SaveErrorLog("userType", e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
+            }
+        }
+        #endregion
+
     }
 }

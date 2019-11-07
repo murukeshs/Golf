@@ -183,5 +183,22 @@ namespace GolfApplication.Data
 
         }
         #endregion
+
+        public static DataTable getCompetitionType()
+        {
+            try
+            {
+                string ConnectionString = Common.GetConnectionString();
+                //Execute the query
+                using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spGetCompetitionType").Tables[0])
+                {
+                    return dt;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
     }
 }
