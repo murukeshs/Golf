@@ -226,10 +226,10 @@ namespace GolfApplication.Data
 
             List<SqlParameter> parameters = new List<SqlParameter>();            
             parameters.Add(new SqlParameter("@OTPValue", updatePassword.OTPValue));
-            parameters.Add(new SqlParameter("@email", updatePassword.email));
+            parameters.Add(new SqlParameter("@email", updatePassword.emailorPhone));
             parameters.Add(new SqlParameter("@password", encryptPassword));
             parameters.Add(new SqlParameter("@sourceType", updatePassword.sourceType));
-            parameters.Add(new SqlParameter("@source", updatePassword.source));
+            //parameters.Add(new SqlParameter("@source", updatePassword.source));
 
             try
             {
@@ -250,10 +250,10 @@ namespace GolfApplication.Data
 
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("@OTPValue", OTPValue));
-            parameters.Add(new SqlParameter("@email", otp.email));
+            parameters.Add(new SqlParameter("@source", otp.emailorPhone));
             parameters.Add(new SqlParameter("@type", otp.type));
             parameters.Add(new SqlParameter("@sourceType", otp.sourceType));
-            parameters.Add(new SqlParameter("@source", otp.source));
+            //parameters.Add(new SqlParameter("@source", otp.source));
 
             try
             {
@@ -274,10 +274,10 @@ namespace GolfApplication.Data
 
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("@OTPValue", otp.OTPValue));
-            parameters.Add(new SqlParameter("@email", otp.email));
+            parameters.Add(new SqlParameter("@source", otp.emailorPhone));
             parameters.Add(new SqlParameter("@type", otp.type));
             parameters.Add(new SqlParameter("@sourceType", otp.sourceType));
-            parameters.Add(new SqlParameter("@source", otp.source));
+            //parameters.Add(new SqlParameter("@source", otp.source));
 
             try
             {

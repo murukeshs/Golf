@@ -56,6 +56,9 @@ namespace GolfApplication.Models
         public string passwordUpdatedDate { get; set; }
         [DefaultValue(false)]
         public bool? isEmailVerified { get; set; }
+        [DefaultValue(false)]
+        public bool? isPhoneVerified { get; set; }
+        
     }
 
     public class userList : getUser
@@ -66,28 +69,28 @@ namespace GolfApplication.Models
     public class otpVerify
     {
        public int OTPValue { get; set; }
-       public string email { get; set; }
+       public string emailorPhone { get; set; }
        public string type { get; set; }
        public string sourceType { get; set; }
-       public string source { get; set; }
+       //public string source { get; set; }
 
     }
 
     public class updatePassword
     {
         public int OTPValue { get; set; }
-        public string email { get; set; }
+        public string emailorPhone { get; set; }
         public string password { get; set; }
         public string sourceType { get; set; }
-        public string source { get; set; }
+        //public string source { get; set; }
     }
 
     public class GenOTP
     { 
-        public string email { get; set; }
+        public string emailorPhone { get; set; }
         public string type { get; set; }
         public string sourceType { get; set; }
-        public string source { get; set; }
+        //public string source { get; set; }
     }
 
     public class updateUser

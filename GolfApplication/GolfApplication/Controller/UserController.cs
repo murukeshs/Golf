@@ -272,6 +272,7 @@ namespace GolfApplication.Controller
                     user.userCreatedDate = (dt.Rows[0]["userCreatedDate"] == DBNull.Value ? "" : dt.Rows[0]["userCreatedDate"].ToString());
                     user.isPublicProfile = (dt.Rows[0]["isPublicProfile"] == DBNull.Value ? false : (bool)dt.Rows[0]["isPublicProfile"]);
                     user.userUpdatedDate = (dt.Rows[0]["userUpdatedDate"] == DBNull.Value ? "" : dt.Rows[0]["userUpdatedDate"].ToString());
+                    user.isPhoneVerified = (dt.Rows[0]["isPhoneVerified"] == DBNull.Value ? false : (bool)dt.Rows[0]["isPhoneVerified"]);
                     //user.passwordUpdatedDate = (dt.Rows[0]["passwordUpdatedDate"] == DBNull.Value ? "" : dt.Rows[0]["passwordUpdatedDate"].ToString());
                     userList.Add(user);
 
@@ -338,6 +339,7 @@ namespace GolfApplication.Controller
                         user.userCreatedDate = (dt.Rows[i]["userCreatedDate"] == DBNull.Value ? "" : dt.Rows[i]["userCreatedDate"].ToString());
                         user.isPublicProfile = (dt.Rows[i]["isPublicProfile"] == DBNull.Value ? false : (bool)dt.Rows[i]["isPublicProfile"]);
                         user.userUpdatedDate = (dt.Rows[i]["userUpdatedDate"] == DBNull.Value ? "" : dt.Rows[i]["userUpdatedDate"].ToString());
+                        user.isPhoneVerified = (dt.Rows[i]["isPhoneVerified"] == DBNull.Value ? false : (bool)dt.Rows[i]["isPhoneVerified"]);
                         //user.passwordUpdatedDate = (dt.Rows[i]["passwordUpdatedDate"] == DBNull.Value ? "" : dt.Rows[i]["passwordUpdatedDate"].ToString());
                         user.userTypeId = (dt.Rows[i]["userTypeId"] == DBNull.Value ? "" : dt.Rows[i]["userTypeId"].ToString());
                         user.userType = (dt.Rows[i]["userType"] == DBNull.Value ? "" : dt.Rows[i]["userType"].ToString());
@@ -373,7 +375,7 @@ namespace GolfApplication.Controller
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter Password" } });
                 }
-                else if (updatePassword.email == "" || updatePassword.email == null)
+                else if (updatePassword.emailorPhone == "" || updatePassword.emailorPhone == null)
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter Email" } });
                 }
@@ -385,13 +387,13 @@ namespace GolfApplication.Controller
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a sourceType" } });
                 }
-                else if (updatePassword.source == "" || updatePassword.sourceType == "string")
-                {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a source" } });
-                }
+                //else if (updatePassword.source == "" || updatePassword.sourceType == "string")
+                //{
+                //    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a source" } });
+                //}
 
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-                System.Text.RegularExpressions.Match match = regex.Match(updatePassword.email);
+                System.Text.RegularExpressions.Match match = regex.Match(updatePassword.emailorPhone);
                 if (match.Success)
                 {
                     string row = Data.User.updatePassword(updatePassword);
@@ -435,7 +437,7 @@ namespace GolfApplication.Controller
                 int OTPValue = Common.GenerateOTP();
 
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-                System.Text.RegularExpressions.Match match = regex.Match(otp.email);
+                System.Text.RegularExpressions.Match match = regex.Match(otp.emailorPhone);
                 if(otp.type == "" || otp.type == "string")
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a type" } });
@@ -444,17 +446,17 @@ namespace GolfApplication.Controller
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a sourceType" } });
                 }
-                else if (otp.source == "" || otp.sourceType == "string")
-                {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a source" } });
-                }
+                //else if (otp.source == "" || otp.sourceType == "string")
+                //{
+                //    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a source" } });
+                //}
                 else if (match.Success)
                 {                   
                     string row = Data.User.generateOTP(OTPValue, otp);
 
                     if (row == "Success")
                     {
-                        res = Common.SendOTP(otp.email, otp.type, OTPValue);
+                        res = Common.SendOTP(otp.emailorPhone, otp.type, OTPValue);
                         if (res == "Mail sent successfully.")
                         {
                             return StatusCode((int)HttpStatusCode.OK, "OTP Generated and sent Successfully"); //result = "Mail sent successfully.";
@@ -494,7 +496,7 @@ namespace GolfApplication.Controller
             try
             {
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-                System.Text.RegularExpressions.Match match = regex.Match(otp.email);
+                System.Text.RegularExpressions.Match match = regex.Match(otp.emailorPhone);
                 if (otp.OTPValue <= 0)
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter OTP Value" } });
@@ -507,10 +509,10 @@ namespace GolfApplication.Controller
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a sourceType" } });
                 }
-                else if (otp.source == "" || otp.source == "string")
-                {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a source" } });
-                }
+                //else if (otp.source == "" || otp.source == "string")
+                //{
+                //    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a source" } });
+                //}
                 else if (match.Success)
                 {
                     string row = Data.User.verifyOTP(otp);
