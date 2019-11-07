@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using static Nexmo.Api.SMS;
 
 namespace GolfApplication.Controller
 {
@@ -541,6 +542,61 @@ namespace GolfApplication.Controller
             }
         }
         #endregion
+
+        #region SmsOTP
+        [HttpPut, Route("SmsOTP")]
+        [AllowAnonymous]
+        public IActionResult SmsOTP([FromBody]GenOTP otp)
+        {
+            try
+            {
+                int OTPValue = Common.GenerateOTP();
+
+                SMSResponse results = new SMSResponse();
+
+                var SmsStatus = "";
+
+                otp.emailorPhone = "+14087224019";
+
+                // string SaveOtpValue = Data.Common.SaveOTP(PhoneNumber, OTPValue, "Phone");
+                string SaveOtpValue = Data.User.generateOTP(OTPValue, otp);
+
+                if (SaveOtpValue == "Success")
+                {
+                    results = SmsNotification.SendMessage(otp.emailorPhone, "Hi User, your OTP is " + OTPValue + " and it's expiry time is 5 minutes.");
+
+                    string status = results.messages[0].status.ToString();
+
+                    if (status == "0")
+                    {
+                        SmsStatus = "Message sent successfully.";
+                    }
+                    else
+                    {
+                        string err = results.messages[0].error_text.ToString();
+                        SmsStatus = err;
+                    }
+
+
+                    return StatusCode((int)HttpStatusCode.OK, new { SmsStatus });       //results.messages, 
+                }
+
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { message = "Phone number not available" } });
+                }
+
+            }
+
+            catch (Exception e)
+            {
+                string SaveErrorLog = Data.Common.SaveErrorLog("SmsOTP", e.Message.ToString());
+
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message.ToString() } });
+            }
+        }
+        #endregion
+
 
         #region updateUserCommunicationinfo
         [HttpPut, Route("updateUserCommunicationinfo")]
