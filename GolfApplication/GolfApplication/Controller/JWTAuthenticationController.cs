@@ -82,7 +82,7 @@ namespace GolfApplication.Controller
                             DataTable dt = ds.Tables[1];
 
                             getUser user = new getUser();
-                            user.userId = (int)dt.Rows[0]["userId"];
+                            user.userId = (dt.Rows[0]["userId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["userId"]);
                             user.firstName = (dt.Rows[0]["firstName"] == DBNull.Value ? "" : dt.Rows[0]["firstName"].ToString());
                             user.lastName = (dt.Rows[0]["lastName"] == DBNull.Value ? "" : dt.Rows[0]["lastName"].ToString());
                             user.gender = (dt.Rows[0]["gender"] == DBNull.Value ? "" : dt.Rows[0]["gender"].ToString());
@@ -106,6 +106,7 @@ namespace GolfApplication.Controller
                             user.userUpdatedDate = (dt.Rows[0]["userUpdatedDate"] == DBNull.Value ? "" : dt.Rows[0]["userUpdatedDate"].ToString());
                             user.isPhoneVerified = (dt.Rows[0]["isPhoneVerified"] == DBNull.Value ? false : (bool)dt.Rows[0]["isPhoneVerified"]);
                             //user.passwordUpdatedDate = (dt.Rows[0]["passwordUpdatedDate"] == DBNull.Value ? "" : dt.Rows[0]["passwordUpdatedDate"].ToString());
+                            user.userWithTypeId = (dt.Rows[0]["userWithTypeId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["userWithTypeId"]);
                             userList.Add(user);
 
                             var token = GenerateJSONWebToken();

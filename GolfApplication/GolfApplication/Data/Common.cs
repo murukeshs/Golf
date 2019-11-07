@@ -161,12 +161,12 @@ namespace GolfApplication.Data
         #endregion
         
         #region GenerateOTP
-        public static int GenerateOTP()
+        public static string GenerateOTP()
         {
             try
             {
                 Random generator = new Random();
-                int OTPValue = generator.Next(0, 999999);
+                string OTPValue = generator.Next(0, 99999).ToString();
                 return OTPValue;
             }
             catch (Exception e)
@@ -177,7 +177,7 @@ namespace GolfApplication.Data
         #endregion
 
         #region SendOTPViaEmail
-        public static string SendOTP(string emailid, string Type, int OTPValue)
+        public static string SendOTP(string emailid, string Type, string OTPValue)
         {
             try
             {

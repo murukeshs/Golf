@@ -24,6 +24,7 @@ namespace GolfApplication.Models
     public class createUser
     {
         public int userId { get; set; }
+        public int userWithTypeId { get; set; }
         public string firstName { get; set; }
         public string lastName { get; set; }
         public string email { get; set; }
@@ -99,6 +100,12 @@ namespace GolfApplication.Models
         public string address { get; set; }
         public int stateId { get; set; }
         public int countryId { get; set; }
+        [DefaultValue(false)]
+        public bool? isEmailNotification { get; set; }
+        [DefaultValue(false)]
+        public bool? isSMSNotification { get; set; }
+        [DefaultValue(false)]
+        public bool? isPublicProfile { get; set; }
     }
 
     class Global

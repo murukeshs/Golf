@@ -245,7 +245,7 @@ namespace GolfApplication.Data
             }
         }
 
-        public static string generateOTP(int OTPValue, [FromBody]GenOTP otp)
+        public static string generateOTP(string OTPValue, [FromBody]GenOTP otp)
         {
 
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -300,6 +300,9 @@ namespace GolfApplication.Data
             parameters.Add(new SqlParameter("@stateId", user.stateId));
             parameters.Add(new SqlParameter("@userID", user.countryId));
             parameters.Add(new SqlParameter("@userID", user.address));
+            parameters.Add(new SqlParameter("@isEmailNotification", user.isEmailNotification));
+            parameters.Add(new SqlParameter("@isSMSNotification", user.isSMSNotification));
+            parameters.Add(new SqlParameter("@isPublicProfile", user.isPublicProfile));
 
             try
             {

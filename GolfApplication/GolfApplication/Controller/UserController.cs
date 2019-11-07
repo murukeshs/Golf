@@ -435,7 +435,11 @@ namespace GolfApplication.Controller
                 //Random generator = new Random();
                 //int OTPValue = generator.Next(0, 999999);
 
-                int OTPValue = Common.GenerateOTP();
+                // int OTPValue = Common.GenerateOTP();
+
+                System.Guid guid = System.Guid.NewGuid();
+
+                string OTPValue = guid.ToString();
 
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
                 System.Text.RegularExpressions.Match match = regex.Match(otp.emailorPhone);
@@ -550,7 +554,7 @@ namespace GolfApplication.Controller
         {
             try
             {
-                int OTPValue = Common.GenerateOTP();
+                string OTPValue = Common.GenerateOTP();
 
                 SMSResponse results = new SMSResponse();
 
