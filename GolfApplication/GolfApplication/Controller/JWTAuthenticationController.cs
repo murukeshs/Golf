@@ -68,7 +68,7 @@ namespace GolfApplication.Controller
             try
             {
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-               System.Text.RegularExpressions.Match match = regex.Match(login.email);
+                System.Text.RegularExpressions.Match match = regex.Match(login.email);
 
                 if (match.Success)
                 {
@@ -121,7 +121,6 @@ namespace GolfApplication.Controller
                         return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a userTypeId" } });
                     }
                 }
-
                 else
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a valid Email" } });

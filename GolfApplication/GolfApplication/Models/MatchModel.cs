@@ -50,6 +50,7 @@ namespace GolfApplication.Models
         public string matchStatus { get; set; }
         public int competitionTypeId { get; set; }
         public string ruleName { get; set; }
+        public string competitionName { get; set; }
     }
 
     public class MatchRulesList

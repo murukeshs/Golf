@@ -15,7 +15,7 @@ namespace GolfApplication.Controller
     [EnableCors("AllowAll")]
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class MatchController : ControllerBase
     {
         #region matchRules
@@ -184,35 +184,74 @@ namespace GolfApplication.Controller
         [HttpGet, Route("getMatchById/{matchId}")]
         public IActionResult getMatchById(int matchId)
         {
-            List<MatchList> matches = new List<MatchList>();
+            List<dynamic> matches = new List<dynamic>();
+            List<dynamic> TeamsPlayers = new List<dynamic>();
             try
             {
-                DataTable dt = Data.Match.getMatchById(matchId);
-
-                if (dt.Rows.Count > 0)
+                DataSet ds = Data.Match.getMatchById(matchId);
+                DataTable dt1 = ds.Tables[0];
+                DataTable dt2 = ds.Tables[1];
+                if (dt1.Rows.Count > 0)
                 {
-                    MatchList match = new MatchList();
-                    match.matchId = (dt.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["matchId"]);
-                    match.matchCode = (dt.Rows[0]["matchCode"] == DBNull.Value ? "" : dt.Rows[0]["matchCode"].ToString());
-                    match.matchName = (dt.Rows[0]["matchName"] == DBNull.Value ? "" : dt.Rows[0]["matchName"].ToString());
-                    match.matchType = (dt.Rows[0]["matchType"] == DBNull.Value ? "" : dt.Rows[0]["matchType"].ToString());
-                    match.matchRuleId = (dt.Rows[0]["matchRuleId"] == DBNull.Value ? "" : dt.Rows[0]["matchRuleId"].ToString());
-                    match.ruleName = (dt.Rows[0]["ruleName"] == DBNull.Value ? "" : dt.Rows[0]["ruleName"].ToString());
-                    match.matchStartDate = (dt.Rows[0]["matchStartDate"] == DBNull.Value ? "" : dt.Rows[0]["matchStartDate"].ToString());
-                    match.matchEndDate = (dt.Rows[0]["matchEndDate"] == DBNull.Value ? "" : dt.Rows[0]["matchEndDate"].ToString());
-                    match.matchFee = (dt.Rows[0]["matchFee"] == DBNull.Value ? 0 : (decimal)dt.Rows[0]["matchFee"]);
-                    match.matchLocation = (dt.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt.Rows[0]["matchLocation"].ToString());
-                    match.createdBy = (dt.Rows[0]["createdBy"] == DBNull.Value ? 0 : (int)dt.Rows[0]["createdBy"]);
-                    match.createdDate = (dt.Rows[0]["createdDate"] == DBNull.Value ? "" : dt.Rows[0]["createdDate"].ToString());
-                    match.matchStatus = (dt.Rows[0]["matchStatus"] == DBNull.Value ? "" : dt.Rows[0]["matchStatus"].ToString());
-                    match.competitionTypeId = (dt.Rows[0]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["competitionTypeId"]);
-                    matches.Add(match);
+                    dynamic MatchList = new System.Dynamic.ExpandoObject();
+                    MatchList.matchId = (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
+                    MatchList.matchCode = (dt1.Rows[0]["matchCode"] == DBNull.Value ? "" : dt1.Rows[0]["matchCode"].ToString());
+                    MatchList.matchName = (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
+                    MatchList.matchType = (dt1.Rows[0]["matchType"] == DBNull.Value ? "" : dt1.Rows[0]["matchType"].ToString());
+                    MatchList.matchRuleId = (dt1.Rows[0]["matchRuleId"] == DBNull.Value ? "" : dt1.Rows[0]["matchRuleId"].ToString());
+                    MatchList.ruleName = (dt1.Rows[0]["ruleName"] == DBNull.Value ? "" : dt1.Rows[0]["ruleName"].ToString());
+                    MatchList.matchStartDate = (dt1.Rows[0]["matchStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchStartDate"].ToString());
+                    MatchList.matchEndDate = (dt1.Rows[0]["matchEndDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchEndDate"].ToString());
+                    MatchList.matchFee = (dt1.Rows[0]["matchFee"] == DBNull.Value ? 0 : (decimal)dt1.Rows[0]["matchFee"]);
+                    MatchList.matchLocation = (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
+                    MatchList.createdBy = (dt1.Rows[0]["createdBy"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["createdBy"]);
+                    MatchList.createdDate = (dt1.Rows[0]["createdDate"] == DBNull.Value ? "" : dt1.Rows[0]["createdDate"].ToString());
+                    MatchList.matchStatus = (dt1.Rows[0]["matchStatus"] == DBNull.Value ? "" : dt1.Rows[0]["matchStatus"].ToString());
+                    MatchList.competitionTypeId = (dt1.Rows[0]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["competitionTypeId"]);
+                    MatchList.competitionName = (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
+                    if (MatchList.matchType == "Teams")
+                    {
+                        if (dt2.Rows.Count > 0)
+                        {
+                            for (int i = 0; i < dt2.Rows.Count; i++)
+                            {
+                                dynamic Teams = new System.Dynamic.ExpandoObject();
+                                Teams.matchPlayerListId = (dt2.Rows[i]["matchPlayerListId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["matchPlayerListId"]);
+                                Teams.matchId = (dt2.Rows[i]["matchId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["matchId"]);
+                                Teams.userId = (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
+                                Teams.teamName = (dt2.Rows[i]["teamName"] == DBNull.Value ? "" : dt2.Rows[i]["teamName"].ToString());
+                                Teams.teamIcon = (dt2.Rows[i]["teamIcon"] == DBNull.Value ? "" : dt2.Rows[i]["teamIcon"].ToString());
+                                TeamsPlayers.Add(Teams);
+                            }
+                        }
+                        MatchList.Teams = TeamsPlayers;
+                    }
+                    else
+                    {
+                        if (dt2.Rows.Count > 0)
+                        {
+                            for (int i = 0; i < dt2.Rows.Count; i++)
+                            {
+                                dynamic Players = new System.Dynamic.ExpandoObject();
+                                Players.matchPlayerListId = (dt2.Rows[i]["matchPlayerListId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["matchPlayerListId"]);
+                                Players.matchId = (dt2.Rows[i]["matchId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["matchId"]);
+                                Players.userId = (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
+                                Players.teamName = (dt2.Rows[i]["teamName"] == DBNull.Value ? "" : dt2.Rows[i]["teamName"].ToString());
+                                Players.playerName = (dt2.Rows[i]["playerName"] == DBNull.Value ? "" : dt2.Rows[i]["playerName"].ToString());
+                                Players.gender = (dt2.Rows[i]["gender"] == DBNull.Value ? "" : dt2.Rows[i]["gender"].ToString());
+                                Players.profileImage = (dt2.Rows[i]["profileImage"] == DBNull.Value ? "" : dt2.Rows[i]["profileImage"].ToString());
+                                TeamsPlayers.Add(Players);
+                            }
+                        }
+                        MatchList.Players = TeamsPlayers;
+                    }
+                    matches.Add(MatchList);
                    
                     return StatusCode((int)HttpStatusCode.OK, matches);
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.OK, new { });
+                    return StatusCode((int)HttpStatusCode.OK, new { error = new { message = "MatchId not found" } });
                 }
             }
             catch (Exception e)
@@ -251,6 +290,7 @@ namespace GolfApplication.Controller
                         Matches.createdDate = (dt.Rows[i]["createdDate"] == DBNull.Value ? "" : dt.Rows[i]["createdDate"].ToString());
                         Matches.matchStatus = (dt.Rows[i]["matchStatus"] == DBNull.Value ? "" : dt.Rows[i]["matchStatus"].ToString());
                         Matches.competitionTypeId = (dt.Rows[i]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["competitionTypeId"]);
+                        Matches.competitionName = (dt.Rows[i]["competitionName"] == DBNull.Value ? "" : dt.Rows[i]["competitionName"].ToString());
                         matchList.Add(Matches);
                     }
                     return StatusCode((int)HttpStatusCode.OK, matchList);

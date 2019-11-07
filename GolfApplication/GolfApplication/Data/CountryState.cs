@@ -8,7 +8,7 @@ using Microsoft.ApplicationBlocks.Data;
 
 namespace GolfApplication.Data
 {
-    public class Country
+    public class CountryState
     {
         public static DataTable GetCountryList()
         {
@@ -28,5 +28,25 @@ namespace GolfApplication.Data
 
         }
 
+
+        public static DataTable GetStateList(int CountryId)
+        {
+            try
+            {
+                string ConnectionString = Common.GetConnectionString();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("@CountryId", CountryId));
+                //Execute the query
+                using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spListState", parameters.ToArray()).Tables[0])
+                {
+                    return dt;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+        }
     }
 }
