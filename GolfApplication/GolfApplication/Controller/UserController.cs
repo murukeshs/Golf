@@ -267,6 +267,7 @@ namespace GolfApplication.Controller
                     user.pinCode = (dt.Rows[0]["pinCode"] == DBNull.Value ? "" : dt.Rows[0]["pinCode"].ToString());
                     user.profileImage = (dt.Rows[0]["profileImage"] == DBNull.Value ? "" : dt.Rows[0]["profileImage"].ToString());
                     user.userType = (dt.Rows[0]["userType"] == DBNull.Value ? "" : dt.Rows[0]["userType"].ToString());
+                    user.userTypeId = (dt.Rows[0]["userTypeId"] == DBNull.Value ? "" : dt.Rows[0]["userTypeId"].ToString());
                     user.isEmailNotification = (dt.Rows[0]["isEmailNotification"] == DBNull.Value ? false : (bool)dt.Rows[0]["isEmailNotification"]);
                     user.isEmailVerified = (dt.Rows[0]["isEmailVerified"] == DBNull.Value ? false : (bool)dt.Rows[0]["isEmailVerified"]);
                     user.isSMSNotification = (dt.Rows[0]["isSMSNotification"] == DBNull.Value ? false : (bool)dt.Rows[0]["isSMSNotification"]);
@@ -328,12 +329,14 @@ namespace GolfApplication.Controller
                         user.email = (dt.Rows[i]["email"] == DBNull.Value ? "" : dt.Rows[i]["email"].ToString());
                         user.password = DecryptPassword;
                         user.phoneNumber = (dt.Rows[i]["phoneNumber"] == DBNull.Value ? "" : dt.Rows[i]["phoneNumber"].ToString());
-                       // user.countryId = (dt.Rows[i]["countryId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["countryId"]);
-                       // user.stateId = (dt.Rows[i]["stateId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["stateId"]);
+                        //user.countryId = (dt.Rows[i]["countryId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["countryId"]);
+                        //user.stateId = (dt.Rows[i]["stateId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["stateId"]);
+                        user.countryName = (dt.Rows[i]["countryName"] == DBNull.Value ? "" : dt.Rows[i]["countryName"].ToString());
+                        user.stateName = (dt.Rows[i]["stateName"] == DBNull.Value ? "" : dt.Rows[i]["stateName"].ToString());
                         user.city = (dt.Rows[i]["city"] == DBNull.Value ? "" : dt.Rows[i]["city"].ToString());
                         user.address = (dt.Rows[i]["address"] == DBNull.Value ? "" : dt.Rows[i]["address"].ToString());
                         user.pinCode = (dt.Rows[i]["pinCode"] == DBNull.Value ? "" : dt.Rows[i]["pinCode"].ToString());
-                        // user.profileImage = (dt.Rows[i]["profileImage"] == DBNull.Value ? "" : dt.Rows[i]["profileImage"].ToString());
+                         user.profileImage = (dt.Rows[i]["profileImage"] == DBNull.Value ? "" : dt.Rows[i]["profileImage"].ToString());
                         user.isEmailNotification = (dt.Rows[i]["isEmailNotification"] == DBNull.Value ? false : (bool)dt.Rows[i]["isEmailNotification"]);
                         user.isEmailVerified = (dt.Rows[i]["isEmailVerified"] == DBNull.Value ? false : (bool)dt.Rows[i]["isEmailVerified"]);
                         user.isSMSNotification = (dt.Rows[i]["isSMSNotification"] == DBNull.Value ? false : (bool)dt.Rows[i]["isSMSNotification"]);
@@ -341,7 +344,6 @@ namespace GolfApplication.Controller
                         user.isPublicProfile = (dt.Rows[i]["isPublicProfile"] == DBNull.Value ? false : (bool)dt.Rows[i]["isPublicProfile"]);
                         user.userUpdatedDate = (dt.Rows[i]["userUpdatedDate"] == DBNull.Value ? "" : dt.Rows[i]["userUpdatedDate"].ToString());
                         user.isPhoneVerified = (dt.Rows[i]["isPhoneVerified"] == DBNull.Value ? false : (bool)dt.Rows[i]["isPhoneVerified"]);
-                        //user.passwordUpdatedDate = (dt.Rows[i]["passwordUpdatedDate"] == DBNull.Value ? "" : dt.Rows[i]["passwordUpdatedDate"].ToString());
                         user.userTypeId = (dt.Rows[i]["userTypeId"] == DBNull.Value ? "" : dt.Rows[i]["userTypeId"].ToString());
                         user.userType = (dt.Rows[i]["userType"] == DBNull.Value ? "" : dt.Rows[i]["userType"].ToString());
                         userList.Add(user);
@@ -380,7 +382,7 @@ namespace GolfApplication.Controller
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter Email" } });
                 }
-                else if (updatePassword.OTPValue <= 0 || updatePassword.OTPValue == null)
+                else if (updatePassword.OTPValue == "" || updatePassword.OTPValue == null)
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter OTPValue" } });
                 }
@@ -502,7 +504,7 @@ namespace GolfApplication.Controller
             {
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
                 System.Text.RegularExpressions.Match match = regex.Match(otp.emailorPhone);
-                if (otp.OTPValue <= 0)
+                if (otp.OTPValue == "")
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter OTP Value" } });
                 }

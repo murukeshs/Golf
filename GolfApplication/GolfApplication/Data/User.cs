@@ -298,8 +298,8 @@ namespace GolfApplication.Data
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("@userId", user.userId));
             parameters.Add(new SqlParameter("@stateId", user.stateId));
-            parameters.Add(new SqlParameter("@userID", user.countryId));
-            parameters.Add(new SqlParameter("@userID", user.address));
+            parameters.Add(new SqlParameter("@countryId", user.countryId));
+            parameters.Add(new SqlParameter("@address", user.address));
             parameters.Add(new SqlParameter("@isEmailNotification", user.isEmailNotification));
             parameters.Add(new SqlParameter("@isSMSNotification", user.isSMSNotification));
             parameters.Add(new SqlParameter("@isPublicProfile", user.isPublicProfile));

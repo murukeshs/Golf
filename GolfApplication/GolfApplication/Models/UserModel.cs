@@ -54,7 +54,6 @@ namespace GolfApplication.Models
         public string stateName { get; set; }
         public string userCreatedDate { get; set; }
         public string userUpdatedDate { get; set; }
-        public string passwordUpdatedDate { get; set; }
         [DefaultValue(false)]
         public bool? isEmailVerified { get; set; }
         [DefaultValue(false)]
@@ -69,7 +68,7 @@ namespace GolfApplication.Models
 
     public class otpVerify
     {
-       public int OTPValue { get; set; }
+       public string OTPValue { get; set; }
        public string emailorPhone { get; set; }
        public string type { get; set; }
        public string sourceType { get; set; }
@@ -79,7 +78,7 @@ namespace GolfApplication.Models
 
     public class updatePassword
     {
-        public int OTPValue { get; set; }
+        public string OTPValue { get; set; }
         public string emailorPhone { get; set; }
         public string password { get; set; }
         public string sourceType { get; set; }
