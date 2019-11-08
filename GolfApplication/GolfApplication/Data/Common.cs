@@ -193,11 +193,10 @@ namespace GolfApplication.Data
                     Body = sr.ReadToEnd();
                 }
                 Body = Body.Replace("*keycode*", OTPValue.ToString());
-                Body = Body.Replace("*Type*",Type );
                 Body = Body.Replace("*Product Name*", "Golf"); 
                 Body = Body.Replace("*invite_sender_name*", "Golf Team");
                 #endregion
-                res = EmailSendGrid.Mail("chitrasubburaj30@gmail.com", emailid, "OTP Verification",Body /*"Hello, your OTP is " + OTPValue + " and for verify type is '" + Type + "' "*/).Result; //and it's expiry time is 5 minutes.
+                res = EmailSendGrid.Mail("chitrasubburaj30@gmail.com", emailid, "OTP Verification",Body).Result; //and it's expiry time is 5 minutes.
                 if (res == "Accepted")
                 {
                     result = "Mail sent successfully.";

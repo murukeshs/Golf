@@ -29,9 +29,14 @@ namespace GolfApplication.Models
 
     public class matchPlayer
     {
-        public int matchId { get; set; }
         public string type { get; set; }
-        public string userId { get; set; }
+        public int eventId { get; set; }
+        public int teamId { get; set; }
+        public int playerId { get; set; }
+        public bool isInvitationSent { get; set; }
+        public bool isInvitationAccept { get; set; }
+        public bool isPaymentMade { get; set; }
+        public string createdDate { get; set; }
     }
 
     public class MatchList 
@@ -57,6 +62,13 @@ namespace GolfApplication.Models
     {
         public int matchRuleId { get; set; }
         public string ruleName { get; set; }
+    }
+
+    public class acceptMatchInvitation
+    {
+        public int matchId { get; set; }
+        public string Type { get; set; }
+        public int playerId { get; set; }
     }
 
 }

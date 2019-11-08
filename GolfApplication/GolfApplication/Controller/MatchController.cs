@@ -307,5 +307,30 @@ namespace GolfApplication.Controller
             }
         }
         #endregion
+
+        #region acceptMatchInvitation
+        [HttpPut, Route("acceptMatchInvitation")]
+        public IActionResult acceptMatchInvitation(acceptMatchInvitation acceptMatchInvitation)
+        {
+            try
+            {
+                int dt = Convert.ToInt32(Data.Match.acceptMatchInvitation(acceptMatchInvitation));
+
+                if (dt >= 1)
+                {
+                    return StatusCode((int)HttpStatusCode.OK, "Updated Successfully");
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { message = "Failed to update" } });
+                }
+            }
+            catch (Exception e)
+            {
+                //string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
+            }
+        }
+        #endregion
     }
 }
