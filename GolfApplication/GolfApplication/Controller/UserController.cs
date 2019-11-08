@@ -427,7 +427,7 @@ namespace GolfApplication.Controller
         #endregion
 
         #region GenerateOTP
-        [HttpPut, Route("generateOTP")]
+        [HttpPut, Route("generateEmailOTP")]
         [AllowAnonymous]
         public IActionResult generateOTP([FromBody]GenOTP otp)
         {
@@ -449,10 +449,10 @@ namespace GolfApplication.Controller
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a type" } });
                 }
-                else if (otp.sourceType == "" || otp.sourceType == "string")
-                {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a sourceType" } });
-                }
+                //else if (otp.sourceType == "" || otp.sourceType == "string")
+                //{
+                //    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a sourceType" } });
+                //}
                 //else if (otp.source == "" || otp.sourceType == "string")
                 //{
                 //    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a source" } });
@@ -550,7 +550,7 @@ namespace GolfApplication.Controller
         #endregion
 
         #region SmsOTP
-        [HttpPut, Route("SmsOTP")]
+        [HttpPut, Route("GenerateSmsOTP")]
         [AllowAnonymous]
         public IActionResult SmsOTP([FromBody]GenOTP otp)
         {

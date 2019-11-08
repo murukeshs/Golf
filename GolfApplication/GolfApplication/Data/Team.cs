@@ -25,7 +25,7 @@ namespace GolfApplication.Data
 
                 using (DataSet dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spCreateTeam", parameters.ToArray()))
                 {
-                    string TeamID = dt.Tables[0].Rows[0]["teamId"].ToString();
+                    string TeamID = dt.Tables[1].Rows[0]["teamId"].ToString();
                     return TeamID;
                 }                
             }
