@@ -30,12 +30,7 @@ namespace GolfApplication.Data
                 var client = new SendGridClient(Apikey());
                 SendGridMessage mail = new SendGridMessage();
 
-                #region EmailTemplate for Content of the Mail
-                string Body = string.Empty;
-
-                mail.HtmlContent = BodyContent;
-                #endregion
-
+               
                 mail.From = new EmailAddress(from);
                 
                 if (to != null)
@@ -44,7 +39,7 @@ namespace GolfApplication.Data
                 }
                 
                 mail.Subject = subject;
-                //mail.PlainTextContent = BodyContent;
+                mail.PlainTextContent = BodyContent;
 
                 var status = await client.SendEmailAsync(mail);
                 return status.StatusCode.ToString();
