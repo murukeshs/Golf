@@ -26,7 +26,7 @@ namespace GolfApplication.Controller
             {
                 int dt = Data.Match.createMatchRules(matchRules);
 
-                if (dt >=1)
+                if (dt >= 1)
                 {
                     return StatusCode((int)HttpStatusCode.OK, "Saved Successfully");
                 }
@@ -82,7 +82,7 @@ namespace GolfApplication.Controller
             {
                 int dt = Data.Match.updateMatchRules(matchRules);
 
-                if (dt>=1)
+                if (dt >= 1)
                 {
                     return StatusCode((int)HttpStatusCode.OK, "Updated Successfully");
                 }
@@ -107,7 +107,7 @@ namespace GolfApplication.Controller
             try
             {
                 DataTable dt = Data.Match.createMatch(createMatch);
-                if(dt.Rows[0][2].ToString()=="Success")
+                if (dt.Rows[0][2].ToString() == "Success")
                 {
                     dynamic Mth = new System.Dynamic.ExpandoObject();
                     Mth.matchId = (dt.Rows[0][0] == DBNull.Value ? 0 : (int)dt.Rows[0][0]);
@@ -135,9 +135,9 @@ namespace GolfApplication.Controller
         {
             try
             {
-                int dt =Convert.ToInt32(Data.Match.updateMatch(updateMatch));
+                int dt = Convert.ToInt32(Data.Match.updateMatch(updateMatch));
 
-                if (dt >=1)
+                if (dt >= 1)
                 {
                     return StatusCode((int)HttpStatusCode.OK, "Updated Successfully");
                 }
@@ -161,9 +161,9 @@ namespace GolfApplication.Controller
 
             try
             {
-                int dt =Convert.ToInt32(Data.Match.createMatchplayer(matchPlayer));
+                int dt = Convert.ToInt32(Data.Match.createMatchplayer(matchPlayer));
 
-                if (dt >=1)
+                if (dt >= 1)
                 {
                     return StatusCode((int)HttpStatusCode.OK, "Saved Successfully");
                 }
@@ -246,7 +246,7 @@ namespace GolfApplication.Controller
                         MatchList.Players = TeamsPlayers;
                     }
                     matches.Add(MatchList);
-                   
+
                     return StatusCode((int)HttpStatusCode.OK, matches);
                 }
                 else
@@ -339,9 +339,37 @@ namespace GolfApplication.Controller
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("userType", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
+
+            }
+        }
+
+        #endregion
+
+        #region acceptMatchInvitation
+        [HttpPut, Route("acceptMatchInvitation")]
+        public IActionResult acceptMatchInvitation(acceptMatchInvitation acceptMatchInvitation)
+        {
+            try
+            {
+                int dt = Convert.ToInt32(Data.Match.acceptMatchInvitation(acceptMatchInvitation));
+
+                if (dt >= 1)
+                {
+                    return StatusCode((int)HttpStatusCode.OK, "Updated Successfully");
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { message = "Failed to update" } });
+                }
+            }
+            catch (Exception e)
+            {
+                //string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
         #endregion
+
 
     }
 }
