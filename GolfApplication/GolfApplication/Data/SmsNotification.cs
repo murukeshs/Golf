@@ -33,7 +33,7 @@ namespace GolfApplication.Data
                 var results = client.SMS.Send(new SMS.SMSRequest
                 {
                     from = "19565390371",             //"7708178085",     //Configuration.Instance.Settings["appsettings:NEXMO_FROM_NUMBER"],
-                    to = to,
+                    to = "+14087224019",
                     text = text
                 });
 

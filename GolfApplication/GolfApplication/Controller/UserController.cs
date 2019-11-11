@@ -388,7 +388,7 @@ namespace GolfApplication.Controller
                 }
                 else if (updatePassword.sourceType == "" || updatePassword.sourceType == "string")
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a sourceType" } });
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "SourceType is required" } });
                 }
                 //else if (updatePassword.source == "" || updatePassword.sourceType == "string")
                 //{
@@ -502,8 +502,8 @@ namespace GolfApplication.Controller
         {
             try
             {
-                Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-                System.Text.RegularExpressions.Match match = regex.Match(otp.emailorPhone);
+                string row = "";
+
                 if (otp.OTPValue == "")
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter OTP Value" } });
@@ -514,30 +514,48 @@ namespace GolfApplication.Controller
                 }
                 else if (otp.sourceType == "" || otp.sourceType == "string")
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a sourceType" } });
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "SourceType is required - 'Email / Phone'" } });
                 }
                 //else if (otp.source == "" || otp.source == "string")
                 //{
                 //    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a source" } });
                 //}
-                else if (match.Success)
-                {
-                    string row = Data.User.verifyOTP(otp);
 
-                    if (row == "OTP Verified")
+                if(otp.sourceType == "Email")
+                {
+                    Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+                    System.Text.RegularExpressions.Match match = regex.Match(otp.emailorPhone);
+                    if (match.Success)
                     {
-                        return StatusCode((int)HttpStatusCode.OK, "OTP Verified Successfully");
+                        row = Data.User.verifyOTP(otp);
                     }
+
                     else
                     {
-                        //return "Invalid user";
-                        return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { message = row } });
+                        return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a valid Email" } });
                     }
+                }
+
+                else if (otp.sourceType == "Phone")
+                {
+                    row = Data.User.verifyOTP(otp);
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a valid Email" } });
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Source Type is required - Enter 'Email / Phone'" } });
                 }
+
+
+                if (row == "OTP Verified")
+                {
+                    return StatusCode((int)HttpStatusCode.OK, "OTP Verified Successfully");
+                }
+                else
+                {
+                    //return "Invalid user";
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { message = row } });
+                }
+
 
             }
             catch (Exception e)
@@ -562,7 +580,7 @@ namespace GolfApplication.Controller
 
                 var SmsStatus = "";
 
-                otp.emailorPhone = "+14087224019";
+                //otp.emailorPhone = "+14087224019";
 
                 // string SaveOtpValue = Data.Common.SaveOTP(PhoneNumber, OTPValue, "Phone");
                 string SaveOtpValue = Data.User.generateOTP(OTPValue, otp);
