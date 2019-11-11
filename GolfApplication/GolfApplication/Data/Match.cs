@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -129,13 +129,13 @@ namespace GolfApplication.Data
                 string connectionstring = Common.GetConnectionString();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("@Type", matchPlayer.type));
-                parameters.Add(new SqlParameter("@eventId", matchPlayer.eventId));
+                parameters.Add(new SqlParameter("@matchId", matchPlayer.eventId));
                 parameters.Add(new SqlParameter("@teamId", matchPlayer.teamId));
                 parameters.Add(new SqlParameter("@playerId", matchPlayer.playerId));
-                //parameters.Add(new SqlParameter("@isInvitationSent", matchPlayer.isInvitationSent));
-                //parameters.Add(new SqlParameter("@isInvitationAccept", matchPlayer.isInvitationAccept));
-                //parameters.Add(new SqlParameter("@isPaymentMade", matchPlayer.isPaymentMade));
-                //parameters.Add(new SqlParameter("@createdDate", matchPlayer.createdDate));
+                parameters.Add(new SqlParameter("@isInvitationSent", matchPlayer.isInvitationSent));
+                parameters.Add(new SqlParameter("@isInvitationAccept", matchPlayer.isInvitationAccept));
+                parameters.Add(new SqlParameter("@isPaymentMade", matchPlayer.isPaymentMade));
+                parameters.Add(new SqlParameter("@createdDate", matchPlayer.createdDate));
 
                 string rowsAffected = SqlHelper.ExecuteScalar(connectionstring, CommandType.StoredProcedure, "spCreateMatchPlayer", parameters.ToArray()).ToString();
                 return rowsAffected;
@@ -189,29 +189,6 @@ namespace GolfApplication.Data
         }
         #endregion
 
-        public static DataTable getCompetitionType()
-
-        #region tblEnrollmentList
-        public static string acceptMatchInvitation([FromBody]acceptMatchInvitation acceptMatchInvitation)
-        {
-            try
-            {
-                string connectionstring = Common.GetConnectionString();
-                List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("@matchId", acceptMatchInvitation.matchId));
-                parameters.Add(new SqlParameter("@matchName", acceptMatchInvitation.Type));
-                parameters.Add(new SqlParameter("@matchRuleId", acceptMatchInvitation.playerId));
-                
-                string rowsAffected = SqlHelper.ExecuteScalar(connectionstring, CommandType.StoredProcedure, "spAcceptMatch", parameters.ToArray()).ToString();
-                return rowsAffected;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-        #endregion
-
         #region acceptMatchInvitation
         public static string acceptMatchInvitation([FromBody]acceptMatchInvitation acceptMatchInvitation)
         {
@@ -252,20 +229,20 @@ namespace GolfApplication.Data
         }
         #endregion
 
-        #region
+       
         #region inviteMatch
-        public static DataSet inviteMatch(int matchId)
+        public static DataSet sendmatchnotification(int matchId)
         {
             try
             {
                 string ConnectionString = Common.GetConnectionString();
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("@matchId", acceptMatchInvitation.matchId));
-                parameters.Add(new SqlParameter("@Type", acceptMatchInvitation.Type));
-                parameters.Add(new SqlParameter("@playerId", acceptMatchInvitation.playerId));
-                
-                string rowsAffected = SqlHelper.ExecuteScalar(connectionstring, CommandType.StoredProcedure, "spAcceptMatch", parameters.ToArray()).ToString();
-                return rowsAffected;
+                parameters.Add(new SqlParameter("@matchId", matchId));
+                //Execute the query
+                using (DataSet dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spSelectMatchById", parameters.ToArray()))
+                {
+                    return dt;
+                }
             }
             catch (Exception e)
             {
@@ -274,6 +251,27 @@ namespace GolfApplication.Data
 
         }
         #endregion
+
+        #region inviteMatch
+        public static DataSet inviteMatch(int matchId)
+        {
+            try
+            {
+                string ConnectionString = Common.GetConnectionString();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("@matchId", matchId));
+                //Execute the query
+                using (DataSet dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spSelectMatchById", parameters.ToArray()))
+                {
+                    return dt;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+        }
         #endregion
     }
 }

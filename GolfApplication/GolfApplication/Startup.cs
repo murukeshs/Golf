@@ -150,6 +150,12 @@ namespace GolfApplication
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Golf");
             });
+
+            app.Use(async (context, next) => {
+                //Do what you want with context,which is HttpContext
+                await next.Invoke();
+            });
+
             app.UseAuthentication();
 
         }
