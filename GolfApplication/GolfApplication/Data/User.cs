@@ -247,12 +247,12 @@ namespace GolfApplication.Data
 
         public static string generateOTP(string OTPValue, [FromBody]GenOTP otp)
         {
-
+           
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("@OTPValue", OTPValue));
             parameters.Add(new SqlParameter("@source", otp.emailorPhone));
             parameters.Add(new SqlParameter("@type", otp.type));
-            parameters.Add(new SqlParameter("@sourceType", otp.sourceType));
+            //parameters.Add(new SqlParameter("@sourceType", otp.sourceType));
             //parameters.Add(new SqlParameter("@source", otp.source));
 
             try
