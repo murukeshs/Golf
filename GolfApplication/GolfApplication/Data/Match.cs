@@ -189,6 +189,28 @@ namespace GolfApplication.Data
         }
         #endregion
 
+
+        #region tblEnrollmentList
+        public static string acceptMatchInvitation([FromBody]acceptMatchInvitation acceptMatchInvitation)
+        {
+            try
+            {
+                string connectionstring = Common.GetConnectionString();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("@matchId", acceptMatchInvitation.matchId));
+                parameters.Add(new SqlParameter("@matchName", acceptMatchInvitation.Type));
+                parameters.Add(new SqlParameter("@matchRuleId", acceptMatchInvitation.playerId));
+                
+                string rowsAffected = SqlHelper.ExecuteScalar(connectionstring, CommandType.StoredProcedure, "spAcceptMatch", parameters.ToArray()).ToString();
+                return rowsAffected;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        #endregion
+
         #region acceptMatchInvitation
         public static string acceptMatchInvitation([FromBody]acceptMatchInvitation acceptMatchInvitation)
         {
