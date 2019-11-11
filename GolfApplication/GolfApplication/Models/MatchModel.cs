@@ -69,11 +69,11 @@ namespace GolfApplication.Models
         public int competitionTypeId { get; set; }
         public string CompetitionName { get; set; }
     }
+
     public class acceptMatchInvitation
     {
         public int matchId { get; set; }
         public string Type { get; set; }
         public int playerId { get; set; }
     }
-}
 

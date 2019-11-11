@@ -197,7 +197,7 @@ namespace GolfApplication.Data
                 //Body = Body.Replace("*Product Name*", "Golf"); 
                 //Body = Body.Replace("*invite_sender_name*", "Golf Team");
                 //#endregion
-                res = EmailSendGrid.Mail("chitrasubburaj30@gmail.com", emailid, "OTP Verification", "Hello, your OTP is  " + OTPValue + "  and for verify type is '" + Type + "' ").Result; //and it's expiry time is 5 minutes.
+                res = EmailSendGrid.Mail("chitrasubburaj30@gmail.com", emailid, "OTP Verification", "Hello, your OTP is " + OTPValue + " and for verify type is '" + Type + "' ").Result; //and it's expiry time is 5 minutes.
                 if (res == "Accepted")
                 {
                     result = "Mail sent successfully.";
@@ -218,8 +218,62 @@ namespace GolfApplication.Data
                 throw e;
             }
         }
+        #endregion
 
 
+        #region inviteMatch
+       
+        public static string inviteMatch(/*string emailId,int matchCode, int matchDate, string competitionName,string typeOf,int NoOfPlayers,string matchLocation*/)
+        {
+            string emailID = "sunila@apptomate.co";
+            string matchCode = "P811201901";
+            string matchDate = "2019-11-25 01:25:454";
+            string competitionName = "Golf MAtch";
+            string typeOf = "Tournment";
+            int NoOfPlayers = 15;
+            string matchLocation = "Chennai Central";
+
+            try
+            {
+                string res = "";
+                var result = "";
+                #region Form Content Body
+                String Body = string.Empty;
+
+                string filename = @"UserInvitation.html";
+                string filePath = Directory.GetCurrentDirectory();
+                using (System.IO.StreamReader sr = new System.IO.StreamReader(filePath + "//EmailTemplates//" + filename))
+                {
+                    Body = sr.ReadToEnd();
+                }
+                Body = Body.Replace("*keycode*", matchCode.ToString());
+                Body = Body.Replace("*Type*", matchDate.ToString());
+                Body = Body.Replace("*Product Name*", competitionName);
+                Body = Body.Replace("*invite_sender_name*", typeOf);
+                Body = Body.Replace("*invite_sender_name*", NoOfPlayers.ToString());
+                Body = Body.Replace("*invite_sender_name*", matchLocation);
+                #endregion
+                res = EmailSendGrid.inviteMatchMail("chitrasubburaj30@gmail.com", emailID, "Match Invitation", Body).Result; //and it's expiry time is 5 minutes.
+                if (res == "Accepted")
+                {
+                    result = "Mail sent successfully.";
+                }
+                else
+                {
+                    result = "Bad Request";
+                }
+
+                return result;
+
+            }
+
+            catch (Exception e)
+            {
+                string SaveErrorLog = Data.Common.SaveErrorLog("SendOTP", e.Message.ToString());
+
+                throw e;
+            }
+        }
         #endregion
     }
 }

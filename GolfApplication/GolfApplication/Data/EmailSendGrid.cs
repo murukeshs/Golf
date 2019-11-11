@@ -52,6 +52,38 @@ namespace GolfApplication.Data
 
         }
 
+        public static async Task<string> inviteMatchMail(string from, string to, string subject, string BodyContent)
+        {
+            try
+            {
+                var client = new SendGridClient(Apikey());
+                SendGridMessage mail = new SendGridMessage();
 
+                #region EmailTemplate for Content of the Mail
+                string Body = string.Empty;
+
+                mail.HtmlContent = Body;
+                #endregion
+
+                mail.From = new EmailAddress(from);
+
+                if (to != null)
+                {
+                    mail.AddTo(to);
+                }
+
+                mail.Subject = subject;
+                mail.PlainTextContent = BodyContent;
+
+                var status = await client.SendEmailAsync(mail);
+                return status.StatusCode.ToString();
+            }
+
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+        }
     }
 }
