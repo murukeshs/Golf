@@ -396,120 +396,6 @@ namespace GolfApplication.Controller
         [HttpGet, Route("sendmatchnotification/{matchId}")]
         public IActionResult sendmatchnotification(int matchId)
         {
-            List<dynamic> matches = new List<dynamic>();
-            List<dynamic> TeamPlayers = new List<dynamic>();
-            try
-            {
-                DataSet ds = Data.Match.sendmatchnotification(matchId);
-                DataTable dt1 = ds.Tables[0];
-                DataTable dt2 = ds.Tables[1];
-                if (dt1.Rows.Count > 0)
-                {
-                    dynamic MatchList = new System.Dynamic.ExpandoObject();
-                    MatchList.matchId = (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
-                    MatchList.matchCode = (dt1.Rows[0]["matchCode"] == DBNull.Value ? "" : dt1.Rows[0]["matchCode"].ToString());
-                    MatchList.matchName = (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
-                    MatchList.matchType = (dt1.Rows[0]["matchType"] == DBNull.Value ? "" : dt1.Rows[0]["matchType"].ToString());
-                    MatchList.matchRuleId = (dt1.Rows[0]["matchRuleId"] == DBNull.Value ? "" : dt1.Rows[0]["matchRuleId"].ToString());
-                    MatchList.ruleName = (dt1.Rows[0]["ruleName"] == DBNull.Value ? "" : dt1.Rows[0]["ruleName"].ToString());
-                    MatchList.matchStartDate = (dt1.Rows[0]["matchStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchStartDate"].ToString());
-                    MatchList.matchEndDate = (dt1.Rows[0]["matchEndDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchEndDate"].ToString());
-                    MatchList.matchFee = (dt1.Rows[0]["matchFee"] == DBNull.Value ? 0 : (decimal)dt1.Rows[0]["matchFee"]);
-                    MatchList.matchLocation = (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
-                    MatchList.createdBy = (dt1.Rows[0]["createdBy"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["createdBy"]);
-                    MatchList.createdDate = (dt1.Rows[0]["createdDate"] == DBNull.Value ? "" : dt1.Rows[0]["createdDate"].ToString());
-                    MatchList.matchStatus = (dt1.Rows[0]["matchStatus"] == DBNull.Value ? "" : dt1.Rows[0]["matchStatus"].ToString());
-                    MatchList.competitionTypeId = (dt1.Rows[0]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["competitionTypeId"]);
-                    MatchList.competitionName = (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
-                    if (MatchList.matchType == "Teams")
-                    {
-                        if (dt2.Rows.Count > 0)
-                        {
-                            for (int i = 0; i < dt2.Rows.Count; i++)
-                            {
-                                dynamic Teams = new System.Dynamic.ExpandoObject();
-                                Teams.teamId = (dt2.Rows[i]["teamId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["teamId"]);
-                                Teams.teamName = (dt2.Rows[i]["teamName"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["teamName"]);
-                                Teams.teamIcon = (dt2.Rows[i]["teamIcon"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["teamIcon"]);
-                                Teams.scoreKeeperId = (dt2.Rows[i]["scoreKeeperId"] == DBNull.Value ? 0 : dt2.Rows[i]["scoreKeeperId"]);
-                                Teams.userId = (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
-                                Teams.firstName = (dt2.Rows[i]["firstName"] == DBNull.Value ? "" : dt2.Rows[i]["firstName"].ToString());
-                                Teams.lastName = (dt2.Rows[i]["lastName"] == DBNull.Value ? "" : dt2.Rows[i]["lastName"].ToString());
-                                Teams.email = (dt2.Rows[i]["email"] == DBNull.Value ? "" : dt2.Rows[i]["email"].ToString());
-                                Teams.gender = (dt2.Rows[i]["gender"] == DBNull.Value ? "" : dt2.Rows[i]["gender"].ToString());
-                                Teams.dob = (dt2.Rows[i]["dob"] == DBNull.Value ? "" : dt2.Rows[i]["dob"].ToString());
-                                Teams.profileImage = (dt2.Rows[i]["profileImage"] == DBNull.Value ? "" : dt2.Rows[i]["profileImage"].ToString());
-                                Teams.phoneNumber = (dt2.Rows[i]["phoneNumber"] == DBNull.Value ? "" : dt2.Rows[i]["phoneNumber"].ToString());
-                                Teams.countryId = (dt2.Rows[i]["countryId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["countryId"]);
-                                Teams.countryName = (dt2.Rows[i]["countryName"] == DBNull.Value ? "" : dt2.Rows[i]["countryName"].ToString());
-                                Teams.stateId = (dt2.Rows[i]["stateId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["stateId"]);
-                                Teams.stateName = (dt2.Rows[i]["stateName"] == DBNull.Value ? "" : dt2.Rows[i]["stateName"].ToString());
-                                Teams.city = (dt2.Rows[i]["city"] == DBNull.Value ? "" : dt2.Rows[i]["city"].ToString());
-                                Teams.address = (dt2.Rows[i]["address"] == DBNull.Value ? "" : dt2.Rows[i]["address"].ToString());
-                                Teams.pinCode = (dt2.Rows[i]["pinCode"] == DBNull.Value ? "" : dt2.Rows[i]["pinCode"].ToString());
-
-                                TeamPlayers.Add(Teams);
-                            }
-                            //Sending Email To All Team Member's
-                            //Common.inviteMatch();
-                        }
-                        MatchList.Teams = TeamPlayers;
-                    }
-                    else
-                    {
-                        if (dt2.Rows.Count > 0)
-                        {
-                            for (int i = 0; i < dt2.Rows.Count; i++)
-                            {
-                                dynamic Players = new System.Dynamic.ExpandoObject();
-                                Players.userId = (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
-                                Players.firstName = (dt2.Rows[i]["firstName"] == DBNull.Value ? "" : dt2.Rows[i]["firstName"].ToString());
-                                Players.lastName = (dt2.Rows[i]["lastName"] == DBNull.Value ? "" : dt2.Rows[i]["lastName"].ToString());
-                                Players.email = (dt2.Rows[i]["email"] == DBNull.Value ? "" : dt2.Rows[i]["email"].ToString());
-                                Players.gender = (dt2.Rows[i]["gender"] == DBNull.Value ? "" : dt2.Rows[i]["gender"].ToString());
-                                Players.dob = (dt2.Rows[i]["dob"] == DBNull.Value ? "" : dt2.Rows[i]["dob"].ToString());
-                                Players.profileImage = (dt2.Rows[i]["profileImage"] == DBNull.Value ? "" : dt2.Rows[i]["profileImage"].ToString());
-                                Players.phoneNumber = (dt2.Rows[i]["phoneNumber"] == DBNull.Value ? "" : dt2.Rows[i]["phoneNumber"].ToString());
-                                Players.countryId = (dt2.Rows[i]["countryId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["countryId"]);
-                                Players.countryName = (dt2.Rows[i]["countryName"] == DBNull.Value ? "" : dt2.Rows[i]["countryName"].ToString());
-                                Players.stateId = (dt2.Rows[i]["stateId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["stateId"]);
-                                Players.stateName = (dt2.Rows[i]["stateName"] == DBNull.Value ? "" : dt2.Rows[i]["stateName"].ToString());
-                                Players.city = (dt2.Rows[i]["city"] == DBNull.Value ? "" : dt2.Rows[i]["city"].ToString());
-                                Players.address = (dt2.Rows[i]["address"] == DBNull.Value ? "" : dt2.Rows[i]["address"].ToString());
-                                Players.pinCode = (dt2.Rows[i]["pinCode"] == DBNull.Value ? "" : dt2.Rows[i]["pinCode"].ToString());
-
-                                TeamPlayers.Add(Players);
-                            }
-                            //Sending Email To All Match Players's
-                            //Common.inviteMatch();
-                        }
-                        
-                        MatchList.Players = TeamPlayers;
-                    }
-
-                    matches.Add(MatchList);
-
-                    return StatusCode((int)HttpStatusCode.OK, matches);
-                }
-                else
-                {
-                    return StatusCode((int)HttpStatusCode.OK, new { error = new { message = "MatchId not found" } });
-                }
-            }
-            catch (Exception e)
-            {
-                //string SaveErrorLog = Data.Common.SaveErrorLog("GetStateList", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
-            }
-        }
-        #endregion
-
-        #region inviteMatch
-        [HttpGet, Route("inviteMatch/{matchId}")]
-        public IActionResult inviteMatch(int matchId)
-        {
-            List<dynamic> matches = new List<dynamic>();
-            List<dynamic> TeamPlayers = new List<dynamic>();
             try
             {
                 DataSet ds = Data.Match.inviteMatch(matchId);
@@ -519,14 +405,14 @@ namespace GolfApplication.Controller
 
                 if (dt1.Rows.Count > 0)
                 {
-                    int matchID= (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
-                    string matchCode= (dt1.Rows[0]["matchCode"] == DBNull.Value ? "" : dt1.Rows[0]["matchCode"].ToString());
-                    string matchName= (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
+                    int matchID = (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
+                    string matchCode = (dt1.Rows[0]["matchCode"] == DBNull.Value ? "" : dt1.Rows[0]["matchCode"].ToString());
+                    string matchName = (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
                     string matchDate = (dt1.Rows[0]["matchStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchStartDate"].ToString());
-                    string CompetitionName= (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
-                    string Typeof= (dt1.Rows[0]["matchType"] == DBNull.Value ? "" : dt1.Rows[0]["matchType"].ToString());
-                    int NoOfPlayers = dt2.Rows.Count;  
-                    string MatchLocations= (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
+                    string CompetitionName = (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
+                    string Typeof = (dt1.Rows[0]["matchType"] == DBNull.Value ? "" : dt1.Rows[0]["matchType"].ToString());
+                    int NoOfPlayers = dt2.Rows.Count;
+                    string MatchLocations = (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
                     string EmailId = string.Empty;
                     int UserID = 0;
 
@@ -536,9 +422,6 @@ namespace GolfApplication.Controller
                         {
                             for (int i = 0; i < dt2.Rows.Count; i++)
                             {
-                                int playerID= (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
-                                UserID= (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
-
                                 //Comma Seperate email
                                 if (dt3.Rows.Count > 0)
                                 {
@@ -550,7 +433,7 @@ namespace GolfApplication.Controller
                                         EmailId = values[j];
 
                                         //Sending Email to Individual Match Players's
-                                        Common.inviteMatch(EmailId, matchID, matchName, UserID, matchCode, matchDate,CompetitionName, Typeof, NoOfPlayers, MatchLocations);
+                                        Match.sendmatchnotification(EmailId, matchName, matchCode, matchDate, CompetitionName, Typeof, NoOfPlayers, MatchLocations);
                                     }
                                 }
                             }
@@ -576,14 +459,105 @@ namespace GolfApplication.Controller
                                         EmailId = values[j];
 
                                         //Sending Email to Individual Match Players's
-                                        Common.inviteMatch(EmailId, matchID, matchName, UserID, matchCode, matchDate, CompetitionName, Typeof, NoOfPlayers, MatchLocations);
+                                        Match.sendmatchnotification(EmailId, matchName, matchCode, matchDate, CompetitionName, Typeof, NoOfPlayers, MatchLocations);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    return StatusCode((int)HttpStatusCode.OK, "Match Invitations Sent Successfully");
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.OK, new { error = new { message = "MatchId not found" } });
+                }
+            }
+            catch (Exception e)
+            {
+                //string SaveErrorLog = Data.Common.SaveErrorLog("GetStateList", e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
+            }
+        }
+        #endregion
+
+        #region inviteMatch
+        [HttpGet, Route("inviteMatch/{matchId}")]
+        public IActionResult inviteMatch(int matchId)
+        {
+            try
+            {
+                DataSet ds = Data.Match.inviteMatch(matchId);
+                DataTable dt1 = ds.Tables[0];
+                DataTable dt2 = ds.Tables[1];
+                DataTable dt3 = ds.Tables[2];
+
+                if (dt1.Rows.Count > 0)
+                {
+                    int matchID= (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
+                    string matchCode= (dt1.Rows[0]["matchCode"] == DBNull.Value ? "" : dt1.Rows[0]["matchCode"].ToString());
+                    string matchName= (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
+                    string matchDate = (dt1.Rows[0]["matchStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchStartDate"].ToString());
+                    string CompetitionName= (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
+                    string Typeof= (dt1.Rows[0]["matchType"] == DBNull.Value ? "" : dt1.Rows[0]["matchType"].ToString());
+                    int NoOfPlayers = dt2.Rows.Count;  
+                    string MatchLocations= (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
+                    string EmailId = string.Empty;
+
+                    if (Typeof == "Teams")
+                    {
+                        if (dt2.Rows.Count > 0)
+                        {
+                            for (int i = 0; i < dt2.Rows.Count; i++)
+                            {
+                                int playerID= (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
+                                
+
+                                //Comma Seperate email
+                                if (dt3.Rows.Count > 0)
+                                {
+                                    string s = dt3.Rows[0][0].ToString();
+                                    string[] values = s.Split(',');
+                                    for (int j = 0; j < values.Length; j++)
+                                    {
+                                        values[j] = values[j].Trim();
+                                        EmailId = values[j];
+
+                                        //Sending Email to Individual Match Players's
+                                        Match.inviteMatch(EmailId, matchID, matchName, playerID, matchCode, matchDate,CompetitionName, Typeof, NoOfPlayers, MatchLocations);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else  //Players
+                    {
+                        if (dt2.Rows.Count > 0)
+                        {
+                            for (int i = 0; i < dt2.Rows.Count; i++)
+                            {
+                                int playerID = (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
+                                
+
+                                //Comma Seperate email
+                                if (dt3.Rows.Count > 0)
+                                {
+                                    string s = dt3.Rows[0][0].ToString();
+                                    string[] values = s.Split(',');
+                                    for (int j = 0; j < values.Length; j++)
+                                    {
+                                        values[j] = values[j].Trim();
+                                        EmailId = values[j];
+
+                                        //Sending Email to Individual Match Players's
+                                        Match.inviteMatch(EmailId, matchID, matchName, playerID, matchCode, matchDate, CompetitionName, Typeof, NoOfPlayers, MatchLocations);
                                     }
                                 }  
                             }
                         }
                     }
 
-                    return StatusCode((int)HttpStatusCode.OK, matches);
+                    return StatusCode((int)HttpStatusCode.OK, "Match Invitations Sent Successfully");
                 }
                 else
                 {

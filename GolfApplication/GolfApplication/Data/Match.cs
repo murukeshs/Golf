@@ -8,6 +8,7 @@ using System.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc;
 using GolfApplication.Data;
 using GolfApplication.Models;
+using System.IO;
 
 namespace GolfApplication.Data
 {
@@ -229,9 +230,9 @@ namespace GolfApplication.Data
         }
         #endregion
 
-       
-        #region inviteMatch
-        public static DataSet sendmatchnotification(int matchId)
+
+        #region inviteMatch && sendmatchnotification
+        public static DataSet inviteMatch(int matchId)
         {
             try
             {
@@ -253,24 +254,93 @@ namespace GolfApplication.Data
         #endregion
 
         #region inviteMatch
-        public static DataSet inviteMatch(int matchId)
+        public static string inviteMatch(string emailId, int matchID, string Title, int UserID, string matchCode, string matchDate, string competitionName, string typeOf, int NoOfPlayers, string MatchLocation)
+        {
+            //var request = Microsoft.AspNetCore.Http.HttpContext;
+            //string CurrentURL = context
+            //string link= CurrentURL+ "?matchId="+matchID+ "/Type="+typeOf+ "/playerId="+ UserID;
+            try
+            {
+                string res = "";
+                var result = "";
+                #region Form Content Body
+                String Body = string.Empty;
+
+                string filename = @"PlayersInviteMatch.html";
+                string filePath = Directory.GetCurrentDirectory();
+                using (System.IO.StreamReader sr = new System.IO.StreamReader(filePath + "//EmailTemplates//" + filename))
+                {
+                    Body = sr.ReadToEnd();
+                }
+                Body = Body.Replace("*Title*", Title);
+                Body = Body.Replace("*MatchCode*", matchCode);
+                Body = Body.Replace("*MatchDate*", matchDate);
+                Body = Body.Replace("*Competitiontype*", competitionName);
+                Body = Body.Replace("*Typeof*", typeOf);
+                Body = Body.Replace("*Noofplayers*", NoOfPlayers.ToString());
+                Body = Body.Replace("*matchLocation*", MatchLocation);
+                Body = Body.Replace("*Link*", "Link");
+                #endregion
+                res = EmailSendGrid.inviteMatchMail("chitrasubburaj30@gmail.com", emailId, "Match Invitation", Body).Result; //and it's expiry time is 5 minutes.
+                if (res == "Accepted")
+                {
+                    result = "Mail sent successfully.";
+                }
+                else
+                {
+                    result = "Bad Request";
+                }
+                return result;
+            }
+
+            catch (Exception e)
+            {
+                string SaveErrorLog = Data.Common.SaveErrorLog("SendOTP", e.Message.ToString());
+                throw e;
+            }
+        }
+        #endregion
+
+
+        #region inviteMatch
+        public static string sendmatchnotification(string emailId, string Title, string matchCode, string matchDate, string competitionName, string typeOf, int NoOfPlayers, string MatchLocation)
         {
             try
             {
-                string ConnectionString = Common.GetConnectionString();
-                List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("@matchId", matchId));
-                //Execute the query
-                using (DataSet dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spSelectMatchById", parameters.ToArray()))
+                string res = "";
+                var result = "";
+                #region Form Content Body
+                String Body = string.Empty;
+
+                string filename = @"email-template.html";
+                string filePath = Directory.GetCurrentDirectory();
+                using (System.IO.StreamReader sr = new System.IO.StreamReader(filePath + "//EmailTemplates//" + filename))
                 {
-                    return dt;
+                    Body = sr.ReadToEnd();
                 }
+                Body = Body.Replace("*Title*", Title);
+                Body = Body.Replace("*MatchCode*", matchCode);
+                Body = Body.Replace("*MatchDate*", matchDate);
+                Body = Body.Replace("*Competitiontype*", competitionName);
+                Body = Body.Replace("*Typeof*", typeOf);
+                Body = Body.Replace("*Noofplayers*", NoOfPlayers.ToString());
+                #endregion
+                res = EmailSendGrid.inviteMatchMail("chitrasubburaj30@gmail.com", emailId, "Match Invitation", Body).Result; //and it's expiry time is 5 minutes.
+                if (res == "Accepted")
+                {
+                    result = "Mail sent successfully.";
+                }
+                else
+                {
+                    result = "Bad Request";
+                }
+                return result;
             }
             catch (Exception e)
             {
+                string SaveErrorLog = Data.Common.SaveErrorLog("SendOTP", e.Message.ToString());
                 throw e;
             }
-
         }
         #endregion
     }
