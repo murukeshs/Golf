@@ -11,7 +11,7 @@ namespace GolfApplication.Data
 {
     public class Team
     {
-        public static string createTeam(TeamModel team)
+        public static DataSet createTeam(TeamModel team)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("@teamName", team.teamName));
@@ -23,10 +23,9 @@ namespace GolfApplication.Data
             {
                 string ConnectionString = Common.GetConnectionString();
 
-                using (DataSet dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spCreateTeam", parameters.ToArray()))
-                {
-                    string TeamID = dt.Tables[1].Rows[0]["teamId"].ToString();
-                    return TeamID;
+                using (DataSet ds = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spCreateTeam", parameters.ToArray()))
+                {                 
+                    return ds;                   
                 }                
             }
             catch (Exception e)

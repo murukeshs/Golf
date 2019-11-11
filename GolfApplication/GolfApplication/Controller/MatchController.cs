@@ -107,18 +107,18 @@ namespace GolfApplication.Controller
             try
             {
                 DataTable dt = Data.Match.createMatch(createMatch);
-                if (dt.Rows[0][2].ToString() == "Success")
+                if (dt.Rows[0]["ErrorMessage"].ToString() == "Success")
                 {
                     dynamic Mth = new System.Dynamic.ExpandoObject();
-                    Mth.matchId = (dt.Rows[0][0] == DBNull.Value ? 0 : (int)dt.Rows[0][0]);
-                    Mth.matchCode = (dt.Rows[0][1] == DBNull.Value ? "" : dt.Rows[0][1].ToString());
+                    Mth.matchId = (dt.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["matchId"]);
+                    Mth.matchCode = (dt.Rows[0]["matchCode"] == DBNull.Value ? "" : dt.Rows[0]["matchCode"].ToString());
                     Matches.Add(Mth);
 
                     return StatusCode((int)HttpStatusCode.OK, Matches);
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.OK, new { });
+                    return StatusCode((int)HttpStatusCode.OK, new { error = new { message = dt.Rows[0]["ErrorMessage"].ToString() } });
                 }
             }
             catch (Exception e)
