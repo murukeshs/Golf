@@ -77,3 +77,4 @@ namespace GolfApplication.Models
         public int playerId { get; set; }
     }
 
+}
