@@ -28,7 +28,6 @@ namespace GolfApplication.Data
         {
             configuration = iConfig;
         }
-
         public static string GetConnectionString()
         {
             IConfigurationBuilder builder = new ConfigurationBuilder();
@@ -38,6 +37,14 @@ namespace GolfApplication.Data
             var connstring = configuration.GetSection("ConnectionString").GetSection("DefaultConnection").Value;
 
             return connstring;
+        }
+        #endregion
+
+        #region Get Current URL
+        public static string MyMethod(Microsoft.AspNetCore.Http.HttpContext context)
+        {
+            var host = $"{context.Request.Scheme}://{context.Request.Host}";
+            return host;
         }
         #endregion
 
@@ -223,16 +230,12 @@ namespace GolfApplication.Data
 
         #region inviteMatch
        
-        public static string inviteMatch(/*string emailId,int matchCode, int matchDate, string competitionName,string typeOf,int NoOfPlayers,string matchLocation*/)
+        public static string inviteMatch(string emailId,int matchID,string Title,int UserID, string matchCode, string matchDate, string competitionName, string typeOf, int NoOfPlayers, string MatchLocation)
         {
-            string emailID = "sunila@apptomate.co";
-            string matchCode = "P811201901";
-            string matchDate = "2019-11-25 01:25:454";
-            string competitionName = "Golf MAtch";
-            string typeOf = "Tournment";
-            int NoOfPlayers = 15;
-            string matchLocation = "Chennai Central";
-
+           
+            //var request = Microsoft.AspNetCore.Http.HttpContext;
+            //string CurrentURL = context
+            //string link= CurrentURL+ "?matchId="+matchID+ "/Type="+typeOf+ "/playerId="+ UserID;
             try
             {
                 string res = "";
@@ -240,20 +243,22 @@ namespace GolfApplication.Data
                 #region Form Content Body
                 String Body = string.Empty;
 
-                string filename = @"UserInvitation.html";
+                string filename = @"PlayersInviteMatch.html";
                 string filePath = Directory.GetCurrentDirectory();
                 using (System.IO.StreamReader sr = new System.IO.StreamReader(filePath + "//EmailTemplates//" + filename))
                 {
                     Body = sr.ReadToEnd();
                 }
-                Body = Body.Replace("*keycode*", matchCode.ToString());
-                Body = Body.Replace("*Type*", matchDate.ToString());
-                Body = Body.Replace("*Product Name*", competitionName);
-                Body = Body.Replace("*invite_sender_name*", typeOf);
-                Body = Body.Replace("*invite_sender_name*", NoOfPlayers.ToString());
-                Body = Body.Replace("*invite_sender_name*", matchLocation);
+                Body = Body.Replace("*Title*", competitionName);
+                Body = Body.Replace("*MatchCode*", matchCode);
+                Body = Body.Replace("*MatchDate*", matchDate);
+                Body = Body.Replace("*Competitiontype*", competitionName);
+                Body = Body.Replace("*Typeof*", typeOf);
+                Body = Body.Replace("*Noofplayers*", NoOfPlayers.ToString());
+                Body = Body.Replace("*matchLocation*", MatchLocation);
+                Body = Body.Replace("*Link*", "Link");
                 #endregion
-                res = EmailSendGrid.inviteMatchMail("chitrasubburaj30@gmail.com", emailID, "Match Invitation", Body).Result; //and it's expiry time is 5 minutes.
+                res = EmailSendGrid.inviteMatchMail("chitrasubburaj30@gmail.com", emailId, "Match Invitation", Body).Result; //and it's expiry time is 5 minutes.
                 if (res == "Accepted")
                 {
                     result = "Mail sent successfully.";

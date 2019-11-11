@@ -392,15 +392,15 @@ namespace GolfApplication.Controller
         }
         #endregion
 
-        #region inviteMatch
-        [HttpGet, Route("inviteMatch/{matchId}")]
-        public IActionResult inviteMatch(int matchId)
+        #region sendmatchnotification
+        [HttpGet, Route("sendmatchnotification/{matchId}")]
+        public IActionResult sendmatchnotification(int matchId)
         {
             List<dynamic> matches = new List<dynamic>();
-            List<dynamic> TeamsPlayers = new List<dynamic>();
+            List<dynamic> TeamPlayers = new List<dynamic>();
             try
             {
-                DataSet ds = Data.Match.inviteMatch(matchId);
+                DataSet ds = Data.Match.sendmatchnotification(matchId);
                 DataTable dt1 = ds.Tables[0];
                 DataTable dt2 = ds.Tables[1];
                 if (dt1.Rows.Count > 0)
@@ -448,10 +448,12 @@ namespace GolfApplication.Controller
                                 Teams.address = (dt2.Rows[i]["address"] == DBNull.Value ? "" : dt2.Rows[i]["address"].ToString());
                                 Teams.pinCode = (dt2.Rows[i]["pinCode"] == DBNull.Value ? "" : dt2.Rows[i]["pinCode"].ToString());
 
-                                TeamsPlayers.Add(Teams);
+                                TeamPlayers.Add(Teams);
                             }
+                            //Sending Email To All Team Member's
+                            //Common.inviteMatch();
                         }
-                        MatchList.Teams = TeamsPlayers;
+                        MatchList.Teams = TeamPlayers;
                     }
                     else
                     {
@@ -476,11 +478,15 @@ namespace GolfApplication.Controller
                                 Players.address = (dt2.Rows[i]["address"] == DBNull.Value ? "" : dt2.Rows[i]["address"].ToString());
                                 Players.pinCode = (dt2.Rows[i]["pinCode"] == DBNull.Value ? "" : dt2.Rows[i]["pinCode"].ToString());
 
-                                TeamsPlayers.Add(Players);
+                                TeamPlayers.Add(Players);
                             }
+                            //Sending Email To All Match Players's
+                            //Common.inviteMatch();
                         }
-                        MatchList.Players = TeamsPlayers;
+                        
+                        MatchList.Players = TeamPlayers;
                     }
+
                     matches.Add(MatchList);
 
                     return StatusCode((int)HttpStatusCode.OK, matches);
@@ -498,5 +504,98 @@ namespace GolfApplication.Controller
         }
         #endregion
 
+        #region inviteMatch
+        [HttpGet, Route("inviteMatch/{matchId}")]
+        public IActionResult inviteMatch(int matchId)
+        {
+            List<dynamic> matches = new List<dynamic>();
+            List<dynamic> TeamPlayers = new List<dynamic>();
+            try
+            {
+                DataSet ds = Data.Match.inviteMatch(matchId);
+                DataTable dt1 = ds.Tables[0];
+                DataTable dt2 = ds.Tables[1];
+                DataTable dt3 = ds.Tables[2];
+
+                if (dt1.Rows.Count > 0)
+                {
+                    int matchID= (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
+                    string matchCode= (dt1.Rows[0]["matchCode"] == DBNull.Value ? "" : dt1.Rows[0]["matchCode"].ToString());
+                    string matchName= (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
+                    string matchDate = (dt1.Rows[0]["matchStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchStartDate"].ToString());
+                    string CompetitionName= (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
+                    string Typeof= (dt1.Rows[0]["matchType"] == DBNull.Value ? "" : dt1.Rows[0]["matchType"].ToString());
+                    int NoOfPlayers = dt2.Rows.Count;  
+                    string MatchLocations= (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
+                    string EmailId = string.Empty;
+                    int UserID = 0;
+
+                    if (Typeof == "Teams")
+                    {
+                        if (dt2.Rows.Count > 0)
+                        {
+                            for (int i = 0; i < dt2.Rows.Count; i++)
+                            {
+                                int playerID= (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
+                                UserID= (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
+
+                                //Comma Seperate email
+                                if (dt3.Rows.Count > 0)
+                                {
+                                    string s = dt3.Rows[0][0].ToString();
+                                    string[] values = s.Split(',');
+                                    for (int j = 0; j < values.Length; j++)
+                                    {
+                                        values[j] = values[j].Trim();
+                                        EmailId = values[j];
+
+                                        //Sending Email to Individual Match Players's
+                                        Common.inviteMatch(EmailId, matchID, matchName, UserID, matchCode, matchDate,CompetitionName, Typeof, NoOfPlayers, MatchLocations);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else  //Players
+                    {
+                        if (dt2.Rows.Count > 0)
+                        {
+                            for (int i = 0; i < dt2.Rows.Count; i++)
+                            {
+                                int playerID = (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
+                                UserID = (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
+
+                                //Comma Seperate email
+                                if (dt3.Rows.Count > 0)
+                                {
+                                    string s = dt3.Rows[0][0].ToString();
+                                    string[] values = s.Split(',');
+                                    for (int j = 0; j < values.Length; j++)
+                                    {
+                                        values[j] = values[j].Trim();
+                                        EmailId = values[j];
+
+                                        //Sending Email to Individual Match Players's
+                                        Common.inviteMatch(EmailId, matchID, matchName, UserID, matchCode, matchDate, CompetitionName, Typeof, NoOfPlayers, MatchLocations);
+                                    }
+                                }  
+                            }
+                        }
+                    }
+
+                    return StatusCode((int)HttpStatusCode.OK, matches);
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.OK, new { error = new { message = "MatchId not found" } });
+                }
+            }
+            catch (Exception e)
+            {
+                //string SaveErrorLog = Data.Common.SaveErrorLog("GetStateList", e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
+            }
+        }
+        #endregion
     }
 }
