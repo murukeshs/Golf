@@ -36,22 +36,25 @@ namespace GolfApplication.Controller
                 //{
                 //    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter startingHole" } });
                 //}
-                else if (team.createdBy < 0 || team.createdBy == null)
+                else if (team.createdBy <= 0 || team.createdBy == null)
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter createdBy" } });
                 }
                 else
                 {
-                    string TeamID = Data.Team.createTeam(team);
+                    DataSet ds = Data.Team.createTeam(team);
 
-                    if (TeamID != "0" || TeamID != null)
+                    string Status = ds.Tables[0].Rows[0]["ErrorMessage"].ToString();
+
+                    if (Status == "Success")
                     {
-                       // return StatusCode((int)HttpStatusCode.OK, "TeamCreated Successfully");
+                        string TeamID = ds.Tables[1].Rows[0]["teamId"].ToString();
+                        // return StatusCode((int)HttpStatusCode.OK, "TeamCreated Successfully");
                         return StatusCode((int)HttpStatusCode.OK, new { TeamID, message = "Team Created successfully" });
                     }
                     else
                     {
-                        if (TeamID.Contains("UNIQUE KEY constraint") == true)
+                        if (Status.Contains("UNIQUE KEY constraint") == true)
                         {
                             return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = "Team name / Team Icon is already exists" } });
                         }
@@ -95,10 +98,14 @@ namespace GolfApplication.Controller
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter teamId" } });
                 }
-                //else if (updateteam.teamName == "" || updateteam.teamName == null)
-                //{
-                //    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter teamName" } });
-                //}
+                else if (updateteam.teamName == "" || updateteam.teamName == null)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter teamName" } });
+                }
+                else if (updateteam.createdBy <= 0 || updateteam.createdBy == null)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter createdBy" } });
+                }
                 else
                 {
                     int row = Data.Team.UpdateTeam(updateteam);
@@ -115,9 +122,16 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("updateTeam", e.Message.ToString());
 
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message.ToString() } });
+                string SaveErrorLog = Data.Common.SaveErrorLog("updateTeam", e.Message);
+                if (e.Message.Contains("UNIQUE KEY constraint") == true)
+                {
+                    return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = "Team name / Team Icon is already exists" } });
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
+                }
             }
         }
         #endregion
@@ -163,12 +177,12 @@ namespace GolfApplication.Controller
             try
             {
                 DataSet ds = Data.Team.selectTeamById(teamId);
-                DataTable dt0 = ds.Tables[0];
-                DataTable dt = ds.Tables[1];
+                string dt0 = ds.Tables[0].Rows[0]["status"].ToString();                
                 List<updateTeam> teamDetailsList = new List<updateTeam>();
 
-                if (dt0.Rows[0]["status"] != "TeamDetails")
+                if (dt0 == "TeamPlayers")
                 {
+                    DataTable dt = ds.Tables[1];
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         getTeam team = new getTeam();
@@ -183,11 +197,11 @@ namespace GolfApplication.Controller
                     }
                     return StatusCode((int)HttpStatusCode.OK, teamList);
                 }
-                else if (dt0.Rows[0]["status"] == "TeamDetails")
+                else if (dt0 == "TeamDetails")
                 {
-                    //for (int i = 0; i < dt.Rows.Count; i++)
-                    //{
-                        updateTeam team = new updateTeam();
+
+                    DataTable dt = ds.Tables[1];
+                    updateTeam team = new updateTeam();
 
                         team.teamId = (dt.Rows[0]["teamId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["teamId"]);
                         team.scoreKeeperID = (dt.Rows[0]["scoreKeeperID"] == DBNull.Value ? 0 : (int)dt.Rows[0]["scoreKeeperID"]);
@@ -198,12 +212,12 @@ namespace GolfApplication.Controller
                         team.startingHole = (dt.Rows[0]["startingHole"] == DBNull.Value ? 0 : (int)dt.Rows[0]["startingHole"]);
 
                         teamDetailsList.Add(team);
-                   // }
+                   
                     return StatusCode((int)HttpStatusCode.OK, team);
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.OK, teamList);
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { message = "Team not available" } });
                 }
 
             }
