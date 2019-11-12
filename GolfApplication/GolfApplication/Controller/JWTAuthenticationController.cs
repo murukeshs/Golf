@@ -48,7 +48,7 @@ namespace GolfApplication.Controller
             var token = new JwtSecurityToken(JwtIssuer,
             JwtIssuer,
             null,
-            expires: DateTime.Now.AddMinutes(120),
+            expires: DateTime.Now.AddHours(24),
             signingCredentials: credentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

@@ -79,8 +79,8 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@matchName", createMatch.matchName));
                 parameters.Add(new SqlParameter("@matchType", createMatch.matchType));
                 parameters.Add(new SqlParameter("@matchRuleId", createMatch.matchRuleId));
-                parameters.Add(new SqlParameter("@matchStartDate",createMatch.matchStartDate));
-                parameters.Add(new SqlParameter("@matchEndDate", createMatch.matchEndDate));
+                parameters.Add(new SqlParameter("@matchStartDate",createMatch.matchStartDate.ToString()));
+                parameters.Add(new SqlParameter("@matchEndDate", createMatch.matchEndDate.ToString()));
                 parameters.Add(new SqlParameter("@matchFee", createMatch.matchFee));
                 parameters.Add(new SqlParameter("@matchLocation", createMatch.matchLocation));
                 parameters.Add(new SqlParameter("@createdBy", createMatch.createdBy));
@@ -130,13 +130,13 @@ namespace GolfApplication.Data
                 string connectionstring = Common.GetConnectionString();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("@Type", matchPlayer.type));
-                parameters.Add(new SqlParameter("@matchId", matchPlayer.eventId));
+                parameters.Add(new SqlParameter("@eventId", matchPlayer.eventId));
                 parameters.Add(new SqlParameter("@teamId", matchPlayer.teamId));
                 parameters.Add(new SqlParameter("@playerId", matchPlayer.playerId));
-                parameters.Add(new SqlParameter("@isInvitationSent", matchPlayer.isInvitationSent));
-                parameters.Add(new SqlParameter("@isInvitationAccept", matchPlayer.isInvitationAccept));
-                parameters.Add(new SqlParameter("@isPaymentMade", matchPlayer.isPaymentMade));
-                parameters.Add(new SqlParameter("@createdDate", matchPlayer.createdDate));
+                //parameters.Add(new SqlParameter("@isInvitationSent", matchPlayer.isInvitationSent));
+                //parameters.Add(new SqlParameter("@isInvitationAccept", matchPlayer.isInvitationAccept));
+                //parameters.Add(new SqlParameter("@isPaymentMade", matchPlayer.isPaymentMade));
+                //parameters.Add(new SqlParameter("@createdDate", matchPlayer.createdDate));
 
                 string rowsAffected = SqlHelper.ExecuteScalar(connectionstring, CommandType.StoredProcedure, "spCreateMatchPlayer", parameters.ToArray()).ToString();
                 return rowsAffected;

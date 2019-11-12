@@ -429,41 +429,28 @@ namespace GolfApplication.Controller
         #region GenerateOTP
         [HttpPut, Route("generateEmailOTP")]
         [AllowAnonymous]
-        public IActionResult generateOTP([FromBody]GenOTP otp)
+        public IActionResult generateOTP([FromBody]generateEmailOTP otp)
         {
             try
             {
                 string res = "";
-                //Random generator = new Random();
-                //int OTPValue = generator.Next(0, 999999);
-
-                // int OTPValue = Common.GenerateOTP();
-
                 System.Guid guid = System.Guid.NewGuid();
 
                 string OTPValue = guid.ToString();
 
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-                System.Text.RegularExpressions.Match match = regex.Match(otp.emailorPhone);
+                System.Text.RegularExpressions.Match match = regex.Match(otp.email);
                 if(otp.type == "" || otp.type == "string")
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a type" } });
                 }
-                //else if (otp.sourceType == "" || otp.sourceType == "string")
-                //{
-                //    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a sourceType" } });
-                //}
-                //else if (otp.source == "" || otp.sourceType == "string")
-                //{
-                //    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a source" } });
-                //}
                 else if (match.Success)
                 {                   
-                    string row = Data.User.generateOTP(OTPValue, otp);
+                    string row = Data.User.generateEmailOTP(OTPValue, otp);
 
                     if (row == "Success")
                     {
-                        res = Common.SendOTP(otp.emailorPhone, otp.type, OTPValue);
+                        res = Common.SendOTP(otp.email, otp.type, OTPValue);
                         if (res == "Mail sent successfully.")
                         {
                             return StatusCode((int)HttpStatusCode.OK, "OTP Generated and sent Successfully"); //result = "Mail sent successfully.";
@@ -570,7 +557,7 @@ namespace GolfApplication.Controller
         #region SmsOTP
         [HttpPut, Route("GenerateSmsOTP")]
         [AllowAnonymous]
-        public IActionResult SmsOTP([FromBody]GenOTP otp)
+        public IActionResult SmsOTP([FromBody]GenerateSmsOTP otp)
         {
             try
             {
@@ -583,11 +570,11 @@ namespace GolfApplication.Controller
                 //otp.emailorPhone = "+14087224019";
 
                 // string SaveOtpValue = Data.Common.SaveOTP(PhoneNumber, OTPValue, "Phone");
-                string SaveOtpValue = Data.User.generateOTP(OTPValue, otp);
+                string SaveOtpValue = Data.User.GenerateSmsOTP(OTPValue, otp);
 
                 if (SaveOtpValue == "Success")
                 {
-                    results = SmsNotification.SendMessage(otp.emailorPhone, "Hi User, your OTP is " + OTPValue + " and it's expiry time is 5 minutes.");
+                    results = SmsNotification.SendMessage(otp.phone, "Hi User, your OTP is " + OTPValue + " and it's expiry time is 5 minutes.");
 
                     string status = results.messages[0].status.ToString();
 

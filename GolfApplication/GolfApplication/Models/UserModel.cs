@@ -85,14 +85,15 @@ namespace GolfApplication.Models
         //public string source { get; set; }
     }
 
-    public class GenOTP
+    public class generateEmailOTP
     {
-        // public string email { get; set; }
-        //public string phone { get; set; }
-        public string emailorPhone { get; set; }
+        public string email { get; set; }
         public string type { get; set; }
-        //public string sourceType { get; set; }
-        //public string source { get; set; }
+    }
+    public class GenerateSmsOTP
+    {
+        public string phone { get; set; }
+        public string type { get; set; }
     }
 
     public class updateUser

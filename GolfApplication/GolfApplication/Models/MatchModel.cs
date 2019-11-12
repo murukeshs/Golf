@@ -33,10 +33,10 @@ namespace GolfApplication.Models
         public int eventId { get; set; }
         public string teamId { get; set; }
         public string playerId { get; set; }
-        public bool isInvitationSent { get; set; }
-        public bool isInvitationAccept { get; set; }
-        public bool isPaymentMade { get; set; }
-        public string createdDate { get; set; }
+        //public bool isInvitationSent { get; set; }
+        //public bool isInvitationAccept { get; set; }
+        //public bool isPaymentMade { get; set; }
+        //public string createdDate { get; set; }
     }
 
     public class MatchList

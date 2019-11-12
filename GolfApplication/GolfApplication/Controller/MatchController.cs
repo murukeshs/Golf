@@ -107,18 +107,18 @@ namespace GolfApplication.Controller
             try
             {
                 DataTable dt = Data.Match.createMatch(createMatch);
-                if(dt.Rows[0][2].ToString()=="Success")
+                if(dt.Rows[0][0].ToString()=="Success")
                 {
                     dynamic Mth = new System.Dynamic.ExpandoObject();
-                    Mth.matchId = (dt.Rows[0][0] == DBNull.Value ? 0 : (int)dt.Rows[0][0]);
-                    Mth.matchCode = (dt.Rows[0][1] == DBNull.Value ? "" : dt.Rows[0][1].ToString());
+                    Mth.matchId = (dt.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["matchId"]);
+                    Mth.matchCode = (dt.Rows[0]["matchCode"] == DBNull.Value ? "" : dt.Rows[0]["matchCode"].ToString());
                     Matches.Add(Mth);
 
                     return StatusCode((int)HttpStatusCode.OK, Matches);
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.OK, new { });
+                    return StatusCode((int)HttpStatusCode.OK, new { message = "Failed to create match" });
                 }
             }
             catch (Exception e)
@@ -217,9 +217,9 @@ namespace GolfApplication.Controller
                             {
                                 dynamic Teams = new System.Dynamic.ExpandoObject();
                                 Teams.teamId = (dt2.Rows[i]["teamId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["teamId"]);
-                                Teams.teamName = (dt2.Rows[i]["teamName"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["teamName"]);
-                                Teams.teamIcon = (dt2.Rows[i]["teamIcon"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["teamIcon"]);
-                                Teams.scoreKeeperId = (dt2.Rows[i]["scoreKeeperId"] == DBNull.Value ? 0 : dt2.Rows[i]["scoreKeeperId"]);
+                                Teams.teamName = (dt2.Rows[i]["teamName"] == DBNull.Value ? "" : dt2.Rows[i]["teamName"].ToString());
+                                Teams.teamIcon = (dt2.Rows[i]["teamIcon"] == DBNull.Value ? "" : dt2.Rows[i]["teamIcon"].ToString());
+                                Teams.scoreKeeperName = (dt2.Rows[i]["scoreKeeperName"] == DBNull.Value ? "" : dt2.Rows[i]["scoreKeeperName"].ToString());
                                 Teams.userId = (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
                                 Teams.firstName = (dt2.Rows[i]["firstName"] == DBNull.Value ? "" : dt2.Rows[i]["firstName"].ToString());
                                 Teams.lastName = (dt2.Rows[i]["lastName"] == DBNull.Value ? "" : dt2.Rows[i]["lastName"].ToString());
@@ -427,14 +427,10 @@ namespace GolfApplication.Controller
                                     string s = dt3.Rows[0][0].ToString();
                                     s = s.TrimStart(',');
                                     string[] values = s.Split(',');
-                                    //for (int j = 0; j < values.Length; j++)
-                                    //{
-                                    //    values[j] = values[j].Trim();
-                                        EmailId = values[i];
+                                    EmailId = values[i];
 
-                                        //Sending Email to Individual Match Players's
-                                        Match.sendmatchnotification(EmailId, matchName, matchCode, matchDate, CompetitionName, Typeof, NoOfPlayers, MatchLocations);
-                                   // }
+                                    //Sending Email to Individual Match Players's
+                                    Match.sendmatchnotification(EmailId, matchName, matchCode, matchDate, CompetitionName, Typeof, NoOfPlayers, MatchLocations);
                                 }
                             }
 
@@ -452,14 +448,10 @@ namespace GolfApplication.Controller
                                     string s = dt3.Rows[0][0].ToString();
                                     s = s.TrimStart(',');
                                     string[] values = s.Split(',');
-                                    //for (int j = 0; j < values.Length; j++)
-                                    //{
-                                    //    values[j] = values[j].Trim();
-                                        EmailId = values[i];
+                                    EmailId = values[i];
 
-                                        //Sending Email to Individual Match Players's
-                                        Match.sendmatchnotification(EmailId, matchName, matchCode, matchDate, CompetitionName, Typeof, NoOfPlayers, MatchLocations);
-                                   // }
+                                    //Sending Email to Individual Match Players's
+                                    Match.sendmatchnotification(EmailId, matchName, matchCode, matchDate, CompetitionName, Typeof, NoOfPlayers, MatchLocations);
                                 }
                             }
                         }
@@ -510,20 +502,17 @@ namespace GolfApplication.Controller
                             for (int i = 0; i < dt2.Rows.Count; i++)
                             {
                                 int playerID= (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
+
                                 //Comma Seperate email
                                 if (dt3.Rows.Count > 0)
                                 {
                                     string s = dt3.Rows[0][0].ToString();
                                     s = s.TrimStart(',');
                                     string[] values = s.Split(',');
-                                    //for (int j = 0; j < values.Length; j++)
-                                    //{
-                                    //    values[j] = values[j].Trim();
-                                        EmailId = values[i];
+                                    EmailId = values[i];
 
                                         //Sending Email to Individual Match Players's
                                         Match.inviteMatch(EmailId, matchID, matchName, playerID, matchCode, matchDate,CompetitionName, Typeof, NoOfPlayers, MatchLocations);
-                                   // }
                                 }
                             }
                         }
@@ -543,14 +532,10 @@ namespace GolfApplication.Controller
                                     string s = dt3.Rows[0][0].ToString();
                                     s = s.TrimStart(',');
                                     string[] values = s.Split(',');
-                                    //for (int j = 0; j < values.Length; j++)
-                                    //{
-                                    //    values[j] = values[j].Trim();
-                                        EmailId = values[i];
+                                    EmailId = values[i];
 
                                         //Sending Email to Individual Match Players's
                                         Match.inviteMatch(EmailId, matchID, matchName, playerID, matchCode, matchDate, CompetitionName, Typeof, NoOfPlayers, MatchLocations);
-                                    //}
                                 }  
                             }
                         }
