@@ -390,11 +390,6 @@ namespace GolfApplication.Controller
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "SourceType is required" } });
                 }
-                //else if (updatePassword.source == "" || updatePassword.sourceType == "string")
-                //{
-                //    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a source" } });
-                //}
-
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
                 System.Text.RegularExpressions.Match match = regex.Match(updatePassword.emailorPhone);
                 if (match.Success)
@@ -643,7 +638,44 @@ namespace GolfApplication.Controller
         }
         #endregion
 
+        #region getPlayerList
+        [HttpGet, Route("getPlayerList")]
+        [AllowAnonymous]
+        public IActionResult getPlayerList(string SearchTerm)
+        {
+            List<dynamic> getPlayerList = new List<dynamic>();
+            
+            try
+            {
+                DataTable dt = Data.User.getPlayerList(SearchTerm);
+                if (dt.Rows.Count > 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        dynamic getPlayers = new System.Dynamic.ExpandoObject();
+                        getPlayers.userId = (int)dt.Rows[i]["userId"];
+                        getPlayers.playerName = (dt.Rows[i]["playerName"] == DBNull.Value ? "" : dt.Rows[i]["playerName"].ToString());
+                        getPlayers.gender = (dt.Rows[i]["gender"] == DBNull.Value ? "" : dt.Rows[i]["gender"].ToString());
+                        getPlayers.email = (dt.Rows[i]["email"] == DBNull.Value ? "" : dt.Rows[i]["email"].ToString());
+                        getPlayers.userType = (dt.Rows[i]["userType"] == DBNull.Value ? "" : dt.Rows[i]["userType"].ToString());
+                        getPlayers.isScoreKeeper = (dt.Rows[i]["isScoreKeeper"] == DBNull.Value ? "" : dt.Rows[i]["isScoreKeeper"].ToString());
 
+                        getPlayerList.Add(getPlayers);
+                    }
+                    return StatusCode((int)HttpStatusCode.OK, getPlayerList);
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.OK, getPlayerList);
+                }
+            }
+            catch (Exception e)
+            {
+                string SaveErrorLog = Data.Common.SaveErrorLog("searchPlayerList", e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
+            }
+        }
+        #endregion
 
         //#region login
         //[HttpPost, Route("login")]
@@ -707,6 +739,8 @@ namespace GolfApplication.Controller
         //    }
         //}
         //#endregion
+
+
 
     }
 }

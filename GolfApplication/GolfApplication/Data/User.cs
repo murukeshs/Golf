@@ -332,5 +332,26 @@ namespace GolfApplication.Data
                 throw e;
             }
         }
+        
+        public static DataTable getPlayerList(string Search)
+        {
+            try
+            {
+                string ConnectionString = Common.GetConnectionString();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("@Search", Search));
+
+                //Execute the query
+                using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spGetPlayerList", parameters.ToArray()).Tables[0])
+                {
+                    return dt;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+        }
     }
 }

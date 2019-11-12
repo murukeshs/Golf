@@ -113,7 +113,6 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-
                 string SaveErrorLog = Data.Common.SaveErrorLog("updateTeam", e.Message);
                 if (e.Message.Contains("UNIQUE KEY constraint") == true)
                 {
