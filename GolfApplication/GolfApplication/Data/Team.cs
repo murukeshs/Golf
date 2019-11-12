@@ -43,7 +43,7 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@teamId", updateteam.teamId));
                 parameters.Add(new SqlParameter("@teamName", updateteam.teamName));
                 parameters.Add(new SqlParameter("@teamIcon", updateteam.teamIcon));
-                parameters.Add(new SqlParameter("@scoreKeeperID", updateteam.scoreKeeperID));                
+                //parameters.Add(new SqlParameter("@scoreKeeperID", updateteam.scoreKeeperID));                
                 parameters.Add(new SqlParameter("@startingHole", updateteam.startingHole));
 
                 int rowsAffected = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, "spUpdateTeam", parameters.ToArray());

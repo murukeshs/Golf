@@ -28,14 +28,6 @@ namespace GolfApplication.Controller
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter teamName" } });
                 }
-                //else if (team.teamIcon == "" || team.teamIcon == null)
-                //{
-                //    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter teamIcon" } });
-                //}
-                //else if (team.startingHole < 0 || team.startingHole == null)
-                //{
-                //    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter startingHole" } });
-                //}
                 else if (team.createdBy <= 0 || team.createdBy == null)
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter createdBy" } });
@@ -90,11 +82,7 @@ namespace GolfApplication.Controller
             updateTeam team = new updateTeam();
             try
             {
-                if (updateteam.scoreKeeperID <= 0 || updateteam.scoreKeeperID == null)
-                {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter scoreKeeperID" } });
-                }
-                else if (updateteam.teamId <= 0 || updateteam.teamId == null)
+                if (updateteam.teamId <= 0 )
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter teamId" } });
                 }
@@ -102,14 +90,17 @@ namespace GolfApplication.Controller
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter teamName" } });
                 }
-                else if (updateteam.createdBy <= 0 || updateteam.createdBy == null)
+                else if (updateteam.teamIcon == "" || updateteam.teamIcon == null)
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter createdBy" } });
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter teamIcon" } });
+                }
+                else if (updateteam.startingHole < 0 )
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter startingHole" } });
                 }
                 else
                 {
                     int row = Data.Team.UpdateTeam(updateteam);
-
                     if (row > 0)
                     {
                         return StatusCode((int)HttpStatusCode.OK, "Updated Successfully");
