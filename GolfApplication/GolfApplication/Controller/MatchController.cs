@@ -37,7 +37,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                //string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -68,7 +68,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                //string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -93,7 +93,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                //string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -123,7 +123,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                //string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -148,7 +148,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                //string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -174,7 +174,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                //string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -280,7 +280,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                //string SaveErrorLog = Data.Common.SaveErrorLog("GetStateList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("GetStateList", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -326,7 +326,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                //string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -351,7 +351,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                //string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -466,7 +466,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                //string SaveErrorLog = Data.Common.SaveErrorLog("GetStateList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("GetStateList", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -550,7 +550,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                //string SaveErrorLog = Data.Common.SaveErrorLog("GetStateList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("GetStateList", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
