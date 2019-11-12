@@ -12,7 +12,10 @@ using System.Data;
 
 namespace GolfApplication.Controller
 {
-   
+    [EnableCors("AllowAll")]
+    [Route("api/[controller]")]
+    [ApiController]
+    [Authorize]
     public class CountryController : ControllerBase
     {
         #region GetCountryList
