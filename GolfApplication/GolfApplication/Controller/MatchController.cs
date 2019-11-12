@@ -37,7 +37,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("matchRules", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -68,7 +68,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("getMatchRulesList", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -93,7 +93,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("updateMatchRules", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -123,7 +123,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("createMatch", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -148,7 +148,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("updateMatch", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -174,7 +174,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("createMatchplayer", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -197,7 +197,7 @@ namespace GolfApplication.Controller
                     MatchList.matchId = (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
                     MatchList.matchCode = (dt1.Rows[0]["matchCode"] == DBNull.Value ? "" : dt1.Rows[0]["matchCode"].ToString());
                     MatchList.matchName = (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
-                    MatchList.matchType = (dt1.Rows[0]["matchType"] == DBNull.Value ? "" : dt1.Rows[0]["matchType"].ToString());
+                    //MatchList.matchType = (dt1.Rows[0]["matchType"] == DBNull.Value ? "" : dt1.Rows[0]["matchType"].ToString());
                     MatchList.matchRuleId = (dt1.Rows[0]["matchRuleId"] == DBNull.Value ? "" : dt1.Rows[0]["matchRuleId"].ToString());
                     MatchList.ruleName = (dt1.Rows[0]["ruleName"] == DBNull.Value ? "" : dt1.Rows[0]["ruleName"].ToString());
                     MatchList.matchStartDate = (dt1.Rows[0]["matchStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchStartDate"].ToString());
@@ -280,7 +280,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("GetStateList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("getMatchById", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -303,7 +303,7 @@ namespace GolfApplication.Controller
                         Matches.matchId = (dt.Rows[i]["matchId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["matchId"]);
                         Matches.matchCode = (dt.Rows[i]["matchCode"] == DBNull.Value ? "" : dt.Rows[i]["matchCode"].ToString());
                         Matches.matchName = (dt.Rows[i]["matchName"] == DBNull.Value ? "" : dt.Rows[i]["matchName"].ToString());
-                        Matches.matchType = (dt.Rows[i]["matchType"] == DBNull.Value ? "" : dt.Rows[i]["matchType"].ToString());
+                        //Matches.matchType = (dt.Rows[i]["matchType"] == DBNull.Value ? "" : dt.Rows[i]["matchType"].ToString());
                         Matches.matchRuleId = (dt.Rows[i]["matchRuleId"] == DBNull.Value ? "" : dt.Rows[i]["matchRuleId"].ToString());
                         Matches.ruleName = (dt.Rows[i]["ruleName"] == DBNull.Value ? "" : dt.Rows[i]["ruleName"].ToString());
                         Matches.matchStartDate = (dt.Rows[i]["matchStartDate"] == DBNull.Value ? "" : dt.Rows[i]["matchStartDate"].ToString());
@@ -326,7 +326,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("getMatchList", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -351,7 +351,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("GetCountryList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("acceptMatchInvitation", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -386,7 +386,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("userType", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("getCompetitionType", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -410,53 +410,31 @@ namespace GolfApplication.Controller
                     string matchName = (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
                     string matchDate = (dt1.Rows[0]["matchStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchStartDate"].ToString());
                     string CompetitionName = (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
-                    string Typeof = (dt1.Rows[0]["matchType"] == DBNull.Value ? "" : dt1.Rows[0]["matchType"].ToString());
                     int NoOfPlayers = dt2.Rows.Count;
                     string MatchLocations = (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
                     string EmailId = string.Empty;
 
-                    if (Typeof == "Teams")
+                    string emailsWithComma;
+                    string[] values = null;
+                    if (dt3.Rows.Count > 0)
                     {
-                        if (dt2.Rows.Count > 0)
+                        emailsWithComma = dt3.Rows[0][0].ToString();
+                        emailsWithComma = emailsWithComma.TrimStart(',');
+                        values = emailsWithComma.Split(',');
+                    }
+                    if (dt2.Rows.Count > 0)
                         {
                             for (int i = 0; i < dt2.Rows.Count; i++)
                             {
                                 //Comma Seperate email
-                                if (dt3.Rows.Count > 0)
+                                if (i < values.Length)
                                 {
-                                    string s = dt3.Rows[0][0].ToString();
-                                    s = s.TrimStart(',');
-                                    string[] values = s.Split(',');
                                     EmailId = values[i];
-
                                     //Sending Email to Individual Match Players's
-                                    Match.sendmatchnotification(EmailId, matchName, matchCode, matchDate, CompetitionName, Typeof, NoOfPlayers, MatchLocations);
-                                }
-                            }
-
-                        }
-                    }
-                    else  //Players
-                    {
-                        if (dt2.Rows.Count > 0)
-                        {
-                            for (int i = 0; i < dt2.Rows.Count; i++)
-                            {
-                                //Comma Seperate email
-                                if (dt3.Rows.Count > 0)
-                                {
-                                    string s = dt3.Rows[0][0].ToString();
-                                    s = s.TrimStart(',');
-                                    string[] values = s.Split(',');
-                                    EmailId = values[i];
-
-                                    //Sending Email to Individual Match Players's
-                                    Match.sendmatchnotification(EmailId, matchName, matchCode, matchDate, CompetitionName, Typeof, NoOfPlayers, MatchLocations);
+                                    Match.sendmatchnotification(EmailId, matchName, matchCode, matchDate, CompetitionName, NoOfPlayers, MatchLocations);
                                 }
                             }
                         }
-                    }
-
                     return StatusCode((int)HttpStatusCode.OK, "Match Invitations Sent Successfully");
                 }
                 else
@@ -466,7 +444,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("GetStateList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("sendmatchnotification", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }
@@ -490,13 +468,18 @@ namespace GolfApplication.Controller
                     string matchName= (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
                     string matchDate = (dt1.Rows[0]["matchStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchStartDate"].ToString());
                     string CompetitionName= (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
-                    string Typeof= (dt1.Rows[0]["matchType"] == DBNull.Value ? "" : dt1.Rows[0]["matchType"].ToString());
                     int NoOfPlayers = dt2.Rows.Count;  
                     string MatchLocations= (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
                     string EmailId = string.Empty;
 
-                    if (Typeof == "Teams")
+                    string emailsWithComma;
+                    string[] values=null;
+                    if (dt3.Rows.Count > 0)
                     {
+                        emailsWithComma = dt3.Rows[0][0].ToString();
+                        emailsWithComma = emailsWithComma.TrimStart(',');
+                        values = emailsWithComma.Split(',');
+                    }
                         if (dt2.Rows.Count > 0)
                         {
                             for (int i = 0; i < dt2.Rows.Count; i++)
@@ -504,43 +487,15 @@ namespace GolfApplication.Controller
                                 int playerID= (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
 
                                 //Comma Seperate email
-                                if (dt3.Rows.Count > 0)
+                                if (i < values.Length )
                                 {
-                                    string s = dt3.Rows[0][0].ToString();
-                                    s = s.TrimStart(',');
-                                    string[] values = s.Split(',');
                                     EmailId = values[i];
-
-                                        //Sending Email to Individual Match Players's
-                                        Match.inviteMatch(EmailId, matchID, matchName, playerID, matchCode, matchDate,CompetitionName, Typeof, NoOfPlayers, MatchLocations);
+                                    //Sending Email to Individual Match Players's
+                                    Match.inviteMatch(EmailId, matchID, matchName, playerID, matchCode, matchDate,CompetitionName, NoOfPlayers, MatchLocations);
                                 }
                             }
                         }
-                    }
-                    else  //Players
-                    {
-                        if (dt2.Rows.Count > 0)
-                        {
-                            for (int i = 0; i < dt2.Rows.Count; i++)
-                            {
-                                int playerID = (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
-                                
-
-                                //Comma Seperate email
-                                if (dt3.Rows.Count > 0)
-                                {
-                                    string s = dt3.Rows[0][0].ToString();
-                                    s = s.TrimStart(',');
-                                    string[] values = s.Split(',');
-                                    EmailId = values[i];
-
-                                        //Sending Email to Individual Match Players's
-                                        Match.inviteMatch(EmailId, matchID, matchName, playerID, matchCode, matchDate, CompetitionName, Typeof, NoOfPlayers, MatchLocations);
-                                }  
-                            }
-                        }
-                    }
-
+                   
                     return StatusCode((int)HttpStatusCode.OK, "Match Invitations Sent Successfully");
                 }
                 else
@@ -550,7 +505,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("GetStateList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("inviteMatch", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
             }
         }

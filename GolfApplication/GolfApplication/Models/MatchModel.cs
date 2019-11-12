@@ -44,7 +44,7 @@ namespace GolfApplication.Models
         public int matchId { get; set; }
         public string matchCode { get; set; }
         public string matchName { get; set; }
-        public string matchType { get; set; }
+        //public string matchType { get; set; }
         public string matchRuleId { get; set; }
         public string matchStartDate { get; set; }
         public string matchEndDate { get; set; }

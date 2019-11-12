@@ -77,7 +77,7 @@ namespace GolfApplication.Data
                 string connectionstring = Common.GetConnectionString();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("@matchName", createMatch.matchName));
-                parameters.Add(new SqlParameter("@matchType", createMatch.matchType));
+                //parameters.Add(new SqlParameter("@matchType", createMatch.matchType));
                 parameters.Add(new SqlParameter("@matchRuleId", createMatch.matchRuleId));
                 parameters.Add(new SqlParameter("@matchStartDate",createMatch.matchStartDate.ToString()));
                 parameters.Add(new SqlParameter("@matchEndDate", createMatch.matchEndDate.ToString()));
@@ -132,7 +132,7 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@Type", matchPlayer.type));
                 parameters.Add(new SqlParameter("@eventId", matchPlayer.eventId));
                 parameters.Add(new SqlParameter("@teamId", matchPlayer.teamId));
-                parameters.Add(new SqlParameter("@playerId", matchPlayer.playerId));
+               // parameters.Add(new SqlParameter("@playerId", matchPlayer.playerId));
                 //parameters.Add(new SqlParameter("@isInvitationSent", matchPlayer.isInvitationSent));
                 //parameters.Add(new SqlParameter("@isInvitationAccept", matchPlayer.isInvitationAccept));
                 //parameters.Add(new SqlParameter("@isPaymentMade", matchPlayer.isPaymentMade));
@@ -254,7 +254,7 @@ namespace GolfApplication.Data
         #endregion
 
         #region inviteMatch
-        public static string inviteMatch(string emailId, int matchID, string Title, int UserID, string matchCode, string matchDate, string competitionName, string typeOf, int NoOfPlayers, string MatchLocation)
+        public static string inviteMatch(string emailId, int matchID, string Title, int UserID, string matchCode, string matchDate, string competitionName, int NoOfPlayers, string MatchLocation)
         {
             //var request = Microsoft.AspNetCore.Http.HttpContext;
             //string CurrentURL = context
@@ -276,7 +276,7 @@ namespace GolfApplication.Data
                 Body = Body.Replace("*MatchCode*", matchCode);
                 Body = Body.Replace("*MatchDate*", matchDate);
                 Body = Body.Replace("*Competitiontype*", competitionName);
-                Body = Body.Replace("*Typeof*", typeOf);
+                //Body = Body.Replace("*Typeof*", typeOf);
                 Body = Body.Replace("*Noofplayers*", NoOfPlayers.ToString());
                 Body = Body.Replace("*matchLocation*", MatchLocation);
                 Body = Body.Replace("*Link*", "Link");
@@ -303,7 +303,7 @@ namespace GolfApplication.Data
 
 
         #region inviteMatch
-        public static string sendmatchnotification(string emailId, string Title, string matchCode, string matchDate, string competitionName, string typeOf, int NoOfPlayers, string MatchLocation)
+        public static string sendmatchnotification(string emailId, string Title, string matchCode, string matchDate, string competitionName, int NoOfPlayers, string MatchLocation)
         {
             try
             {
@@ -322,7 +322,7 @@ namespace GolfApplication.Data
                 Body = Body.Replace("*MatchCode*", matchCode);
                 Body = Body.Replace("*MatchDate*", matchDate);
                 Body = Body.Replace("*Competitiontype*", competitionName);
-                Body = Body.Replace("*Typeof*", typeOf);
+                //Body = Body.Replace("*Typeof*", typeOf);
                 Body = Body.Replace("*Noofplayers*", NoOfPlayers.ToString());
                 #endregion
                 res = EmailSendGrid.inviteMatchMail("chitrasubburaj30@gmail.com", emailId, "Match Invitation", Body).Result; //and it's expiry time is 5 minutes.
