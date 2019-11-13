@@ -102,9 +102,13 @@ namespace GolfApplication.Controller
                     }
                     else
                     {
-                        if (Response.Contains("UNIQUE KEY constraint") == true)
+                        if (Response.Contains("UQ__tblUser__AB6E61648296FE35"))  // Check Duplicate Key for Email
                         {
-                            return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = "Email Id / Phone is already exists" });
+                            return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = "Email Id  is already exists" });
+                        }
+                        if(Response.Contains("UQ__tblUser__4849DA0168C6999A"))   // Check Duplicate Key for Phone
+                        {
+                            return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = "PhoneNo  is already exists" });
                         }
                         else
                         {
