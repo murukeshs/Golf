@@ -67,7 +67,7 @@ namespace GolfApplication.Data
         //}
 
 
-        public static string createUser([FromBody]createUser userCreate)
+        public static DataTable createUser([FromBody]createUser userCreate)
         {
             try
             {
@@ -94,8 +94,13 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@isPublicProfile", userCreate.isPublicProfile));
                 parameters.Add(new SqlParameter("@userTypeId", userCreate.userTypeId));
 
-                string rowsAffected = SqlHelper.ExecuteScalar(ConnectionString, CommandType.StoredProcedure, "spCreateUser", parameters.ToArray()).ToString();
-                return rowsAffected;
+                //string rowsAffected = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spCreateUser", parameters.ToArray()).ToString();
+                //return rowsAffected;
+
+                using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spCreateUser", parameters.ToArray()).Tables[0])
+                {
+                    return dt;
+                }
             }
             catch (Exception e)
             {

@@ -65,6 +65,7 @@ namespace GolfApplication.Controller
         [AllowAnonymous]
         public IActionResult createUser(createUser userCreate)
         {
+            
             try
             {                
                 userCreate.profileImage = Global.fileurl;
@@ -93,21 +94,21 @@ namespace GolfApplication.Controller
 
                 if (match.Success)
                 {
-                    string row = Data.User.createUser(userCreate);
-
-                    if (row == "Success")
+                    DataTable dt = Data.User.createUser(userCreate);
+                    string Response = dt.Rows[0][0].ToString();
+                    if (Response == "Success")
                     {
-                        return StatusCode((int)HttpStatusCode.OK, "Saved Successfully");
+                        return StatusCode((int)HttpStatusCode.OK, new { userId= dt.Rows[0][1].ToString() });
                     }
                     else
                     {
-                        if (row.Contains("UNIQUE KEY constraint") == true)
+                        if (Response.Contains("UNIQUE KEY constraint") == true)
                         {
                             return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = "Email Id is already exists" } });
                         }
                         else
                         {
-                            return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { message = row.ToString() } });
+                            return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { message = Response } });
                         }
                         
                     }
