@@ -344,5 +344,28 @@ namespace GolfApplication.Data
             }
         }
         #endregion
+
+
+        #region getMatchJoinList
+        public static DataTable getMatchJoinList([FromBody]getMatchJoinList getMatchJoinList)
+        {
+            try
+            {
+                string connectionstring = Common.GetConnectionString();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("@matchId", getMatchJoinList.matchId));
+                parameters.Add(new SqlParameter("@userId", getMatchJoinList.userId));
+                
+                using (DataTable dt = SqlHelper.ExecuteDataset(connectionstring, CommandType.StoredProcedure, "spGetMatchJoinList", parameters.ToArray()).Tables[0])
+                {
+                    return dt;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        #endregion
     }
 }

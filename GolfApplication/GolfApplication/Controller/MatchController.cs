@@ -32,13 +32,13 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { ErrorMessage = "Failed" } });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = "Failed" });
                 }
             }
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("matchRules", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
             }
         }
 
@@ -69,7 +69,7 @@ namespace GolfApplication.Controller
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("getMatchRulesList", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
             }
         }
         #endregion
@@ -88,13 +88,13 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { ErrorMessage = "MatchRuleId Not Found" } });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = "MatchRuleId Not Found" });
                 }
             }
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("updateMatchRules", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
             }
         }
         #endregion
@@ -118,13 +118,13 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { ErrorMessage = "Failed to create match" } });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = "Failed to create match" });
                 }
             }
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("createMatch", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
             }
         }
         #endregion
@@ -143,13 +143,13 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { ErrorMessage = "MatchId Not Found" } });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = "MatchId Not Found" });
                 }
             }
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("updateMatch", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
             }
         }
         #endregion
@@ -169,13 +169,13 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { ErrorMessage = "MatchId is already present" } });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = "MatchId is already present" });
                 }
             }
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("createMatchplayer", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
             }
         }
         #endregion
@@ -275,13 +275,13 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { ErrorMessage = "MatchId not found" } });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = "MatchId not found" });
                 }
             }
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("getMatchById", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
             }
         }
         #endregion
@@ -329,7 +329,7 @@ namespace GolfApplication.Controller
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("getMatchList", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
             }
         }
         #endregion
@@ -375,7 +375,7 @@ namespace GolfApplication.Controller
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("getMatchList", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
             }
         }
         #endregion
@@ -394,13 +394,13 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { ErrorMessage = "Failed to update" } });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = "Failed to update" });
                 }
             }
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("acceptMatchInvitation", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = new { message = e.Message } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
             }
         }
         #endregion
@@ -435,7 +435,7 @@ namespace GolfApplication.Controller
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("getCompetitionType", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
             }
         }
         #endregion
@@ -498,13 +498,13 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new { error = new { ErrorMessage = "MatchId not found" } });
+                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new {ErrorMessage = "MatchId not found" });
                 }
             }
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("sendmatchnotification", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
             }
         }
         #endregion
@@ -559,13 +559,53 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new { error = new { ErrorMessage = "MatchId not found" } });
+                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new {ErrorMessage = "MatchId not found" });
                 }
             }
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("inviteMatch", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
+            }
+        }
+        #endregion
+
+
+        #region createMatch
+        [HttpPost, Route("getMatchJoinList")]
+        public IActionResult getMatchJoinList(getMatchJoinList getMatchJoinList)
+        {
+            List<dynamic> matchJoinlist = new List<dynamic>();
+            try
+            {
+                DataTable dt = Data.Match.getMatchJoinList(getMatchJoinList);
+                if (dt.Rows.Count>0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        dynamic matchjoin = new System.Dynamic.ExpandoObject();
+                        matchjoin.userId = (dt.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["userId"]);
+                        matchjoin.ParticipantName = (dt.Rows[i]["ParticipantName"] == DBNull.Value ? "" : dt.Rows[i]["ParticipantName"].ToString());
+                        matchjoin.ParticipantId = (dt.Rows[i]["ParticipantId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["ParticipantId"]);
+                        matchjoin.matchName = (dt.Rows[i]["matchName"] == DBNull.Value ? "" : dt.Rows[i]["matchName"].ToString());
+                        matchjoin.matchId = (dt.Rows[i]["matchId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["matchId"]);
+                        matchjoin.Type = (dt.Rows[i]["Type"] == DBNull.Value ? "" : dt.Rows[i]["Type"].ToString());
+                        matchjoin.matchFee = (dt.Rows[i]["matchFee"] == DBNull.Value ? 0 : (decimal)dt.Rows[i]["matchFee"]);
+                        matchjoin.CompetitionName = (dt.Rows[i]["CompetitionName"] == DBNull.Value ? "" : dt.Rows[i]["CompetitionName"].ToString());
+                        matchjoin.competitionTypeId = (dt.Rows[i]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["competitionTypeId"]);
+                        matchJoinlist.Add(matchjoin);
+                    }
+                    return StatusCode((int)HttpStatusCode.OK, new { matchJoinlist });
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new {ErrorMessage = "No Data Found" });
+                }
+            }
+            catch (Exception e)
+            {
+                string SaveErrorLog = Data.Common.SaveErrorLog("getMatchJoinList", e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
             }
         }
         #endregion
