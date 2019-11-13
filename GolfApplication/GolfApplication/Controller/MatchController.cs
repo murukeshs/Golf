@@ -220,21 +220,21 @@ namespace GolfApplication.Controller
                                 Teams.teamName = (dt2.Rows[i]["teamName"] == DBNull.Value ? "" : dt2.Rows[i]["teamName"].ToString());
                                 Teams.teamIcon = (dt2.Rows[i]["teamIcon"] == DBNull.Value ? "" : dt2.Rows[i]["teamIcon"].ToString());
                                 Teams.scoreKeeperName = (dt2.Rows[i]["scoreKeeperName"] == DBNull.Value ? "" : dt2.Rows[i]["scoreKeeperName"].ToString());
-                                Teams.userId = (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
-                                Teams.firstName = (dt2.Rows[i]["firstName"] == DBNull.Value ? "" : dt2.Rows[i]["firstName"].ToString());
-                                Teams.lastName = (dt2.Rows[i]["lastName"] == DBNull.Value ? "" : dt2.Rows[i]["lastName"].ToString());
-                                Teams.email = (dt2.Rows[i]["email"] == DBNull.Value ? "" : dt2.Rows[i]["email"].ToString());
-                                Teams.gender = (dt2.Rows[i]["gender"] == DBNull.Value ? "" : dt2.Rows[i]["gender"].ToString());
-                                Teams.dob = (dt2.Rows[i]["dob"] == DBNull.Value ? "" : dt2.Rows[i]["dob"].ToString());
-                                Teams.profileImage = (dt2.Rows[i]["profileImage"] == DBNull.Value ? "" : dt2.Rows[i]["profileImage"].ToString());
-                                Teams.phoneNumber = (dt2.Rows[i]["phoneNumber"] == DBNull.Value ? "" : dt2.Rows[i]["phoneNumber"].ToString());
-                                Teams.countryId = (dt2.Rows[i]["countryId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["countryId"]);
-                                Teams.countryName = (dt2.Rows[i]["countryName"] == DBNull.Value ? "" : dt2.Rows[i]["countryName"].ToString());
-                                Teams.stateId = (dt2.Rows[i]["stateId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["stateId"]);
-                                Teams.stateName = (dt2.Rows[i]["stateName"] == DBNull.Value ? "" : dt2.Rows[i]["stateName"].ToString());
-                                Teams.city = (dt2.Rows[i]["city"] == DBNull.Value ? "" : dt2.Rows[i]["city"].ToString());
-                                Teams.address = (dt2.Rows[i]["address"] == DBNull.Value ? "" : dt2.Rows[i]["address"].ToString());
-                                Teams.pinCode = (dt2.Rows[i]["pinCode"] == DBNull.Value ? "" : dt2.Rows[i]["pinCode"].ToString());
+                                Teams.playerList = (dt2.Rows[i]["playerList"] == DBNull.Value ? "" : dt2.Rows[i]["playerList"].ToString());
+                                //Teams.firstName = (dt2.Rows[i]["firstName"] == DBNull.Value ? "" : dt2.Rows[i]["firstName"].ToString());
+                                //Teams.lastName = (dt2.Rows[i]["lastName"] == DBNull.Value ? "" : dt2.Rows[i]["lastName"].ToString());
+                                //Teams.email = (dt2.Rows[i]["email"] == DBNull.Value ? "" : dt2.Rows[i]["email"].ToString());
+                                //Teams.gender = (dt2.Rows[i]["gender"] == DBNull.Value ? "" : dt2.Rows[i]["gender"].ToString());
+                                //Teams.dob = (dt2.Rows[i]["dob"] == DBNull.Value ? "" : dt2.Rows[i]["dob"].ToString());
+                                //Teams.profileImage = (dt2.Rows[i]["profileImage"] == DBNull.Value ? "" : dt2.Rows[i]["profileImage"].ToString());
+                                //Teams.phoneNumber = (dt2.Rows[i]["phoneNumber"] == DBNull.Value ? "" : dt2.Rows[i]["phoneNumber"].ToString());
+                                //Teams.countryId = (dt2.Rows[i]["countryId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["countryId"]);
+                                //Teams.countryName = (dt2.Rows[i]["countryName"] == DBNull.Value ? "" : dt2.Rows[i]["countryName"].ToString());
+                                //Teams.stateId = (dt2.Rows[i]["stateId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["stateId"]);
+                                //Teams.stateName = (dt2.Rows[i]["stateName"] == DBNull.Value ? "" : dt2.Rows[i]["stateName"].ToString());
+                                //Teams.city = (dt2.Rows[i]["city"] == DBNull.Value ? "" : dt2.Rows[i]["city"].ToString());
+                                //Teams.address = (dt2.Rows[i]["address"] == DBNull.Value ? "" : dt2.Rows[i]["address"].ToString());
+                                //Teams.pinCode = (dt2.Rows[i]["pinCode"] == DBNull.Value ? "" : dt2.Rows[i]["pinCode"].ToString());
 
                                 TeamsPlayers.Add(Teams);
                             }
