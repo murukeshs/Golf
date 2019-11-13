@@ -102,7 +102,7 @@ namespace GolfApplication.Controller
                     }
                     else
                     {
-                        if (Response.Contains("UQ__tblUser__AB6E61648296FE35"))  // Check Duplicate Key for Email
+                        if (Response.Contains("UQ__tblUser__AB6E61648296FE35"))  // Check Duplicate Key For Email
                         {
                             return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = "Email Id  is already exists" });
                         }
