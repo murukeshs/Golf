@@ -82,7 +82,7 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@matchStartDate",createMatch.matchStartDate.ToString()));
                 parameters.Add(new SqlParameter("@matchEndDate", createMatch.matchEndDate.ToString()));
                 parameters.Add(new SqlParameter("@matchFee", createMatch.matchFee));
-                parameters.Add(new SqlParameter("@matchLocation", createMatch.matchLocation));
+                //parameters.Add(new SqlParameter("@matchLocation", createMatch.matchLocation));
                 parameters.Add(new SqlParameter("@createdBy", createMatch.createdBy));
                 parameters.Add(new SqlParameter("@competitionTypeId", createMatch.competitionTypeId));
 
@@ -106,9 +106,10 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@matchId", updateMatch.matchId));
                 parameters.Add(new SqlParameter("@matchName", updateMatch.matchName));
                 parameters.Add(new SqlParameter("@matchRuleId", updateMatch.matchRuleId));
+                parameters.Add(new SqlParameter("@matchStartDate", updateMatch.matchStartDate));
                 parameters.Add(new SqlParameter("@matchEndDate", updateMatch.matchEndDate));
                 parameters.Add(new SqlParameter("@matchFee", updateMatch.matchFee));
-                parameters.Add(new SqlParameter("@matchLocation", updateMatch.matchLocation));
+                //parameters.Add(new SqlParameter("@matchLocation", updateMatch.matchLocation));
                 parameters.Add(new SqlParameter("@matchStatus", updateMatch.matchStatus));
                 parameters.Add(new SqlParameter("@competitionTypeId", updateMatch.competitionTypeId));
                 
