@@ -315,6 +315,7 @@ namespace GolfApplication.Data
             parameters.Add(new SqlParameter("@userId", user.userId));
             parameters.Add(new SqlParameter("@stateId", user.stateId));
             parameters.Add(new SqlParameter("@countryId", user.countryId));
+            parameters.Add(new SqlParameter("@city", user.city));
             parameters.Add(new SqlParameter("@address", user.address));
             parameters.Add(new SqlParameter("@isEmailNotification", user.isEmailNotification));
             parameters.Add(new SqlParameter("@isSMSNotification", user.isSMSNotification));

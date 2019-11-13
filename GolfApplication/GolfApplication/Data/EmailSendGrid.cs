@@ -66,10 +66,14 @@ namespace GolfApplication.Data
                 #endregion
 
                 mail.From = new EmailAddress(from);
-
+                EmailAddress EmailAddress = new EmailAddress("Sunila@apptomate.co",null);
+                
+                List<SendGrid.Helpers.Mail.EmailAddress> emails = new List<SendGrid.Helpers.Mail.EmailAddress>();
+                emails.Add(EmailAddress);
+                
                 if (to != null)
                 {
-                    mail.AddTo(to);
+                    mail.AddTos(emails, 0,null);
                 }
 
                 mail.Subject = subject;

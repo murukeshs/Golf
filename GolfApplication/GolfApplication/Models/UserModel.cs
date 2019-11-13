@@ -102,6 +102,7 @@ namespace GolfApplication.Models
         public string address { get; set; }
         public int stateId { get; set; }
         public int countryId { get; set; }
+        public string city { get; set; }
         [DefaultValue(false)]
         public bool? isEmailNotification { get; set; }
         [DefaultValue(false)]

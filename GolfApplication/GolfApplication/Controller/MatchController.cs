@@ -109,12 +109,12 @@ namespace GolfApplication.Controller
                 DataTable dt = Data.Match.createMatch(createMatch);
                 if(dt.Rows[0][0].ToString()=="Success")
                 {
-                    dynamic Mth = new System.Dynamic.ExpandoObject();
-                    Mth.matchId = (dt.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["matchId"]);
-                    Mth.matchCode = (dt.Rows[0]["matchCode"] == DBNull.Value ? "" : dt.Rows[0]["matchCode"]);
-                    Mth.competitionTypeName = (dt.Rows[0]["competitionTypeName"] == DBNull.Value ? "" : dt.Rows[0]["competitionTypeName"]);
-                    Matches.Add(Mth);
-                    return StatusCode((int)HttpStatusCode.OK, Matches);
+                    //dynamic Mth = new System.Dynamic.ExpandoObject();
+                    var MatchID = (dt.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["matchId"]);
+                    var MatchCode = (dt.Rows[0]["matchCode"] == DBNull.Value ? "" : dt.Rows[0]["matchCode"]);
+                    var CompetitionTypeName = (dt.Rows[0]["competitionTypeName"] == DBNull.Value ? "" : dt.Rows[0]["competitionTypeName"]);
+                    //Matches.Add(Mth);
+                    return StatusCode((int)HttpStatusCode.OK, new { matchId = MatchID, matchCode= MatchCode, competitionTypeName= CompetitionTypeName });
                 }
                 else
                 {
@@ -462,28 +462,39 @@ namespace GolfApplication.Controller
                     string MatchLocations = (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
                     string EmailId = string.Empty;
 
-                    string emailsWithComma;
-                    string[] values = null;
-                    if (dt3.Rows.Count > 0)
+                    //string emailsWithComma;
+                    //string[] values = null;
+                    //if (dt3.Rows.Count > 0)
+                    //{
+                    //    emailsWithComma = dt3.Rows[0][0].ToString();
+                    //    emailsWithComma = emailsWithComma.TrimStart(',');
+                    //    values = emailsWithComma.Split(',');
+                    //}
+                    string emails = dt3.Rows[0]["emailList"].ToString();
+                    if (emails.Contains('@'))
                     {
-                        emailsWithComma = dt3.Rows[0][0].ToString();
-                        emailsWithComma = emailsWithComma.TrimStart(',');
-                        values = emailsWithComma.Split(',');
-                    }
-                    if (dt2.Rows.Count > 0)
+                        emails = emails.TrimStart(',').TrimEnd(',');
+                        string res = Match.sendmatchnotification(emails, matchName, matchCode, matchDate, CompetitionName, NoOfPlayers, MatchLocations);
+                        if (res == "Mail sent successfully.")
                         {
-                            for (int i = 0; i < dt2.Rows.Count; i++)
-                            {
-                                //Comma Seperate email
-                                if (i < values.Length)
-                                {
-                                    EmailId = values[i];
-                                    //Sending Email to Individual Match Players's
-                                    Match.sendmatchnotification(EmailId, matchName, matchCode, matchDate, CompetitionName, NoOfPlayers, MatchLocations);
-                                }
-                            }
+                            return StatusCode((int)HttpStatusCode.OK, "Match Invitations Sent Successfully");
                         }
-                    return StatusCode((int)HttpStatusCode.OK, "Match Invitations Sent Successfully");
+                    }
+                     return StatusCode((int)HttpStatusCode.Forbidden, "Email's Not Found");
+                    //if (dt2.Rows.Count > 0)
+                    //    {
+                    //        for (int i = 0; i < dt2.Rows.Count; i++)
+                    //        {
+                    //            //Comma Seperate email
+                    //            if (i < values.Length)
+                    //            {
+                    //                EmailId = values[i];
+                    //                //Sending Email to Individual Match Players's
+                    //                Match.sendmatchnotification(EmailId, matchName, matchCode, matchDate, CompetitionName, NoOfPlayers, MatchLocations);
+                    //            }
+                    //        }
+                    //    }
+                    //return StatusCode((int)HttpStatusCode.OK, "Match Invitations Sent Successfully");
                 }
                 else
                 {
