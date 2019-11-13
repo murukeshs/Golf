@@ -26,11 +26,11 @@ namespace GolfApplication.Controller
             {
                 if (team.teamName == "" || team.teamName == null)
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter teamName" } });
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { ErrorMessage = "Please enter teamName" } });
                 }
                 else if (team.createdBy <= 0 || team.createdBy == null)
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter createdBy" } });
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { ErrorMessage = "Please enter createdBy" } });
                 }
                 else
                 {
@@ -48,12 +48,12 @@ namespace GolfApplication.Controller
                     {
                         if (Status.Contains("UNIQUE KEY constraint") == true)
                         {
-                            return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = "Team name / Team Icon is already exists" } });
+                            return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = "Team name / Team Icon is already exists" } });
                         }
                         else
                         {
                             //return "Invalid user";
-                            return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { message = "Error while creating the Team" } });
+                            return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { ErrorMessage = "Error while creating the Team" } });
                         }
                     }
                    
@@ -65,11 +65,11 @@ namespace GolfApplication.Controller
                 string SaveErrorLog = Data.Common.SaveErrorLog("createTeam", e.Message);
                 if (e.Message.Contains("UNIQUE KEY constraint") == true)
                 {
-                    return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = "Team name / Team Icon is already exists" } });
+                    return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = "Team name / Team Icon is already exists" } });
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
+                    return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
                 }
             }
         }
@@ -84,19 +84,19 @@ namespace GolfApplication.Controller
             {
                 if (updateteam.teamId <= 0 )
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter teamId" } });
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { ErrorMessage = "Please enter teamId" } });
                 }
                 else if (updateteam.teamName == "" || updateteam.teamName == null)
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter teamName" } });
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { ErrorMessage = "Please enter teamName" } });
                 }
                 else if (updateteam.teamIcon == "" || updateteam.teamIcon == null)
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter teamIcon" } });
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { ErrorMessage = "Please enter teamIcon" } });
                 }
                 else if (updateteam.startingHole < 0 )
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter startingHole" } });
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { ErrorMessage = "Please enter startingHole" } });
                 }
                 else
                 {
@@ -107,7 +107,7 @@ namespace GolfApplication.Controller
                     }
                     else
                     {
-                        return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = "Error while Updating the team" } });
+                        return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = "Error while Updating the team" } });
                     }
                 }
             }
@@ -116,11 +116,11 @@ namespace GolfApplication.Controller
                 string SaveErrorLog = Data.Common.SaveErrorLog("updateTeam", e.Message);
                 if (e.Message.Contains("UNIQUE KEY constraint") == true)
                 {
-                    return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = "Team name / Team Icon is already exists" } });
+                    return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = "Team name / Team Icon is already exists" } });
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
+                    return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
                 }
             }
         }
@@ -134,7 +134,7 @@ namespace GolfApplication.Controller
             {
                  if (teamId <= 0 || teamId == null)
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter teamId" } });
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { ErrorMessage = "Please enter teamId" } });
                 }                
                 else
                 {
@@ -146,7 +146,7 @@ namespace GolfApplication.Controller
                     }
                     else
                     {
-                        return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = "Team is already enrolled" } });
+                        return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = "Team is already enrolled" } });
                     }
                 }
             }
@@ -154,7 +154,7 @@ namespace GolfApplication.Controller
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("deleteTeam", e.Message.ToString());
 
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message.ToString() } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message.ToString() } });
             }
         }
         #endregion
@@ -207,14 +207,14 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { message = "Team not available" } });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { ErrorMessage = "Team not available" } });
                 }
 
             }
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("selectTeamById", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
             }
         }
 
@@ -256,7 +256,7 @@ namespace GolfApplication.Controller
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("listTeam", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
             }
         }
         #endregion
@@ -278,13 +278,13 @@ namespace GolfApplication.Controller
                 else
                 {
                     //return "Invalid user";
-                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { message = dt.Rows[0]["ErrorMessage"].ToString() } });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { ErrorMessage = dt.Rows[0]["ErrorMessage"].ToString() } });
                 }
             }
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("createTeamPlayers", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
             }
         }
         #endregion
@@ -297,7 +297,7 @@ namespace GolfApplication.Controller
             {
                 if (teamPlayerListId <= 0 || teamPlayerListId == null)
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter teamPlayerListId" } });
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { ErrorMessage = "Please enter teamPlayerListId" } });
                 }
                 //else if (updateBy <= 0 || updateBy == null)
                 //{
@@ -313,7 +313,7 @@ namespace GolfApplication.Controller
                     }
                     else
                     {
-                        return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = "Team player is already enrolled" } });
+                        return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = "Team player is already enrolled" } });
                     }
                 }
             }
@@ -321,7 +321,7 @@ namespace GolfApplication.Controller
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("deleteTeamPlayers", e.Message.ToString());
 
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message.ToString() } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message.ToString() } });
             }
         }
         #endregion
