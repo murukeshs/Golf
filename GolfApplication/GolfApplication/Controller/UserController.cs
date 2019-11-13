@@ -606,6 +606,7 @@ namespace GolfApplication.Controller
 
 
         #region updateUserCommunicationinfo
+        [AllowAnonymous]
         [HttpPut, Route("updateUserCommunicationinfo")]
         public IActionResult updateUserCommunicationinfo([FromBody]updateUser user)
         {

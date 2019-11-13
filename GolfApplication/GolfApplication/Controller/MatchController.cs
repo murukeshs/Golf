@@ -572,7 +572,7 @@ namespace GolfApplication.Controller
 
 
         #region createMatch
-        [HttpPost, Route("getMatchJoinList")]
+        [HttpGet, Route("getMatchJoinList")]
         public IActionResult getMatchJoinList(getMatchJoinList getMatchJoinList)
         {
             List<dynamic> matchJoinlist = new List<dynamic>();
