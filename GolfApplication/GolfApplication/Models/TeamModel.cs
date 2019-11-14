@@ -29,6 +29,7 @@ namespace GolfApplication.Models
         public string playerName { get; set; }
         public string gender { get; set; }
         public string RoleType { get; set; }
+        public string profileImage { get; set; }
     }
 
     public class TeamPlayer

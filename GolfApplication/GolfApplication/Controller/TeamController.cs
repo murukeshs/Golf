@@ -180,6 +180,7 @@ namespace GolfApplication.Controller
                         team.teamPlayerListId = (int)dt.Rows[i]["teamPlayerListId"];
                         team.teamId = (int)dt.Rows[i]["teamId"];
                         team.playerName = (dt.Rows[i]["playerName"] == DBNull.Value ? "" : dt.Rows[i]["playerName"].ToString());
+                        team.profileImage = (dt.Rows[i]["profileImage"] == DBNull.Value ? "" : dt.Rows[i]["profileImage"].ToString());
                         team.gender = (dt.Rows[i]["gender"] == DBNull.Value ? "" : dt.Rows[i]["gender"].ToString());
                         team.RoleType = (dt.Rows[i]["RoleType"] == DBNull.Value ? "" : dt.Rows[i]["RoleType"].ToString());
 
