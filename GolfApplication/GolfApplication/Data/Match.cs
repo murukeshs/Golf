@@ -197,7 +197,7 @@ namespace GolfApplication.Data
                 string connectionstring = Common.GetConnectionString();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("@matchId", acceptMatchInvitation.matchId));
-                //parameters.Add(new SqlParameter("@Type", acceptMatchInvitation.Type));
+                parameters.Add(new SqlParameter("@Type", acceptMatchInvitation.Type));
                 parameters.Add(new SqlParameter("@playerId", acceptMatchInvitation.playerId));
 
                 string rowsAffected = SqlHelper.ExecuteScalar(connectionstring, CommandType.StoredProcedure, "spAcceptMatch", parameters.ToArray()).ToString();

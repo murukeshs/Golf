@@ -244,7 +244,7 @@ namespace GolfApplication.Controller
                         team.createdBy = (dt.Rows[i]["createdBy"] == DBNull.Value ? 0 : (int)dt.Rows[i]["createdBy"]);
                         team.startingHole = (dt.Rows[i]["startingHole"] == DBNull.Value ? 0 : (int)dt.Rows[i]["startingHole"]);
                         team.noOfPlayers = (dt.Rows[i]["noOfPlayers"] == DBNull.Value ? 0 : (int)dt.Rows[i]["noOfPlayers"]);
-
+                        team.playerList= (dt.Rows[i]["playerList"] == DBNull.Value ? "" : dt.Rows[i]["playerList"].ToString());
                         teamList.Add(team);
                     }
                     return StatusCode((int)HttpStatusCode.OK, teamList);

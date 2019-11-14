@@ -20,6 +20,7 @@ namespace GolfApplication.Models
         public int scoreKeeperID { get; set; }
         public int noOfPlayers { get; set; }  
         public string createdName { get; set; }
+        public string playerList { get; set; }
     }
 
     public class getTeam
