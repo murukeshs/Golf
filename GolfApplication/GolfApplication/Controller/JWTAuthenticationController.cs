@@ -115,17 +115,17 @@ namespace GolfApplication.Controller
                         }
                         else
                         {
-                            return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { message = dt0.Rows[0]["ErrorMessage"].ToString() } });
+                            return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { ErrorMessage = dt0.Rows[0]["ErrorMessage"].ToString() } });
                         }
                     }
                     else
                     {
-                        return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a userTypeId" } });
+                        return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { ErrorMessage = "Please enter a userTypeId" } });
                     }
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a valid Email" } });
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { ErrorMessage = "Please enter a valid Email" } });
                 }
 
             }
@@ -135,7 +135,7 @@ namespace GolfApplication.Controller
                 string SaveErrorLog = Data.Common.SaveErrorLog("Login", e.Message);
 
                 //return StatusCode((int)HttpStatusCode.InternalServerError, new { Data = e.Message.ToString() });
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message } });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { ErrorMessage = e.Message } });
             }
         }
         #endregion

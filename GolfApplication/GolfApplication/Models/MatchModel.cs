@@ -73,7 +73,7 @@ namespace GolfApplication.Models
     public class acceptMatchInvitation
     {
         public int matchId { get; set; }
-        public string Type { get; set; }
+        //public string Type { get; set; }
         public int playerId { get; set; }
     }
 

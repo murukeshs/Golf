@@ -9,6 +9,7 @@ using System.Net;
 using System.Data;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.Extensions;
 
 namespace GolfApplication.Controller
 {
@@ -532,6 +533,7 @@ namespace GolfApplication.Controller
                     int NoOfPlayers = dt2.Rows.Count;  
                     string MatchLocations= (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
                     string EmailId = string.Empty;
+                    string CurrentHostedUrl = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, Request.PathBase);
 
                     string emailsWithComma;
                     string[] values=null;
@@ -552,7 +554,7 @@ namespace GolfApplication.Controller
                                 {
                                     EmailId = values[i];
                                     //Sending Email to Individual Match Players's
-                                    Match.inviteMatch(EmailId, matchID, matchName, playerID, matchCode, matchDate,CompetitionName, NoOfPlayers, MatchLocations);
+                                    Match.inviteMatch(EmailId, matchID, matchName, playerID, matchCode, matchDate,CompetitionName, NoOfPlayers, MatchLocations, CurrentHostedUrl);
                                 }
                             }
                         }
