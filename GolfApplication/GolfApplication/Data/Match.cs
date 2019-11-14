@@ -365,5 +365,30 @@ namespace GolfApplication.Data
             }
         }
         #endregion
+
+        #region Create  Matchplayer
+        public static DataTable addParticipants([FromBody]addParticipants addParticipants)
+        {
+            try
+            {
+                string connectionstring = Common.GetConnectionString();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("@firstName", addParticipants.firstName));
+                parameters.Add(new SqlParameter("@lastName", addParticipants.lastName));
+                parameters.Add(new SqlParameter("@gender", addParticipants.gender));
+                parameters.Add(new SqlParameter("@phoneNumber", addParticipants.phoneNumber));
+                parameters.Add(new SqlParameter("@teamId", addParticipants.teamId));
+                parameters.Add(new SqlParameter("@email", addParticipants.email));
+                parameters.Add(new SqlParameter("@userTypeId", addParticipants.userTypeId));
+
+                DataTable rowsAffected = SqlHelper.ExecuteDataset(connectionstring, CommandType.StoredProcedure, "addParticipants", parameters.ToArray()).Tables[0];
+                return rowsAffected;
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+        #endregion
     }
 }

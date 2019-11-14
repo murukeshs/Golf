@@ -592,5 +592,32 @@ namespace GolfApplication.Controller
             }
         }
         #endregion
+
+
+        #region addParticipants
+        [HttpPost, Route("addParticipants")]
+        public IActionResult addParticipants(addParticipants addParticipants)
+        {
+
+            try
+            {
+                DataTable dt = Data.Match.addParticipants(addParticipants);
+
+                if (dt.Rows[0][0].ToString()== "Success")
+                {
+                    return StatusCode((int)HttpStatusCode.OK, "Participants added successfully");
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Unable to add participant" });
+                }
+            }
+            catch (Exception e)
+            {
+                string SaveErrorLog = Data.Common.SaveErrorLog("addParticipants", e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
+            }
+        }
+        #endregion
     }
 }
