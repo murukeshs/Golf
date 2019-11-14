@@ -347,14 +347,14 @@ namespace GolfApplication.Data
 
 
         #region getMatchJoinList
-        public static DataTable getMatchJoinList([FromBody]getMatchJoinList getMatchJoinList)
+        public static DataTable getMatchJoinList(int matchId, int userId)
         {
             try
             {
                 string connectionstring = Common.GetConnectionString();
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("@matchId", getMatchJoinList.matchId));
-                parameters.Add(new SqlParameter("@userId", getMatchJoinList.userId));
+                parameters.Add(new SqlParameter("@matchId", matchId));
+                parameters.Add(new SqlParameter("@userId", userId));
                 
                 using (DataTable dt = SqlHelper.ExecuteDataset(connectionstring, CommandType.StoredProcedure, "spGetMatchJoinList", parameters.ToArray()).Tables[0])
                 {

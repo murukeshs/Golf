@@ -190,14 +190,12 @@ namespace GolfApplication.Controller
             {
                 DataSet ds = Data.Match.getMatchById(matchId);
                 DataTable dt1 = ds.Tables[0];
-                DataTable dt2 = ds.Tables[1];
                 if (dt1.Rows.Count > 0)
                 {
                     dynamic MatchList = new System.Dynamic.ExpandoObject();
                     MatchList.matchId = (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
                     MatchList.matchCode = (dt1.Rows[0]["matchCode"] == DBNull.Value ? "" : dt1.Rows[0]["matchCode"].ToString());
                     MatchList.matchName = (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
-                    //MatchList.matchType = (dt1.Rows[0]["matchType"] == DBNull.Value ? "" : dt1.Rows[0]["matchType"].ToString());
                     MatchList.matchRuleId = (dt1.Rows[0]["matchRuleId"] == DBNull.Value ? "" : dt1.Rows[0]["matchRuleId"].ToString());
                     MatchList.ruleName = (dt1.Rows[0]["ruleName"] == DBNull.Value ? "" : dt1.Rows[0]["ruleName"].ToString());
                     MatchList.matchStartDate = (dt1.Rows[0]["matchStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchStartDate"].ToString());
@@ -209,79 +207,82 @@ namespace GolfApplication.Controller
                     MatchList.matchStatus = (dt1.Rows[0]["matchStatus"] == DBNull.Value ? "" : dt1.Rows[0]["matchStatus"].ToString());
                     MatchList.competitionTypeId = (dt1.Rows[0]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["competitionTypeId"]);
                     MatchList.competitionName = (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
-                    //if (MatchList.matchType == "Teams")
-                    //{
-                        if (dt2.Rows.Count > 0)
-                        {
-                            for (int i = 0; i < dt2.Rows.Count; i++)
-                            {
-                                dynamic Teams = new System.Dynamic.ExpandoObject();
-                                Teams.teamId = (dt2.Rows[i]["teamId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["teamId"]);
-                                Teams.teamName = (dt2.Rows[i]["teamName"] == DBNull.Value ? "" : dt2.Rows[i]["teamName"].ToString());
-                                Teams.teamIcon = (dt2.Rows[i]["teamIcon"] == DBNull.Value ? "" : dt2.Rows[i]["teamIcon"].ToString());
-                                Teams.scoreKeeperName = (dt2.Rows[i]["scoreKeeperName"] == DBNull.Value ? "" : dt2.Rows[i]["scoreKeeperName"].ToString());
-                                Teams.playerList = (dt2.Rows[i]["playerList"] == DBNull.Value ? "" : dt2.Rows[i]["playerList"].ToString());
-                                //Teams.firstName = (dt2.Rows[i]["firstName"] == DBNull.Value ? "" : dt2.Rows[i]["firstName"].ToString());
-                                //Teams.lastName = (dt2.Rows[i]["lastName"] == DBNull.Value ? "" : dt2.Rows[i]["lastName"].ToString());
-                                //Teams.email = (dt2.Rows[i]["email"] == DBNull.Value ? "" : dt2.Rows[i]["email"].ToString());
-                                //Teams.gender = (dt2.Rows[i]["gender"] == DBNull.Value ? "" : dt2.Rows[i]["gender"].ToString());
-                                //Teams.dob = (dt2.Rows[i]["dob"] == DBNull.Value ? "" : dt2.Rows[i]["dob"].ToString());
-                                //Teams.profileImage = (dt2.Rows[i]["profileImage"] == DBNull.Value ? "" : dt2.Rows[i]["profileImage"].ToString());
-                                //Teams.phoneNumber = (dt2.Rows[i]["phoneNumber"] == DBNull.Value ? "" : dt2.Rows[i]["phoneNumber"].ToString());
-                                //Teams.countryId = (dt2.Rows[i]["countryId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["countryId"]);
-                                //Teams.countryName = (dt2.Rows[i]["countryName"] == DBNull.Value ? "" : dt2.Rows[i]["countryName"].ToString());
-                                //Teams.stateId = (dt2.Rows[i]["stateId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["stateId"]);
-                                //Teams.stateName = (dt2.Rows[i]["stateName"] == DBNull.Value ? "" : dt2.Rows[i]["stateName"].ToString());
-                                //Teams.city = (dt2.Rows[i]["city"] == DBNull.Value ? "" : dt2.Rows[i]["city"].ToString());
-                                //Teams.address = (dt2.Rows[i]["address"] == DBNull.Value ? "" : dt2.Rows[i]["address"].ToString());
-                                //Teams.pinCode = (dt2.Rows[i]["pinCode"] == DBNull.Value ? "" : dt2.Rows[i]["pinCode"].ToString());
 
-                                TeamsPlayers.Add(Teams);
-                            }
-                        }
-                        MatchList.Teams = TeamsPlayers;
-                   // }
-                    //else
-                    //{
-                    //    if (dt2.Rows.Count > 0)
-                    //    {
-                    //        for (int i = 0; i < dt2.Rows.Count; i++)
-                    //        {
-                    //            dynamic Players = new System.Dynamic.ExpandoObject();
-                    //            Players.userId = (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
-                    //            Players.firstName = (dt2.Rows[i]["firstName"] == DBNull.Value ? "" : dt2.Rows[i]["firstName"].ToString());
-                    //            Players.lastName = (dt2.Rows[i]["lastName"] == DBNull.Value ? "" : dt2.Rows[i]["lastName"].ToString());
-                    //            Players.email = (dt2.Rows[i]["email"] == DBNull.Value ? "" : dt2.Rows[i]["email"].ToString());
-                    //            Players.gender = (dt2.Rows[i]["gender"] == DBNull.Value ? "" : dt2.Rows[i]["gender"].ToString());
-                    //            Players.dob = (dt2.Rows[i]["dob"] == DBNull.Value ? "" : dt2.Rows[i]["dob"].ToString());
-                    //            Players.profileImage = (dt2.Rows[i]["profileImage"] == DBNull.Value ? "" : dt2.Rows[i]["profileImage"].ToString());
-                    //            Players.phoneNumber = (dt2.Rows[i]["phoneNumber"] == DBNull.Value ? "" : dt2.Rows[i]["phoneNumber"].ToString());
-                    //            Players.countryId = (dt2.Rows[i]["countryId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["countryId"]);
-                    //            Players.countryName = (dt2.Rows[i]["countryName"] == DBNull.Value ? "" : dt2.Rows[i]["countryName"].ToString());
-                    //            Players.stateId = (dt2.Rows[i]["stateId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["stateId"]);
-                    //            Players.stateName = (dt2.Rows[i]["stateName"] == DBNull.Value ? "" : dt2.Rows[i]["stateName"].ToString());
-                    //            Players.city = (dt2.Rows[i]["city"] == DBNull.Value ? "" : dt2.Rows[i]["city"].ToString());
-                    //            Players.address = (dt2.Rows[i]["address"] == DBNull.Value ? "" : dt2.Rows[i]["address"].ToString());
-                    //            Players.pinCode = (dt2.Rows[i]["pinCode"] == DBNull.Value ? "" : dt2.Rows[i]["pinCode"].ToString());
-
-                    //            TeamsPlayers.Add(Players);
-                    //        }
-                    //    }
-                    //    MatchList.Players = TeamsPlayers;
-                    //}
                     matches.Add(MatchList);
-                   
+
                     return StatusCode((int)HttpStatusCode.OK, matches);
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = "MatchId not found" });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "MatchId not found" });
                 }
             }
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("getMatchById", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
+            }
+        }
+        #endregion
+
+        #region getMatchesDetailsById
+        [HttpGet, Route("getMatchesDetailsById/{matchId}")]
+        public IActionResult getMatchesDetailsById(int matchId)
+        {
+            List<dynamic> matches = new List<dynamic>();
+            List<dynamic> TeamsPlayers = new List<dynamic>();
+            try
+            {
+                DataSet ds = Data.Match.getMatchById(matchId);
+                DataTable dt1 = ds.Tables[0];
+                DataTable dt2 = ds.Tables[1];
+                if (dt1.Rows.Count > 0)
+                {
+                    dynamic MatchList = new System.Dynamic.ExpandoObject();
+                    MatchList.matchId = (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
+                    MatchList.matchCode = (dt1.Rows[0]["matchCode"] == DBNull.Value ? "" : dt1.Rows[0]["matchCode"].ToString());
+                    MatchList.matchName = (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
+                    MatchList.matchRuleId = (dt1.Rows[0]["matchRuleId"] == DBNull.Value ? "" : dt1.Rows[0]["matchRuleId"].ToString());
+                    MatchList.ruleName = (dt1.Rows[0]["ruleName"] == DBNull.Value ? "" : dt1.Rows[0]["ruleName"].ToString());
+                    MatchList.matchStartDate = (dt1.Rows[0]["matchStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchStartDate"].ToString());
+                    MatchList.matchEndDate = (dt1.Rows[0]["matchEndDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchEndDate"].ToString());
+                    MatchList.matchFee = (dt1.Rows[0]["matchFee"] == DBNull.Value ? 0 : (decimal)dt1.Rows[0]["matchFee"]);
+                    MatchList.matchLocation = (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
+                    MatchList.createdBy = (dt1.Rows[0]["createdBy"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["createdBy"]);
+                    MatchList.createdDate = (dt1.Rows[0]["createdDate"] == DBNull.Value ? "" : dt1.Rows[0]["createdDate"].ToString());
+                    MatchList.matchStatus = (dt1.Rows[0]["matchStatus"] == DBNull.Value ? "" : dt1.Rows[0]["matchStatus"].ToString());
+                    MatchList.competitionTypeId = (dt1.Rows[0]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["competitionTypeId"]);
+                    MatchList.competitionName = (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
+
+                    if (dt2.Rows.Count > 0)
+                    {
+                        for (int i = 0; i < dt2.Rows.Count; i++)
+                        {
+                            dynamic Teams = new System.Dynamic.ExpandoObject();
+                            Teams.teamId = (dt2.Rows[i]["teamId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["teamId"]);
+                            Teams.teamName = (dt2.Rows[i]["teamName"] == DBNull.Value ? "" : dt2.Rows[i]["teamName"].ToString());
+                            Teams.teamIcon = (dt2.Rows[i]["teamIcon"] == DBNull.Value ? "" : dt2.Rows[i]["teamIcon"].ToString());
+                            Teams.scoreKeeperName = (dt2.Rows[i]["scoreKeeperName"] == DBNull.Value ? "" : dt2.Rows[i]["scoreKeeperName"].ToString());
+                            Teams.playerList = (dt2.Rows[i]["playerList"] == DBNull.Value ? "" : dt2.Rows[i]["playerList"].ToString());
+
+                            TeamsPlayers.Add(Teams);
+                        }
+                    }
+                    MatchList.Teams = TeamsPlayers;
+
+                    matches.Add(MatchList);
+
+                    return StatusCode((int)HttpStatusCode.OK, matches);
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "MatchId not found" });
+                }
+            }
+            catch (Exception e)
+            {
+                string SaveErrorLog = Data.Common.SaveErrorLog("getMatchesDetailsById", e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
             }
         }
         #endregion
@@ -333,7 +334,8 @@ namespace GolfApplication.Controller
             }
         }
         #endregion
-        #region getMatchList
+
+        #region getMatchesList
         [HttpGet, Route("getMatches")]
         public IActionResult getMatches()
         {
@@ -570,15 +572,14 @@ namespace GolfApplication.Controller
         }
         #endregion
 
-
-        #region createMatch
+        #region getMatchJoinList
         [HttpGet, Route("getMatchJoinList")]
-        public IActionResult getMatchJoinList(getMatchJoinList getMatchJoinList)
+        public IActionResult getMatchJoinList(int matchId ,int userId)
         {
             List<dynamic> matchJoinlist = new List<dynamic>();
             try
             {
-                DataTable dt = Data.Match.getMatchJoinList(getMatchJoinList);
+                DataTable dt = Data.Match.getMatchJoinList(matchId, userId);
                 if (dt.Rows.Count>0)
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)

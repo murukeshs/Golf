@@ -77,9 +77,5 @@ namespace GolfApplication.Models
         public int playerId { get; set; }
     }
 
-    public class getMatchJoinList
-    {
-        public int matchId { get; set; }
-        public int userId { get; set; }
-    }
+    
 }
