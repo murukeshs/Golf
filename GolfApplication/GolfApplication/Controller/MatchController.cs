@@ -230,7 +230,7 @@ namespace GolfApplication.Controller
         [HttpGet, Route("getMatchesDetailsById/{matchId}")]
         public IActionResult getMatchesDetailsById(int matchId)
         {
-            List<dynamic> matches = new List<dynamic>();
+            //List<dynamic> matches = new List<dynamic>();
             List<dynamic> TeamsPlayers = new List<dynamic>();
             try
             {
@@ -239,7 +239,7 @@ namespace GolfApplication.Controller
                 DataTable dt2 = ds.Tables[1];
                 if (dt1.Rows.Count > 0)
                 {
-                    dynamic MatchList = new System.Dynamic.ExpandoObject();
+                    //dynamic MatchList = new System.Dynamic.ExpandoObject();
                     //MatchList.matchId = (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
                     //MatchList.matchCode = (dt1.Rows[0]["matchCode"] == DBNull.Value ? "" : dt1.Rows[0]["matchCode"].ToString());
                     //MatchList.matchName = (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
@@ -269,11 +269,11 @@ namespace GolfApplication.Controller
                             TeamsPlayers.Add(Teams);
                         }
                     }
-                    MatchList.Teams = TeamsPlayers;
+                    //MatchList.Teams = TeamsPlayers;
 
-                    matches.Add(MatchList);
+                    //matches.Add(MatchList);
 
-                    return StatusCode((int)HttpStatusCode.OK, matches);
+                    return StatusCode((int)HttpStatusCode.OK, TeamsPlayers);
                 }
                 else
                 {
