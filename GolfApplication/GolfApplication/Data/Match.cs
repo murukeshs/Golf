@@ -69,7 +69,7 @@ namespace GolfApplication.Data
         }
         #endregion
 
-        #region Upsert Match
+        #region createMatch
         public static DataTable createMatch([FromBody]createMatch createMatch)
         {
             try
@@ -77,12 +77,10 @@ namespace GolfApplication.Data
                 string connectionstring = Common.GetConnectionString();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("@matchName", createMatch.matchName));
-                //parameters.Add(new SqlParameter("@matchType", createMatch.matchType));
                 parameters.Add(new SqlParameter("@matchRuleId", createMatch.matchRuleId));
                 parameters.Add(new SqlParameter("@matchStartDate",createMatch.matchStartDate.ToString()));
                 parameters.Add(new SqlParameter("@matchEndDate", createMatch.matchEndDate.ToString()));
                 parameters.Add(new SqlParameter("@matchFee", createMatch.matchFee));
-                //parameters.Add(new SqlParameter("@matchLocation", createMatch.matchLocation));
                 parameters.Add(new SqlParameter("@createdBy", createMatch.createdBy));
                 parameters.Add(new SqlParameter("@competitionTypeId", createMatch.competitionTypeId));
 

@@ -230,7 +230,6 @@ namespace GolfApplication.Controller
         [HttpGet, Route("getMatchesDetailsById/{matchId}")]
         public IActionResult getMatchesDetailsById(int matchId)
         {
-            //List<dynamic> matches = new List<dynamic>();
             List<dynamic> TeamsPlayers = new List<dynamic>();
             try
             {
@@ -239,22 +238,7 @@ namespace GolfApplication.Controller
                 DataTable dt2 = ds.Tables[1];
                 if (dt1.Rows.Count > 0)
                 {
-                    //dynamic MatchList = new System.Dynamic.ExpandoObject();
-                    //MatchList.matchId = (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
-                    //MatchList.matchCode = (dt1.Rows[0]["matchCode"] == DBNull.Value ? "" : dt1.Rows[0]["matchCode"].ToString());
-                    //MatchList.matchName = (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
-                    //MatchList.matchRuleId = (dt1.Rows[0]["matchRuleId"] == DBNull.Value ? "" : dt1.Rows[0]["matchRuleId"].ToString());
-                    //MatchList.ruleName = (dt1.Rows[0]["ruleName"] == DBNull.Value ? "" : dt1.Rows[0]["ruleName"].ToString());
-                    //MatchList.matchStartDate = (dt1.Rows[0]["matchStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchStartDate"].ToString());
-                    //MatchList.matchEndDate = (dt1.Rows[0]["matchEndDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchEndDate"].ToString());
-                    //MatchList.matchFee = (dt1.Rows[0]["matchFee"] == DBNull.Value ? 0 : (decimal)dt1.Rows[0]["matchFee"]);
-                    //MatchList.matchLocation = (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
-                    //MatchList.createdBy = (dt1.Rows[0]["createdBy"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["createdBy"]);
-                    //MatchList.createdDate = (dt1.Rows[0]["createdDate"] == DBNull.Value ? "" : dt1.Rows[0]["createdDate"].ToString());
-                    //MatchList.matchStatus = (dt1.Rows[0]["matchStatus"] == DBNull.Value ? "" : dt1.Rows[0]["matchStatus"].ToString());
-                    //MatchList.competitionTypeId = (dt1.Rows[0]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["competitionTypeId"]);
-                    //MatchList.competitionName = (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
-
+                    
                     if (dt2.Rows.Count > 0)
                     {
                         for (int i = 0; i < dt2.Rows.Count; i++)
@@ -269,10 +253,6 @@ namespace GolfApplication.Controller
                             TeamsPlayers.Add(Teams);
                         }
                     }
-                    //MatchList.Teams = TeamsPlayers;
-
-                    //matches.Add(MatchList);
-
                     return StatusCode((int)HttpStatusCode.OK, TeamsPlayers);
                 }
                 else
