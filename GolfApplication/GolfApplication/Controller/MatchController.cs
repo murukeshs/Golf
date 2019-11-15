@@ -185,7 +185,7 @@ namespace GolfApplication.Controller
         [HttpGet, Route("getMatchById/{matchId}")]
         public IActionResult getMatchById(int matchId)
         {
-            List<MatchList> matches = new List<MatchList>();
+           // List<MatchList> matches = new List<MatchList>();
             //List<dynamic> TeamsPlayers = new List<dynamic>();
             try
             {
@@ -210,9 +210,9 @@ namespace GolfApplication.Controller
                     MatchList.competitionTypeId = (dt1.Rows[0]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["competitionTypeId"]);
                     MatchList.competitionName = (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
 
-                    matches.Add(MatchList);
+                    //matches.Add(MatchList);
 
-                    return StatusCode((int)HttpStatusCode.OK, matches);
+                    return StatusCode((int)HttpStatusCode.OK, MatchList);
                 }
                 else
                 {
