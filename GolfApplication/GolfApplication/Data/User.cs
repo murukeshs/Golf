@@ -74,7 +74,10 @@ namespace GolfApplication.Data
                 string ConnectionString = Common.GetConnectionString();
 
                 var encryptPassword = Common.EncryptData(userCreate.password);
-
+                //if(userCreate.profileImage=="" || userCreate.profileImage==null)
+                //{
+                //    userCreate.profileImage = null;
+                //}
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("@firstName", userCreate.firstName));
                 parameters.Add(new SqlParameter("@lastName", userCreate.lastName));

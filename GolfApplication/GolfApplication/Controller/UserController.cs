@@ -666,7 +666,10 @@ namespace GolfApplication.Controller
                         getPlayers.profileImage = (dt.Rows[i]["profileImage"] == DBNull.Value ? "" : dt.Rows[i]["profileImage"].ToString());
                         getPlayers.userType = (dt.Rows[i]["userType"] == DBNull.Value ? "" : dt.Rows[i]["userType"].ToString());
                         getPlayers.isScoreKeeper = (dt.Rows[i]["isScoreKeeper"] == DBNull.Value ? "" : dt.Rows[i]["isScoreKeeper"].ToString());
-
+                        //string userType = (dt.Rows[i]["userType"] == DBNull.Value ? "" : dt.Rows[i]["userType"].ToString());
+                        //string[] strArray = userType.Split(',');
+                        //List<string> myList = strArray.ToList();
+                        //getPlayers.UserType = myList;
                         getPlayerList.Add(getPlayers);
                     }
                     return StatusCode((int)HttpStatusCode.OK, getPlayerList);

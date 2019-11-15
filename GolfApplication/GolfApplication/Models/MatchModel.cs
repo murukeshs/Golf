@@ -32,7 +32,7 @@ namespace GolfApplication.Models
         public string type { get; set; }
         public int eventId { get; set; }
         public string teamId { get; set; }
-        public string playerId { get; set; }
+       // public string playerId { get; set; }
         //public bool isInvitationSent { get; set; }
         //public bool isInvitationAccept { get; set; }
         //public bool isPaymentMade { get; set; }
