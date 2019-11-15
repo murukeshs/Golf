@@ -343,6 +343,10 @@ namespace GolfApplication.Data
         {
             try
             {
+                if (Search=="" || Search == null)
+                {
+                    Search = "";
+                }
                 string ConnectionString = Common.GetConnectionString();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("@Search", Search));

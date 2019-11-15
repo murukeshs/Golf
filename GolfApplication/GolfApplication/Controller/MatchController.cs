@@ -248,6 +248,8 @@ namespace GolfApplication.Controller
                             Teams.teamId = (dt2.Rows[i]["teamId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["teamId"]);
                             Teams.teamName = (dt2.Rows[i]["teamName"] == DBNull.Value ? "" : dt2.Rows[i]["teamName"].ToString());
                             Teams.teamIcon = (dt2.Rows[i]["teamIcon"] == DBNull.Value ? "" : dt2.Rows[i]["teamIcon"].ToString());
+                            Teams.createdByName = (dt2.Rows[i]["createdByName"] == DBNull.Value ? "" : dt2.Rows[i]["createdByName"].ToString());
+                            Teams.NoOfPlayers = (dt2.Rows[i]["NoOfPlayers"] == DBNull.Value ? "" : dt2.Rows[i]["NoOfPlayers"].ToString());
                             Teams.scoreKeeperName = (dt2.Rows[i]["scoreKeeperName"] == DBNull.Value ? "" : dt2.Rows[i]["scoreKeeperName"].ToString());
                             Teams.matchPlayerList = (dt2.Rows[i]["playerList"] == DBNull.Value ? "" : dt2.Rows[i]["playerList"].ToString());
 
@@ -380,7 +382,7 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = "Failed to update" });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = /*"Failed to update"*/"PlayerId Not Found" });
                 }
             }
             catch (Exception e)
