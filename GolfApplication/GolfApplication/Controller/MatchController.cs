@@ -185,15 +185,16 @@ namespace GolfApplication.Controller
         [HttpGet, Route("getMatchById/{matchId}")]
         public IActionResult getMatchById(int matchId)
         {
-            List<dynamic> matches = new List<dynamic>();
-            List<dynamic> TeamsPlayers = new List<dynamic>();
+            List<MatchList> matches = new List<MatchList>();
+            //List<dynamic> TeamsPlayers = new List<dynamic>();
             try
             {
                 DataSet ds = Data.Match.getMatchById(matchId);
                 DataTable dt1 = ds.Tables[0];
                 if (dt1.Rows.Count > 0)
                 {
-                    dynamic MatchList = new System.Dynamic.ExpandoObject();
+                    //dynamic MatchList = new System.Dynamic.ExpandoObject();
+                    MatchList MatchList = new MatchList();
                     MatchList.matchId = (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
                     MatchList.matchCode = (dt1.Rows[0]["matchCode"] == DBNull.Value ? "" : dt1.Rows[0]["matchCode"].ToString());
                     MatchList.matchName = (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());

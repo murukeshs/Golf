@@ -301,7 +301,7 @@ namespace GolfApplication.Data
         #endregion
 
 
-        #region inviteMatch
+        #region sendmatchnotification
         public static string sendmatchnotification(string emailId, string Title, string matchCode, string matchDate, string competitionName, int NoOfPlayers, string MatchLocation)
         {
             try
@@ -366,7 +366,7 @@ namespace GolfApplication.Data
         }
         #endregion
 
-        #region Create  Matchplayer
+        #region addParticipants
         public static DataTable addParticipants([FromBody]addParticipants addParticipants)
         {
             try
@@ -381,7 +381,7 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@email", addParticipants.email));
                 parameters.Add(new SqlParameter("@userTypeId", addParticipants.userTypeId));
 
-                DataTable rowsAffected = SqlHelper.ExecuteDataset(connectionstring, CommandType.StoredProcedure, "addParticipants", parameters.ToArray()).Tables[0];
+                DataTable rowsAffected = SqlHelper.ExecuteDataset(connectionstring, CommandType.StoredProcedure, "spAddParticipants", parameters.ToArray()).Tables[0];
                 return rowsAffected;
             }
             catch (Exception e)
