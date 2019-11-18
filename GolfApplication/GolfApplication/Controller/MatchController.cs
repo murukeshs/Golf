@@ -558,7 +558,7 @@ namespace GolfApplication.Controller
                         matchjoin.isAllowMatch = (dt.Rows[i]["isAllowMatch"] == DBNull.Value ? "" : dt.Rows[i]["isAllowMatch"]);
                         matchJoinlist.Add(matchjoin);
                     }
-                    return StatusCode((int)HttpStatusCode.OK, new { matchJoinlist });
+                    return StatusCode((int)HttpStatusCode.OK, matchJoinlist);
                 }
                 else
                 {
