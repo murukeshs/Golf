@@ -253,11 +253,10 @@ namespace GolfApplication.Data
         #endregion
 
         #region inviteMatch
-        public static string inviteMatch(string emailId, int matchID, string Title, int UserID, string matchCode, string matchDate, string competitionName, int NoOfPlayers, string MatchLocation,string CurrentHostedUrl)
+        public static string inviteMatch(string emailId, int matchID, string Title, /*int UserID,*/ string matchCode, string matchDate, string competitionName, int NoOfPlayers, string MatchLocation,string CurrentHostedUrl)
         {
-
-            string CurrentURL = CurrentHostedUrl;
-            string link= CurrentURL+ "api/acceptMatchInvitation"+"?matchId=" +matchID+/* "/Type="+typeOf+ */"/playerId="+ UserID;
+            //string CurrentURL = CurrentHostedUrl;
+            string link= CurrentHostedUrl + "/api/acceptMatchInvitation"+"?matchId=" +matchID /* "/Type="+typeOf+ "/playerId="+ UserID*/;
             try
             {
                 string res = "";
@@ -278,9 +277,9 @@ namespace GolfApplication.Data
                 //Body = Body.Replace("*Typeof*", typeOf);
                 Body = Body.Replace("*Noofplayers*", NoOfPlayers.ToString());
                 Body = Body.Replace("*matchLocation*", MatchLocation);
-                Body = Body.Replace("*Link*", "Link");
+                Body = Body.Replace("*Link*", link);
                 #endregion
-                res = EmailSendGrid.inviteMatchMail("chitrasubburaj30@gmail.com", "sunila@apptomate.co", "Match Invitation", Body).Result; //and it's expiry time is 5 minutes.
+                res = EmailSendGrid.inviteMatchMail("chitrasubburaj30@gmail.com", emailId, "Match Invitation", Body).Result; //and it's expiry time is 5 minutes.
                 if (res == "Accepted")
                 {
                     result = "Mail sent successfully.";

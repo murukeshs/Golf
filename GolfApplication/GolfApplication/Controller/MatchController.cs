@@ -10,6 +10,8 @@ using System.Data;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
+using SendGrid;
+using SendGrid.Helpers.Mail;
 
 namespace GolfApplication.Controller
 {
@@ -458,17 +460,28 @@ namespace GolfApplication.Controller
                     //    emailsWithComma = emailsWithComma.TrimStart(',');
                     //    values = emailsWithComma.Split(',');
                     //}
+                    //string emailsList = string.Empty;
                     string emails = dt3.Rows[0]["emailList"].ToString();
                     if (emails.Contains('@'))
                     {
                         emails = emails.TrimStart(',').TrimEnd(',');
-                        string res = Match.sendmatchnotification(emails, matchName, matchCode, matchDate, CompetitionName, NoOfPlayers, MatchLocations);
-                        if (res == "Mail sent successfully.")
-                        {
-                            return StatusCode((int)HttpStatusCode.OK, "Match Invitations Sent Successfully");
-                        }
+                        //emailsList = emails.Split(',').ToList();
                     }
-                     return StatusCode((int)HttpStatusCode.Forbidden, "Email's Not Found");
+                    //if (emails.Contains('@'))
+                    //{
+                    //    emails = emails.TrimStart(',').TrimEnd(',');
+                    string res = Match.sendmatchnotification(emails, matchName, matchCode, matchDate, CompetitionName, NoOfPlayers, MatchLocations);
+
+                    if (res == "Mail sent successfully.")
+                    {
+                        return StatusCode((int)HttpStatusCode.OK, "Invitations Sent Successfully");
+                    }
+                    else
+                    {
+                        return StatusCode((int)HttpStatusCode.Forbidden, "Mail Sending Failed");
+                    }
+                    //}
+                    //return StatusCode((int)HttpStatusCode.Forbidden, "Email's Not Found");
                     //if (dt2.Rows.Count > 0)
                     //    {
                     //        for (int i = 0; i < dt2.Rows.Count; i++)
@@ -510,41 +523,54 @@ namespace GolfApplication.Controller
 
                 if (dt1.Rows.Count > 0)
                 {
-                    int matchID= (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
-                    string matchCode= (dt1.Rows[0]["matchCode"] == DBNull.Value ? "" : dt1.Rows[0]["matchCode"].ToString());
-                    string matchName= (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
+                    int matchID = (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
+                    string matchCode = (dt1.Rows[0]["matchCode"] == DBNull.Value ? "" : dt1.Rows[0]["matchCode"].ToString());
+                    string matchName = (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
                     string matchDate = (dt1.Rows[0]["matchStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchStartDate"].ToString());
-                    string CompetitionName= (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
-                    int NoOfPlayers = dt2.Rows.Count;  
-                    string MatchLocations= (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
+                    string CompetitionName = (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
+                    int NoOfPlayers = dt2.Rows.Count;
+                    string MatchLocations = (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
                     string EmailId = string.Empty;
                     string CurrentHostedUrl = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, Request.PathBase);
 
-                    string emailsWithComma;
-                    string[] values=null;
-                    if (dt3.Rows.Count > 0)
+                    //string emailsWithComma;
+                    //string[] values=null;
+                    //if (dt3.Rows.Count > 0)
+                    //{
+                    //    emailsWithComma = dt3.Rows[0][0].ToString();
+                    //    emailsWithComma = emailsWithComma.TrimStart(',');
+                    //    values = emailsWithComma.Split(',');
+                    //}
+                    //List<EmailAddress> emailsList=new List<EmailAddress>();
+                    string emails = dt3.Rows[0]["emailList"].ToString();
+                    if (emails.Contains('@'))
                     {
-                        emailsWithComma = dt3.Rows[0][0].ToString();
-                        emailsWithComma = emailsWithComma.TrimStart(',');
-                        values = emailsWithComma.Split(',');
+                        emails = emails.TrimStart(',').TrimEnd(',');
                     }
-                        if (dt2.Rows.Count > 0)
-                        {
-                            for (int i = 0; i < dt2.Rows.Count; i++)
-                            {
-                                int playerID= (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
+                
+                        //if (dt2.Rows.Count > 0)
+                        //{
+                        //    for (int i = 0; i < dt2.Rows.Count; i++)
+                        //    {
+                        //        int playerID= (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
 
                                 //Comma Seperate email
-                                if (i < values.Length )
-                                {
-                                    EmailId = values[i];
+                                //if (i < values.Length )
+                                //{
+                                   // EmailId = values[i];
                                     //Sending Email to Individual Match Players's
-                                    Match.inviteMatch(EmailId, matchID, matchName, playerID, matchCode, matchDate,CompetitionName, NoOfPlayers, MatchLocations, CurrentHostedUrl);
-                                }
-                            }
-                        }
-                   
-                    return StatusCode((int)HttpStatusCode.OK, "Match Invitations Sent Successfully");
+                                 string result=Match.inviteMatch(emails, matchID, matchName, /*playerID,*/ matchCode, matchDate,CompetitionName, NoOfPlayers, MatchLocations, CurrentHostedUrl);
+                    //}
+                    //    }
+                    //}
+                    if (result == "Mail sent successfully.")
+                    {
+                        return StatusCode((int)HttpStatusCode.OK, "Invitations Sent Successfully");
+                    }
+                    else
+                    {
+                        return StatusCode((int)HttpStatusCode.Forbidden, "Mail Sending Failed");
+                    }
                 }
                 else
                 {
@@ -587,7 +613,7 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new {ErrorMessage = "No Data Found" });
+                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new {ErrorMessage = "No matches available for this user" });
                 }
             }
             catch (Exception e)
