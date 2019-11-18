@@ -451,25 +451,12 @@ namespace GolfApplication.Controller
                     int NoOfPlayers = dt2.Rows.Count;
                     string MatchLocations = (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
                     string EmailId = string.Empty;
-
-                    //string emailsWithComma;
-                    //string[] values = null;
-                    //if (dt3.Rows.Count > 0)
-                    //{
-                    //    emailsWithComma = dt3.Rows[0][0].ToString();
-                    //    emailsWithComma = emailsWithComma.TrimStart(',');
-                    //    values = emailsWithComma.Split(',');
-                    //}
-                    //string emailsList = string.Empty;
+                    
                     string emails = dt3.Rows[0]["emailList"].ToString();
                     if (emails.Contains('@'))
                     {
                         emails = emails.TrimStart(',').TrimEnd(',');
-                        //emailsList = emails.Split(',').ToList();
                     }
-                    //if (emails.Contains('@'))
-                    //{
-                    //    emails = emails.TrimStart(',').TrimEnd(',');
                     string res = Match.sendmatchnotification(emails, matchName, matchCode, matchDate, CompetitionName, NoOfPlayers, MatchLocations);
 
                     if (res == "Mail sent successfully.")
@@ -480,22 +467,6 @@ namespace GolfApplication.Controller
                     {
                         return StatusCode((int)HttpStatusCode.Forbidden, "Mail Sending Failed");
                     }
-                    //}
-                    //return StatusCode((int)HttpStatusCode.Forbidden, "Email's Not Found");
-                    //if (dt2.Rows.Count > 0)
-                    //    {
-                    //        for (int i = 0; i < dt2.Rows.Count; i++)
-                    //        {
-                    //            //Comma Seperate email
-                    //            if (i < values.Length)
-                    //            {
-                    //                EmailId = values[i];
-                    //                //Sending Email to Individual Match Players's
-                    //                Match.sendmatchnotification(EmailId, matchName, matchCode, matchDate, CompetitionName, NoOfPlayers, MatchLocations);
-                    //            }
-                    //        }
-                    //    }
-                    //return StatusCode((int)HttpStatusCode.OK, "Match Invitations Sent Successfully");
                 }
                 else
                 {
@@ -533,36 +504,13 @@ namespace GolfApplication.Controller
                     string EmailId = string.Empty;
                     string CurrentHostedUrl = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, Request.PathBase);
 
-                    //string emailsWithComma;
-                    //string[] values=null;
-                    //if (dt3.Rows.Count > 0)
-                    //{
-                    //    emailsWithComma = dt3.Rows[0][0].ToString();
-                    //    emailsWithComma = emailsWithComma.TrimStart(',');
-                    //    values = emailsWithComma.Split(',');
-                    //}
-                    //List<EmailAddress> emailsList=new List<EmailAddress>();
                     string emails = dt3.Rows[0]["emailList"].ToString();
                     if (emails.Contains('@'))
                     {
                         emails = emails.TrimStart(',').TrimEnd(',');
                     }
-                
-                        //if (dt2.Rows.Count > 0)
-                        //{
-                        //    for (int i = 0; i < dt2.Rows.Count; i++)
-                        //    {
-                        //        int playerID= (dt2.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["userId"]);
-
-                                //Comma Seperate email
-                                //if (i < values.Length )
-                                //{
-                                   // EmailId = values[i];
-                                    //Sending Email to Individual Match Players's
-                                 string result=Match.inviteMatch(emails, matchID, matchName, /*playerID,*/ matchCode, matchDate,CompetitionName, NoOfPlayers, MatchLocations, CurrentHostedUrl);
-                    //}
-                    //    }
-                    //}
+                    string result=Match.inviteMatch(emails, matchID, matchName, /*playerID,*/ matchCode, matchDate,CompetitionName, NoOfPlayers, MatchLocations, CurrentHostedUrl);
+                   
                     if (result == "Mail sent successfully.")
                     {
                         return StatusCode((int)HttpStatusCode.OK, "Invitations Sent Successfully");
@@ -606,7 +554,8 @@ namespace GolfApplication.Controller
                         matchjoin.Type = (dt.Rows[i]["Type"] == DBNull.Value ? "" : dt.Rows[i]["Type"].ToString());
                         matchjoin.matchFee = (dt.Rows[i]["matchFee"] == DBNull.Value ? 0 : (decimal)dt.Rows[i]["matchFee"]);
                         matchjoin.CompetitionName = (dt.Rows[i]["CompetitionName"] == DBNull.Value ? "" : dt.Rows[i]["CompetitionName"].ToString());
-                        matchjoin.competitionTypeId = (dt.Rows[i]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["competitionTypeId"]);
+                        matchjoin.competitionTypeId = (dt.Rows[i]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["competitionTypeId"]); 
+                        matchjoin.isAllowMatch = (dt.Rows[i]["isAllowMatch"] == DBNull.Value ? "" : dt.Rows[i]["isAllowMatch"].ToString());
                         matchJoinlist.Add(matchjoin);
                     }
                     return StatusCode((int)HttpStatusCode.OK, new { matchJoinlist });

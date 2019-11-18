@@ -58,52 +58,18 @@ namespace GolfApplication.Data
             {
                 var client = new SendGridClient(Apikey());
                 SendGridMessage mail = new SendGridMessage();
-
-                #region EmailTemplate for Content of the Mail
-                string Body = string.Empty;
-
-                mail.HtmlContent = BodyContent;
-                #endregion
-
-                //mail.From = new EmailAddress(from);
-                //EmailAddress EmailAddress = new EmailAddress("Sunila@apptomate.co",null);
-
-                //List<SendGrid.Helpers.Mail.EmailAddress> emails = new List<SendGrid.Helpers.Mail.EmailAddress>();
-                //emails.Add(EmailAddress);
                 string[] values = to.Split(',');
                 var fromMail = new EmailAddress(from, "");
-
-                //List<EmailAddress>toMail = new List<EmailAddress>();
-                //toMail.Add("");
-                //foreach (string i in values)
-                //{
-                //    dynamic tos = new List<EmailAddress>
-                //   {
-                //new EmailAddress(i, "Example User1"),
-                //toMail.Add(tos)
-                //     };
-                //}
-                var toMail = new List<EmailAddress>
-            {
-                new EmailAddress("sunila@apptmate.co", ""),
-                new EmailAddress("murukeshs@apptomate.co", ""),
-                new EmailAddress("kajas@apptomate.co", "")
-            };
-                //new EmailAddress("murukeshs@apptomate.co", "Example User2"),
-                //new EmailAddress("kajas@apptomate.co", "Example User3")
+                List<EmailAddress> toMail = new List<EmailAddress>();
+               
+                foreach (string i in values)
+                {
+                    EmailAddress e = new EmailAddress(i, "");
+                    toMail.Add(e);
+                }
 
                 var showAllRecipients = false;
-
-                //var tos = to.Select(x => MailHelper.StringToEmailAddress(x)).ToList();
                 var msg = MailHelper.CreateSingleEmailToMultipleRecipients(fromMail, toMail, subject, "", BodyContent, showAllRecipients);
-                //if (tos != null)
-                //{
-                //    mail.AddTos(tos);
-                //}
-
-                mail.Subject = subject;
-               // mail.PlainTextContent = BodyContent;
-
                 var status = await client.SendEmailAsync(msg);
                 return status.StatusCode.ToString();
             }
