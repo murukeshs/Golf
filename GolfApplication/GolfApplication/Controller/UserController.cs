@@ -147,22 +147,22 @@ namespace GolfApplication.Controller
             {
             
                 List<createUser> userList = new List<createUser>();
-                if (userUpdate.userId <= 0 || userUpdate.userId == null)
-                {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter First Name" });
-                }
-                else if (userUpdate.firstName == "" || userUpdate.firstName == null)
-                {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter First Name" });
-                }
-                else if (userUpdate.password == "" || userUpdate.password == null)
-                {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter Password" });
-                }
-                else if (userUpdate.email == "" || userUpdate.email == "string" || userUpdate.email == null)
-                {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter Email" });
-                }
+                //if (userUpdate.userId <= 0 || userUpdate.userId == null)
+                //{
+                //    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter First Name" });
+                //}
+                //else if (userUpdate.firstName == "" || userUpdate.firstName == null)
+                //{
+                //    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter First Name" });
+                //}
+                //else if (userUpdate.password == "" || userUpdate.password == null)
+                //{
+                //    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter Password" });
+                //}
+                //else if (userUpdate.email == "" || userUpdate.email == "string" || userUpdate.email == null)
+                //{
+                //    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter Email" });
+                //}
 
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
                 System.Text.RegularExpressions.Match match = regex.Match(userUpdate.email);

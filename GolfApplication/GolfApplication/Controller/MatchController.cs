@@ -24,12 +24,15 @@ namespace GolfApplication.Controller
     [Authorize]
     public class MatchController : ControllerBase
     {
+        #region HostingEnvironment
         private readonly IHostingEnvironment _env;
 
         public MatchController(IHostingEnvironment env)
         {
             _env = env;
         }
+        #endregion
+
         #region matchRules
         [HttpPost, Route("matchRules")]
         public IActionResult matchRules(string matchRules)
