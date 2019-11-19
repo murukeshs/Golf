@@ -58,7 +58,7 @@ namespace GolfApplication.Models
         public bool? isEmailVerified { get; set; }
         [DefaultValue(false)]
         public bool? isPhoneVerified { get; set; }
-        
+        public bool? isModerator { get; set; }
     }
 
     public class userList : getUser

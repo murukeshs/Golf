@@ -107,6 +107,7 @@ namespace GolfApplication.Controller
                             user.isPhoneVerified = (dt.Rows[0]["isPhoneVerified"] == DBNull.Value ? false : (bool)dt.Rows[0]["isPhoneVerified"]);
                             //user.passwordUpdatedDate = (dt.Rows[0]["passwordUpdatedDate"] == DBNull.Value ? "" : dt.Rows[0]["passwordUpdatedDate"].ToString());
                             user.userWithTypeId = (dt.Rows[0]["userWithTypeId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["userWithTypeId"]);
+                            user.isModerator = (dt.Rows[0]["isModerator"] == DBNull.Value ? false : (bool)dt.Rows[0]["isModerator"]);
                             userList.Add(user);
 
                             var token = GenerateJSONWebToken();
