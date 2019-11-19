@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using GolfApplication.Data;
 using GolfApplication.Models;
 using System.IO;
+using System.Text;
 
 namespace GolfApplication.Data
 {
@@ -253,7 +254,7 @@ namespace GolfApplication.Data
         #endregion
 
         #region inviteMatch
-        public static string inviteMatch(string emailId, int matchID, string Title, /*int UserID,*/ string matchCode, string matchDate, string competitionName, int NoOfPlayers, string MatchLocation,string CurrentHostedUrl)
+        public static string inviteMatch(string emailId, int matchID, string Title, /*int UserID,*/ string matchCode, string matchDate, string competitionName, int NoOfPlayers, string MatchLocation,string CurrentHostedUrl,StringBuilder TeamPlayerList,string MatchRuleName,decimal MatchFee)
         {
             //string CurrentURL = CurrentHostedUrl;
             string link= CurrentHostedUrl + "/api/acceptMatchInvitation"+"?matchId=" +matchID /* "/Type="+typeOf+ "/playerId="+ UserID*/;
@@ -274,10 +275,15 @@ namespace GolfApplication.Data
                 Body = Body.Replace("*MatchCode*", matchCode);
                 Body = Body.Replace("*MatchDate*", matchDate);
                 Body = Body.Replace("*Competitiontype*", competitionName);
-                //Body = Body.Replace("*Typeof*", typeOf);
                 Body = Body.Replace("*Noofplayers*", NoOfPlayers.ToString());
                 Body = Body.Replace("*matchLocation*", MatchLocation);
                 Body = Body.Replace("*Link*", link);
+                Body = Body.Replace("*TeamsPlayers*", TeamPlayerList.ToString());
+                Body = Body.Replace("*matchrules*", MatchRuleName.ToString());
+                Body = Body.Replace("*matchfee*", MatchFee.ToString());
+
+
+
                 #endregion
                 res = EmailSendGrid.inviteMatchMail("chitrasubburaj30@gmail.com", emailId, "Match Invitation", Body).Result; //and it's expiry time is 5 minutes.
                 if (res == "Accepted")
@@ -320,7 +326,6 @@ namespace GolfApplication.Data
                 Body = Body.Replace("*MatchCode*", matchCode);
                 Body = Body.Replace("*MatchDate*", matchDate);
                 Body = Body.Replace("*Competitiontype*", competitionName);
-                //Body = Body.Replace("*Typeof*", typeOf);
                 Body = Body.Replace("*Noofplayers*", NoOfPlayers.ToString());
                 #endregion
                 res = EmailSendGrid.inviteMatchMail("chitrasubburaj30@gmail.com", emailId, "Match Invitation", Body).Result; //and it's expiry time is 5 minutes.

@@ -12,6 +12,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using GolfApplication.Models;
 
 namespace GolfApplication.Data
 {
@@ -70,20 +71,22 @@ namespace GolfApplication.Data
         #endregion
 
         #region uploadFile       
-        public static string CreateMediaItem([FromForm]IFormFile file)
+        public static string CreateMediaItem(byte[] imageFile, string fileName)
         {
             try
             {
-                string Exceptsymbols = Regex.Replace(file.FileName, @"[^.0-9a-zA-Z]+", "");
+
+                string Exceptsymbols = Regex.Replace(fileName, @"[^.0-9a-zA-Z]+", "");
                 string[] strFilename = Exceptsymbols.Split('.');
 
                 string Filename = strFilename[0] + "_" + DateTime.Now.ToString("dd'-'MM'-'yyyy'-'HH'-'mm'-'ss") + "." + strFilename[1];
 
-               var FileURL = AzureStorage.UploadImage(file, Filename, "videosandimages").Result;  //+ "." + file.ContentType
+               var FileURL = AzureStorage.UploadImage(imageFile, Filename, "videosandimages").Result;  //+ "." + file.ContentType
                 return FileURL;
             }
             catch (Exception e)
             {
+                string SaveErrorLog = Data.Common.SaveErrorLog("CreateMediaItem", e.Message.ToString());
                 //loggerErr.Error(e.Message + " - " + e.StackTrace);
                 throw e;
             }

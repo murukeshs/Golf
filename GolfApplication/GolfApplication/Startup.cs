@@ -116,6 +116,11 @@ namespace GolfApplication
                 // c.OperationFilter<AddFileParamTypesOperationFilter>();
                 //  c.OperationFilter<MyCorp.Swashbuckle.FormFileSwaggerFilter<MyCorp.Attr.ValidateMimeMultipartContentFilter>>();
             });
+            services.Configure<FormOptions>(o => {
+                o.ValueLengthLimit = int.MaxValue;
+                o.MultipartBodyLengthLimit = int.MaxValue;
+                o.MemoryBufferThreshold = int.MaxValue;
+            });
 
         }
 

@@ -23,7 +23,7 @@ namespace GolfApplication.Data
             return StorageKey;
         }
 
-        public static async Task<string> UploadImage(IFormFile file, string DocumentName, string Folder)
+        public static async Task<string> UploadImage(byte[] file, string DocumentName, string Folder)
         {
             string uri = "";
 
@@ -38,9 +38,12 @@ namespace GolfApplication.Data
                 //cloudBlockBlob.Properties.ContentType = ContentType == "jpg" ? "image/jpg" : "video/mp4";
                 //byte[] byteArray = Encoding.ASCII.GetBytes(DocumentBytes);
                 //MemoryStream stream = new MemoryStream(byteArray);
-                var fileStream = file.OpenReadStream();
-                //Stream fileStream = new MemoryStream(fileStram);
+
+                Stream fileStream = new MemoryStream(file);
                 await cloudBlockBlob.UploadFromStreamAsync(fileStream);
+                //var fileStream = file.OpenReadStream();
+                ////Stream fileStream = new MemoryStream(fileStram);
+                //await cloudBlockBlob.UploadFromStreamAsync(fileStream);
                 uri = Convert.ToString(cloudBlockBlob.Uri);
                 return uri;
             }

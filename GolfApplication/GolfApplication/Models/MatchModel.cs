@@ -25,6 +25,7 @@ namespace GolfApplication.Models
         public int competitionTypeId { get; set; }
         public int matchId { get; set; }
         public string matchStatus { get; set; }
+        public bool isSaveAndNotify { get; set; }
     }
 
     public class matchPlayer

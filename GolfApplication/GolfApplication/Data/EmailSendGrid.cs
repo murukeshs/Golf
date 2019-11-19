@@ -61,12 +61,15 @@ namespace GolfApplication.Data
                 string[] values = to.Split(',');
                 var fromMail = new EmailAddress(from, "");
                 List<EmailAddress> toMail = new List<EmailAddress>();
-               
-                foreach (string i in values)
-                {
-                    EmailAddress e = new EmailAddress(i, "");
-                    toMail.Add(e);
-                }
+
+                EmailAddress e = new EmailAddress("sunila@apptomate.co", "");
+                toMail.Add(e);
+
+                //foreach (string i in values)
+                //{
+                //    EmailAddress e = new EmailAddress(i, "");
+                //    toMail.Add(e);
+                //}
 
                 var showAllRecipients = false;
                 var msg = MailHelper.CreateSingleEmailToMultipleRecipients(fromMail, toMail, subject, "", BodyContent, showAllRecipients);

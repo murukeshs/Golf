@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http.Extensions;
 using SendGrid;
 using SendGrid.Helpers.Mail;
+using System.Text;
 
 namespace GolfApplication.Controller
 {
@@ -142,6 +143,10 @@ namespace GolfApplication.Controller
 
                 if (dt >=1)
                 {
+                    if(updateMatch.isSaveAndNotify==true)
+                    {
+                        IActionResult result = sendmatchnotification(updateMatch.matchId);
+                    }
                     return StatusCode((int)HttpStatusCode.OK, "Updated Successfully");
                 }
                 else
@@ -501,15 +506,41 @@ namespace GolfApplication.Controller
                     string CompetitionName = (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
                     int NoOfPlayers = dt2.Rows.Count;
                     string MatchLocations = (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
+                    string RuleName = (dt1.Rows[0]["ruleName"] == DBNull.Value ? "" : dt1.Rows[0]["ruleName"].ToString());
+                    decimal MatchFee = (dt1.Rows[0]["matchFee"] == DBNull.Value ? 0 : (decimal)dt1.Rows[0]["matchFee"]);
                     string EmailId = string.Empty;
+
                     string CurrentHostedUrl = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, Request.PathBase);
 
                     string emails = dt3.Rows[0]["emailList"].ToString();
+                    string result = string.Empty;
+                    #region HtmlTemplate Code 
+                    System.Text.StringBuilder sbody = new StringBuilder();
+                    for (int i = 0;i < dt2.Rows.Count;i++)
+                    {
+                            sbody.Append("<table align='center' role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%' style='margin: auto;'>");
+                            sbody.Append("<tr>");
+                            sbody.Append("<td valign='middle' class='' style='background: #fff;'>");
+                            sbody.Append("<table width='88%' style='background: #f5f5f5;padding: 30px;'>");
+                            sbody.Append("<tr>");
+                            sbody.Append("<td style='width:20%'>");
+                            sbody.Append("<img src='https://cdn.dribbble.com/users/2476222/screenshots/6768199/golf_logo_effect1_2x.png' width='50' height='50' style='border-radius: 50%;'>");
+                            sbody.Append("</td>");
+                            sbody.Append("<td style='width: 40%'>" + dt2.Rows[i]["teamName"] + "</td>");
+                            sbody.Append("<td style='width:40%'>No Of Players:" + dt2.Rows[i]["NoOfPlayers"] + "</td>");
+                            sbody.Append("</tr>");
+                            sbody.Append("</table>");
+                            sbody.Append("</td>");
+                            sbody.Append("</tr>");
+                            sbody.Append("</table>");
+                    }
+                    #endregion
                     if (emails.Contains('@'))
                     {
                         emails = emails.TrimStart(',').TrimEnd(',');
+                        result = Match.inviteMatch(emails, matchID, matchName, /*playerID,*/ matchCode, matchDate, CompetitionName, NoOfPlayers, MatchLocations, CurrentHostedUrl, sbody,RuleName,MatchFee);
                     }
-                    string result=Match.inviteMatch(emails, matchID, matchName, /*playerID,*/ matchCode, matchDate,CompetitionName, NoOfPlayers, MatchLocations, CurrentHostedUrl);
+                    
                    
                     if (result == "Mail sent successfully.")
                     {
