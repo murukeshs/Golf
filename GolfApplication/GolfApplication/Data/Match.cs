@@ -254,7 +254,7 @@ namespace GolfApplication.Data
         #endregion
 
         #region inviteMatch
-        public static string inviteMatch(string emailId, int matchID, string Title, /*int UserID,*/ string matchCode, string matchDate, string competitionName, int NoOfPlayers, string MatchLocation,string CurrentHostedUrl,StringBuilder TeamPlayerList,string MatchRuleName,decimal MatchFee)
+        public static string inviteMatch(string emailId, int matchID, string Title, /*int UserID,*/ string matchCode, string matchDate, string competitionName, int NoOfPlayers, string MatchLocation,string CurrentHostedUrl,StringBuilder TeamPlayerList,string MatchRuleName,decimal MatchFee,string filepath)
         {
             //string CurrentURL = CurrentHostedUrl;
             string link= CurrentHostedUrl + "/api/acceptMatchInvitation"+"?matchId=" +matchID /* "/Type="+typeOf+ "/playerId="+ UserID*/;
@@ -265,9 +265,7 @@ namespace GolfApplication.Data
                 #region Form Content Body
                 String Body = string.Empty;
 
-                string filename = @"PlayersInviteMatch.html";
-                string filePath = Directory.GetCurrentDirectory();
-                using (System.IO.StreamReader sr = new System.IO.StreamReader(filePath + "//EmailTemplates//" + filename))
+                using (System.IO.StreamReader sr = new System.IO.StreamReader(filepath))
                 {
                     Body = sr.ReadToEnd();
                 }
@@ -307,7 +305,7 @@ namespace GolfApplication.Data
 
 
         #region sendmatchnotification
-        public static string sendmatchnotification(string emailId, string Title, string matchCode, string matchDate, string competitionName, int NoOfPlayers, string MatchLocation)
+        public static string sendmatchnotification(string emailId, string Title, string matchCode, string matchDate, string competitionName, int NoOfPlayers, string MatchLocation,string filepath)
         {
             try
             {
@@ -316,9 +314,7 @@ namespace GolfApplication.Data
                 #region Form Content Body
                 String Body = string.Empty;
 
-                string filename = @"email-template.html";
-                string filePath = Directory.GetCurrentDirectory();
-                using (System.IO.StreamReader sr = new System.IO.StreamReader(filePath + "//EmailTemplates//" + filename))
+                using (System.IO.StreamReader sr = new System.IO.StreamReader(filepath))
                 {
                     Body = sr.ReadToEnd();
                 }

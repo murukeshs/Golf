@@ -26,7 +26,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="EmailTemplates\" />
+    <Folder Include="wwwroot\EmailTemplates\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\EmailTemplates\email-template.html" />
+    <None Include="wwwroot\EmailTemplates\PlayersInviteMatch.html" />
+    <None Include="wwwroot\EmailTemplates\UserInvitation.html" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Cors.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 
@@ -142,14 +144,20 @@ namespace GolfApplication
             app.UseCors("AllowAll");
             app.UseAuthentication();
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
+            //app.UseStaticFiles();
             app.UseCookiePolicy();
 
             app.UseMvc();
 
             app.UseSession();
 
-            app.UseSwagger();                        
+            app.UseSwagger();
+
+            //app.UseStaticFiles(new StaticFileOptions()
+            //{
+            //    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"EmailTemplates")),
+            //    RequestPath = new PathString("/EmailTemplates")
+            //});
 
             app.UseSwaggerUI(c =>
             {

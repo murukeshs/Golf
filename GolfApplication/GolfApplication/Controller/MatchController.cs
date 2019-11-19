@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Http.Extensions;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System.Text;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace GolfApplication.Controller
 {
@@ -22,6 +24,12 @@ namespace GolfApplication.Controller
     [Authorize]
     public class MatchController : ControllerBase
     {
+        private readonly IHostingEnvironment _env;
+
+        public MatchController(IHostingEnvironment env)
+        {
+            _env = env;
+        }
         #region matchRules
         [HttpPost, Route("matchRules")]
         public IActionResult matchRules(string matchRules)
@@ -446,6 +454,11 @@ namespace GolfApplication.Controller
                 DataTable dt2 = ds.Tables[1];
                 DataTable dt3 = ds.Tables[2];
 
+                var FilePath = _env.WebRootPath + Path.DirectorySeparatorChar.ToString()
+               + "EmailTemplates"
+               + Path.DirectorySeparatorChar.ToString()
+               + "email-template.html";
+
                 if (dt1.Rows.Count > 0)
                 {
                     int matchID = (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
@@ -462,7 +475,7 @@ namespace GolfApplication.Controller
                     {
                         emails = emails.TrimStart(',').TrimEnd(',');
                     }
-                    string res = Match.sendmatchnotification(emails, matchName, matchCode, matchDate, CompetitionName, NoOfPlayers, MatchLocations);
+                    string res = Match.sendmatchnotification(emails, matchName, matchCode, matchDate, CompetitionName, NoOfPlayers, MatchLocations,FilePath);
 
                     if (res == "Mail sent successfully.")
                     {
@@ -496,6 +509,11 @@ namespace GolfApplication.Controller
                 DataTable dt1 = ds.Tables[0];
                 DataTable dt2 = ds.Tables[1];
                 DataTable dt3 = ds.Tables[2];
+
+                var FilePath = _env.WebRootPath + Path.DirectorySeparatorChar.ToString()
+               + "EmailTemplates"
+               + Path.DirectorySeparatorChar.ToString()
+               + "PlayersInviteMatch.html";
 
                 if (dt1.Rows.Count > 0)
                 {
@@ -538,7 +556,7 @@ namespace GolfApplication.Controller
                     if (emails.Contains('@'))
                     {
                         emails = emails.TrimStart(',').TrimEnd(',');
-                        result = Match.inviteMatch(emails, matchID, matchName, /*playerID,*/ matchCode, matchDate, CompetitionName, NoOfPlayers, MatchLocations, CurrentHostedUrl, sbody,RuleName,MatchFee);
+                        result = Match.inviteMatch(emails, matchID, matchName, /*playerID,*/ matchCode, matchDate, CompetitionName, NoOfPlayers, MatchLocations, CurrentHostedUrl, sbody,RuleName,MatchFee, FilePath);
                     }
                     
                    

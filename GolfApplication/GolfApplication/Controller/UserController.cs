@@ -283,7 +283,7 @@ namespace GolfApplication.Controller
                     //user.passwordUpdatedDate = (dt.Rows[0]["passwordUpdatedDate"] == DBNull.Value ? "" : dt.Rows[0]["passwordUpdatedDate"].ToString());
                     userList.Add(user);
 
-                    return StatusCode((int)HttpStatusCode.OK, new { user });
+                    return StatusCode((int)HttpStatusCode.OK, user);
                 }
 
                 else
