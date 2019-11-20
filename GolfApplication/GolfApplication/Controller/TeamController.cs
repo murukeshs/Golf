@@ -191,25 +191,24 @@ namespace GolfApplication.Controller
                 }
                 else if (dt0 == "TeamDetails")
                 {
+                    //    DataTable dt = ds.Tables[1];
+                    //    updateTeam team = new updateTeam();
+                    //        team.teamId = (dt.Rows[0]["teamId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["teamId"]);
+                    //        team.scoreKeeperID = (dt.Rows[0]["scoreKeeperID"] == DBNull.Value ? 0 : (int)dt.Rows[0]["scoreKeeperID"]);
+                    //        team.teamName = (dt.Rows[0]["teamName"] == DBNull.Value ? "" : dt.Rows[0]["teamName"].ToString());
+                    //        team.teamIcon = (dt.Rows[0]["teamIcon"] == DBNull.Value ? "" : dt.Rows[0]["teamIcon"].ToString());
+                    //        team.CreatedOn = (dt.Rows[0]["createdOn"] == DBNull.Value ? "" : dt.Rows[0]["createdOn"].ToString());
+                    //        team.createdBy = (dt.Rows[0]["createdBy"] == DBNull.Value ? 0 : (int)dt.Rows[0]["createdBy"]);
+                    //        team.startingHole = (dt.Rows[0]["startingHole"] == DBNull.Value ? 0 : (int)dt.Rows[0]["startingHole"]);
+                    //        teamDetailsList.Add(team);
+                    // return StatusCode((int)HttpStatusCode.OK, team);
 
-                    DataTable dt = ds.Tables[1];
-                    updateTeam team = new updateTeam();
-
-                        team.teamId = (dt.Rows[0]["teamId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["teamId"]);
-                        team.scoreKeeperID = (dt.Rows[0]["scoreKeeperID"] == DBNull.Value ? 0 : (int)dt.Rows[0]["scoreKeeperID"]);
-                        team.teamName = (dt.Rows[0]["teamName"] == DBNull.Value ? "" : dt.Rows[0]["teamName"].ToString());
-                        team.teamIcon = (dt.Rows[0]["teamIcon"] == DBNull.Value ? "" : dt.Rows[0]["teamIcon"].ToString());
-                        team.CreatedOn = (dt.Rows[0]["createdOn"] == DBNull.Value ? "" : dt.Rows[0]["createdOn"].ToString());
-                        team.createdBy = (dt.Rows[0]["createdBy"] == DBNull.Value ? 0 : (int)dt.Rows[0]["createdBy"]);
-                        team.startingHole = (dt.Rows[0]["startingHole"] == DBNull.Value ? 0 : (int)dt.Rows[0]["startingHole"]);
-
-                        teamDetailsList.Add(team);
-                   
-                    return StatusCode((int)HttpStatusCode.OK, team);
+                    string[] data = new string[0];
+                    return StatusCode((int)HttpStatusCode.OK, data);
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = "Team not available" });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Team not available" });
                 }
 
             }
