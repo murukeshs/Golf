@@ -55,6 +55,30 @@ namespace GolfApplication.Controller
         }
 
         #endregion
-        
+
+
+
+        #region UploadFile
+        [HttpPost, Route("UploadFileBytes")]
+        [AllowAnonymous]
+        public async Task<string> UploadFileBytes(UploadModel UploadModel)
+        {
+            //byte[] imgdata = System.IO.File.ReadAllBytes(@"C:\\Users\\admin\\Desktop\\Images\\download.jpg");
+            try
+            {
+                string myFileName = UploadModel.fileName /*"images.png"*/;
+                byte[] myFileContent = UploadModel.file /*imgdata*/;
+                
+                Global.fileurl = Common.CreateMediaItem(myFileContent, myFileName);
+                return Global.fileurl;
+            }
+
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
+        #endregion
     }
 }
