@@ -109,8 +109,10 @@ namespace GolfApplication.Data
             try
             {
                 string ConnectionString = Common.GetConnectionString();
-                var encryptPassword = Common.EncryptData(userCreate.password);
-
+                //if (userCreate.password != null && userCreate.password != "")
+                //{
+                //    var encryptPassword = Common.EncryptData(userCreate.password);
+                //}
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("@userId", userCreate.userId));
                 parameters.Add(new SqlParameter("@firstName", userCreate.firstName));
@@ -120,7 +122,7 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@dob", userCreate.dob));
                 parameters.Add(new SqlParameter("@profileImage", userCreate.profileImage));
                 parameters.Add(new SqlParameter("@phoneNumber", userCreate.phoneNumber));
-                parameters.Add(new SqlParameter("@password", encryptPassword));
+                parameters.Add(new SqlParameter("@password", ""));
                 parameters.Add(new SqlParameter("@countryId", userCreate.countryId));
                 parameters.Add(new SqlParameter("@stateId", userCreate.stateId));
                 parameters.Add(new SqlParameter("@city", userCreate.city));

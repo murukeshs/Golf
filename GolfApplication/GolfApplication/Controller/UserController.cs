@@ -68,7 +68,7 @@ namespace GolfApplication.Controller
             
             try
             {                
-                userCreate.profileImage = Global.fileurl;
+                //userCreate.profileImage = Global.fileurl;
 
                 List<createUser> userList = new List<createUser>();
 

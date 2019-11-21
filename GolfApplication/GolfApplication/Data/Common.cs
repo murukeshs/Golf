@@ -176,7 +176,7 @@ namespace GolfApplication.Data
             try
             {
                 Random generator = new Random();
-                string OTPValue = generator.Next(0, 999999).ToString();
+                string OTPValue = generator.Next(0, 999999).ToString("D6");
                 return OTPValue;
             }
             catch (Exception e)

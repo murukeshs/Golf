@@ -118,6 +118,10 @@ namespace GolfApplication.Controller
         [HttpPost, Route("createMatch")]
         public IActionResult createMatch(createMatch createMatch)
         {
+            if (createMatch.matchStartDate == "" || createMatch.matchStartDate == null)
+            {
+                return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter match startdate" });
+            }
             List<dynamic> Matches = new List<dynamic>();
             try
             {
