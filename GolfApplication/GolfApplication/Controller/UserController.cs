@@ -88,6 +88,10 @@ namespace GolfApplication.Controller
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter userTypeId" });
                 }
+                else if (userCreate.phoneNumber == "" ||  userCreate.phoneNumber == null)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter phonenumber" });
+                }
 
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
                 System.Text.RegularExpressions.Match match = regex.Match(userCreate.email);
@@ -147,22 +151,6 @@ namespace GolfApplication.Controller
             {
             
                 List<createUser> userList = new List<createUser>();
-                //if (userUpdate.userId <= 0 || userUpdate.userId == null)
-                //{
-                //    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter First Name" });
-                //}
-                //else if (userUpdate.firstName == "" || userUpdate.firstName == null)
-                //{
-                //    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter First Name" });
-                //}
-                //else if (userUpdate.password == "" || userUpdate.password == null)
-                //{
-                //    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter Password" });
-                //}
-                //else if (userUpdate.email == "" || userUpdate.email == "string" || userUpdate.email == null)
-                //{
-                //    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter Email" });
-                //}
 
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
                 System.Text.RegularExpressions.Match match = regex.Match(userUpdate.email);
@@ -686,71 +674,6 @@ namespace GolfApplication.Controller
             }
         }
         #endregion
-
-        //#region login
-        //[HttpPost, Route("login")]
-        //public IActionResult login(string email, string password)
-        //{
-        //    List<getUser> userList = new List<getUser>();
-        //    try
-        //    {
-        //        Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-        //        Match match = regex.Match(email);
-
-        //        if (match.Success)
-        //        {
-        //            DataSet ds = Data.User.login(email, password);
-        //            DataTable dt0 = ds.Tables[0];
-
-        //            if (dt0.Rows[0]["ErrorMessage"].ToString() == "Success")
-        //            {
-        //                DataTable dt = ds.Tables[1];
-
-        //                getUser user = new getUser();
-        //                user.userId = (int)dt.Rows[1]["userId"];
-        //                user.firstName = (dt.Rows[1]["firstName"] == DBNull.Value ? "" : dt.Rows[1]["firstName"].ToString());
-        //                user.lastName = (dt.Rows[1]["lastName"] == DBNull.Value ? "" : dt.Rows[1]["lastName"].ToString());
-        //                user.gender = (dt.Rows[1]["gender"] == DBNull.Value ? "" : dt.Rows[1]["gender"].ToString());
-        //                user.dob = (dt.Rows[1]["dob"] == DBNull.Value ? "" : dt.Rows[1]["dob"].ToString());
-        //                user.email = (dt.Rows[1]["email"] == DBNull.Value ? "" : dt.Rows[1]["email"].ToString());
-        //                user.password = (dt.Rows[1]["password"] == DBNull.Value ? "" : dt.Rows[1]["password"].ToString());
-        //                user.phoneNumber = (dt.Rows[1]["phoneNumber"] == DBNull.Value ? "" : dt.Rows[1]["phoneNumber"].ToString());
-        //                user.countryId = (dt.Rows[1]["countryId"] == DBNull.Value ? 0 : (int)dt.Rows[1]["countryId"]);
-        //                user.stateId = (dt.Rows[1]["stateId"] == DBNull.Value ? 0 : (int)dt.Rows[1]["stateId"]);
-        //                user.city = (dt.Rows[1]["city"] == DBNull.Value ? "" : dt.Rows[1]["city"].ToString());
-        //                user.address = (dt.Rows[1]["address"] == DBNull.Value ? "" : dt.Rows[1]["address"].ToString());
-        //                user.pinCode = (dt.Rows[1]["pinCode"] == DBNull.Value ? "" : dt.Rows[1]["pinCode"].ToString());
-        //                // user.profileImage = (dt.Rows[1]["profileImage"] == DBNull.Value ? "" : dt.Rows[1]["profileImage"].ToString());
-        //                user.isEmailNotification = (dt.Rows[1]["isEmailNotification"] == DBNull.Value ? false : (bool)dt.Rows[1]["isEmailNotification"]);
-        //                user.isEmailVerified = (dt.Rows[1]["isEmailVerified"] == DBNull.Value ? false : (bool)dt.Rows[1]["isEmailVerified"]);
-        //                user.isSMSNotification = (dt.Rows[1]["isSMSNotification"] == DBNull.Value ? false : (bool)dt.Rows[1]["isSMSNotification"]);
-        //                user.userCreatedDate = (dt.Rows[1]["userCreatedDate"] == DBNull.Value ? "" : dt.Rows[1]["userCreatedDate"].ToString());
-        //                user.isPublicProfile = (dt.Rows[1]["isPublicProfile"] == DBNull.Value ? false : (bool)dt.Rows[1]["isPublicProfile"]);
-        //                user.userUpdatedDate = (dt.Rows[1]["userUpdatedDate"] == DBNull.Value ? "" : dt.Rows[1]["userUpdatedDate"].ToString());
-        //                user.userCreatedDate = (dt.Rows[1]["passwordUpdatedDate"] == DBNull.Value ? "" : dt.Rows[1]["passwordUpdatedDate"].ToString());
-        //                userList.Add(user);
-        //                return StatusCode((int)HttpStatusCode.OK, new { user });
-        //            }
-        //            else
-        //            {
-        //                return StatusCode((int)HttpStatusCode.Forbidden, new { error = new { message = dt0.Rows[0]["ErrorMessage"].ToString() } });
-        //            }
-        //        }
-
-        //        else
-        //        {
-        //            return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter a valid Email" } });
-        //        }
-        //    }
-
-        //    catch (Exception e)
-        //    {
-        //        return StatusCode((int)HttpStatusCode.InternalServerError, new { error = new { message = e.Message.ToString() } });
-        //    }
-        //}
-        //#endregion
-
-
 
     }
 }

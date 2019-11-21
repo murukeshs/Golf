@@ -19,8 +19,7 @@ namespace GolfApplication.Controller
 
     public class UploadFileController : ControllerBase
     {
-
-        #region UploadFile
+        #region UploadFileBase64
         [HttpPost, Route("UploadFileBase64")]
         [AllowAnonymous]
         public async Task<string> UploadFileBase64([FromBody] UploadModel uploadModel )
@@ -42,10 +41,10 @@ namespace GolfApplication.Controller
         }
         #endregion
 
-        #region UploadFile
+        #region UploadFileBytes
         [HttpPost, Route("UploadFileBytes"), DisableRequestSizeLimit]
         [AllowAnonymous]
-        public async Task<string> UploadFileBytes(/*UploadModel UploadModel*/)
+        public async Task<string> UploadFileBytes()
         {
             //byte[] imgdata = System.IO.File.ReadAllBytes(@"C:\\Users\\admin\\Desktop\\Images\\Sunil.jpg");
             try
