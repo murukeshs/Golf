@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
+using Microsoft.WindowsAzure.Storage.RetryPolicies;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,7 +31,7 @@ namespace GolfApplication.Data
             try
             {
                 var AccountKey = ConnString();
-
+                
                 CloudStorageAccount cloudStorageAccount = CloudStorageAccount.Parse(AccountKey);
                 CloudBlobClient cloudBlobClient = cloudStorageAccount.CreateCloudBlobClient();
                 CloudBlobContainer cloudBlobContainer = cloudBlobClient.GetContainerReference(Folder);
@@ -39,8 +40,26 @@ namespace GolfApplication.Data
                 //byte[] byteArray = Encoding.ASCII.GetBytes(DocumentBytes);
                 //MemoryStream stream = new MemoryStream(byteArray);
 
+                //using (FileStream uploadFileStream = File.OpenRead(file){
+                //    await blobClient.UploadAsync(uploadFileStream);
+                //    uploadFileStream.Close();
+                //}
+
+                if (await cloudBlobContainer.CreateIfNotExistsAsync())
+                {
+                    await cloudBlobContainer.SetPermissionsAsync(
+                        new BlobContainerPermissions
+                        {
+                            PublicAccess = BlobContainerPublicAccessType.Blob
+                        }
+                        );
+                }
+
                 Stream fileStream = new MemoryStream(file);
                 await cloudBlockBlob.UploadFromStreamAsync(fileStream);
+               
+                //await cloudBlockBlob.UploadFromByteArrayAsync(file,0,1);
+                
                 //var fileStream = file.OpenReadStream();
                 ////Stream fileStream = new MemoryStream(fileStram);
                 //await cloudBlockBlob.UploadFromStreamAsync(fileStream);

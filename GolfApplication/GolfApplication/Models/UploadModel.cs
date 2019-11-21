@@ -7,7 +7,7 @@ namespace GolfApplication.Models
 {
     public class UploadModel
     {
-        public byte[] file { get; set; }
+        public string file { get; set; }
         public string fileName { get; set; }
     }
 }

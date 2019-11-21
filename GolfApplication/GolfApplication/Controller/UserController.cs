@@ -434,9 +434,9 @@ namespace GolfApplication.Controller
             try
             {
                 string res = "";
-                System.Guid guid = System.Guid.NewGuid();
-
-                string OTPValue = guid.ToString();
+                //System.Guid guid = System.Guid.NewGuid();
+                string OTPValue = Common.GenerateOTP();
+                //string OTPValue = guid.ToString();
 
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
                 System.Text.RegularExpressions.Match match = regex.Match(otp.email);

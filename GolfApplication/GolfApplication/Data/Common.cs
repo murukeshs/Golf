@@ -81,7 +81,7 @@ namespace GolfApplication.Data
 
                 string Filename = strFilename[0] + "_" + DateTime.Now.ToString("dd'-'MM'-'yyyy'-'HH'-'mm'-'ss") + "." + strFilename[1];
 
-               var FileURL = AzureStorage.UploadImage(imageFile, Filename, "videosandimages").Result;  //+ "." + file.ContentType
+                var FileURL = AzureStorage.UploadImage(imageFile, Filename, "videosandimages").Result;  //+ "." + file.ContentType
                 return FileURL;
             }
             catch (Exception e)
@@ -176,7 +176,7 @@ namespace GolfApplication.Data
             try
             {
                 Random generator = new Random();
-                string OTPValue = generator.Next(0, 99999).ToString();
+                string OTPValue = generator.Next(0, 999999).ToString();
                 return OTPValue;
             }
             catch (Exception e)

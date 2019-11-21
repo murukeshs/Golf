@@ -83,7 +83,7 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@lastName", userCreate.lastName));
                 parameters.Add(new SqlParameter("@email", userCreate.email));
                 parameters.Add(new SqlParameter("@gender", userCreate.gender));
-                parameters.Add(new SqlParameter("@dob", Convert.ToDateTime(userCreate.dob)));
+                parameters.Add(new SqlParameter("@dob", userCreate.dob.ToString()));
                 parameters.Add(new SqlParameter("@profileImage", userCreate.profileImage));
                 parameters.Add(new SqlParameter("@phoneNumber", userCreate.phoneNumber));
                 parameters.Add(new SqlParameter("@password", encryptPassword));
