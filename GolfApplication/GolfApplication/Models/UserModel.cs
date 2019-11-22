@@ -145,4 +145,10 @@ namespace GolfApplication.Models
     {
         public static string fileurl;
     }
+
+
+    public class  matchRule
+    {
+       public string matchRules{ get; set; }
+    }
 }

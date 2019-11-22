@@ -35,11 +35,16 @@ namespace GolfApplication.Controller
 
         #region matchRules
         [HttpPost, Route("matchRules")]
-        public IActionResult matchRules(string matchRules)
+        public IActionResult matchRules(matchRule matchRule)
         {
             try
             {
-                int dt = Data.Match.createMatchRules(matchRules);
+                if(matchRule.matchRules == "" || matchRule.matchRules == null)
+                {
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Please Enter Matchrules" });
+                }
+
+                int dt = Data.Match.createMatchRules(matchRule.matchRules);
 
                 if (dt >=1)
                 {

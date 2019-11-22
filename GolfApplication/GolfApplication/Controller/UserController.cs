@@ -70,8 +70,6 @@ namespace GolfApplication.Controller
             {                
                 //userCreate.profileImage = Global.fileurl;
 
-                List<createUser> userList = new List<createUser>();
-
                 if (userCreate.firstName == "" || userCreate.firstName == null)
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter First Name" });
@@ -129,15 +127,15 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                if (e.Message.Contains("UNIQUE KEY constraint") == true)
-                {
-                    return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = "Email Id is already exists" });
-                }
-                else
-                {
+                //if (e.Message.Contains("UNIQUE KEY constraint") == true)
+                //{
+                //    return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = "Email Id is already exists" });
+                //}
+                //else
+                //{
                     string SaveErrorLog = Data.Common.SaveErrorLog("createUser", e.Message);
                     return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
-                }
+                //}
             }
         }
 
@@ -149,9 +147,6 @@ namespace GolfApplication.Controller
         {
             try
             {
-            
-                List<createUser> userList = new List<createUser>();
-
                 Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
                 System.Text.RegularExpressions.Match match = regex.Match(userUpdate.email);
                 if (match.Success)
