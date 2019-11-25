@@ -18,6 +18,7 @@ namespace GolfApplication.Data
             parameters.Add(new SqlParameter("@teamIcon", team.teamIcon));
             parameters.Add(new SqlParameter("@createdBy", team.createdBy));
             parameters.Add(new SqlParameter("@startingHole", team.startingHole));
+            parameters.Add(new SqlParameter("@roundId", team.roundId));
 
             try
             {
@@ -45,6 +46,7 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@teamIcon", updateteam.teamIcon));
                 //parameters.Add(new SqlParameter("@scoreKeeperID", updateteam.scoreKeeperID));                
                 parameters.Add(new SqlParameter("@startingHole", updateteam.startingHole));
+                parameters.Add(new SqlParameter("@roundId", updateteam.roundId));
 
                 int rowsAffected = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, "spUpdateTeam", parameters.ToArray());
                 return rowsAffected;

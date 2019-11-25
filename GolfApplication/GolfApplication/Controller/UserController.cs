@@ -317,14 +317,14 @@ namespace GolfApplication.Controller
                         user.email = (dt.Rows[i]["email"] == DBNull.Value ? "" : dt.Rows[i]["email"].ToString());
                         user.password = DecryptPassword;
                         user.phoneNumber = (dt.Rows[i]["phoneNumber"] == DBNull.Value ? "" : dt.Rows[i]["phoneNumber"].ToString());
-                        //user.countryId = (dt.Rows[i]["countryId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["countryId"]);
-                        //user.stateId = (dt.Rows[i]["stateId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["stateId"]);
+                        user.countryId = (dt.Rows[i]["countryId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["countryId"]);
+                        user.stateId = (dt.Rows[i]["stateId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["stateId"]);
                         user.countryName = (dt.Rows[i]["countryName"] == DBNull.Value ? "" : dt.Rows[i]["countryName"].ToString());
                         user.stateName = (dt.Rows[i]["stateName"] == DBNull.Value ? "" : dt.Rows[i]["stateName"].ToString());
                         user.city = (dt.Rows[i]["city"] == DBNull.Value ? "" : dt.Rows[i]["city"].ToString());
                         user.address = (dt.Rows[i]["address"] == DBNull.Value ? "" : dt.Rows[i]["address"].ToString());
                         user.pinCode = (dt.Rows[i]["pinCode"] == DBNull.Value ? "" : dt.Rows[i]["pinCode"].ToString());
-                         user.profileImage = (dt.Rows[i]["profileImage"] == DBNull.Value ? "" : dt.Rows[i]["profileImage"].ToString());
+                        user.profileImage = (dt.Rows[i]["profileImage"] == DBNull.Value ? "" : dt.Rows[i]["profileImage"].ToString());
                         user.isEmailNotification = (dt.Rows[i]["isEmailNotification"] == DBNull.Value ? false : (bool)dt.Rows[i]["isEmailNotification"]);
                         user.isEmailVerified = (dt.Rows[i]["isEmailVerified"] == DBNull.Value ? false : (bool)dt.Rows[i]["isEmailVerified"]);
                         user.isSMSNotification = (dt.Rows[i]["isSMSNotification"] == DBNull.Value ? false : (bool)dt.Rows[i]["isSMSNotification"]);
@@ -411,57 +411,91 @@ namespace GolfApplication.Controller
         #endregion
 
         #region GenerateOTP
-        [HttpPut, Route("generateEmailOTP")]
+        [HttpPut, Route("generateOTP")]
         [AllowAnonymous]
-        public IActionResult generateOTP([FromBody]generateEmailOTP otp)
+        public IActionResult generateOTP([FromBody]generateOTP otp)
         {
-            try
+           
+            if (otp.sourceType == "Email")
             {
-                string res = "";
-                //System.Guid guid = System.Guid.NewGuid();
-                string OTPValue = Common.GenerateOTP();
-                //string OTPValue = guid.ToString();
-
-                Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-                System.Text.RegularExpressions.Match match = regex.Match(otp.email);
-                if(otp.type == "" || otp.type == "string")
+                try
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter a type" });
-                }
-                else if (match.Success)
-                {                   
-                    string row = Data.User.generateEmailOTP(OTPValue, otp);
-
-                    if (row == "Success")
+                    string OTPValue = Common.GenerateOTP();
+                    Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+                    System.Text.RegularExpressions.Match match = regex.Match(otp.emailorphone);
+                    if (otp.type == "" || otp.type == "string")
                     {
-                        res = Common.SendOTP(otp.email, otp.type, OTPValue);
-                        if (res == "Mail sent successfully.")
+                        return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter a type" });
+                    }
+                    else if (match.Success)
+                    {
+                        string row = Data.User.GenerateOTP(OTPValue, otp);
+                        if (row == "Success")
                         {
-                            return StatusCode((int)HttpStatusCode.OK, "OTP Generated and sent Successfully"); //result = "Mail sent successfully.";
+                            string res = Common.SendOTP(otp.emailorphone, otp.type, OTPValue);
+                            if (res == "Mail sent successfully.")
+                            {
+                                return StatusCode((int)HttpStatusCode.OK, "OTP Generated and sent Successfully"); //result = "Mail sent successfully.";
+                            }
+                            else
+                            {
+                                return StatusCode((int)HttpStatusCode.OK, "OTP Generated, mail not sent Successfully");
+                            }
                         }
                         else
                         {
-                            return StatusCode((int)HttpStatusCode.OK, "OTP Generated, mail not sent Successfully");
+                            //return "Invalid user";
+                            return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = row });
                         }
-                        
                     }
                     else
                     {
-                        //return "Invalid user";
-                        return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = row });
+                        return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter a valid Email" });
                     }
+
                 }
-                else
+                catch (Exception e)
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter a valid Email" });
+                    string SaveErrorLog = Data.Common.SaveErrorLog("generateOTP", e.Message);
+                    return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
                 }
-
             }
-            catch (Exception e)
+            else
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("generateOTP", e.Message);
+                try
+                {
+                    string OTPValue = Common.GenerateOTP();
+                    SMSResponse results = new SMSResponse();
+                    var SmsStatus = "";
+                    //otp.emailorPhone = "+14087224019";
+                    // string SaveOtpValue = Data.Common.SaveOTP(PhoneNumber, OTPValue, "Phone");
+                    string SaveOtpValue = Data.User.GenerateOTP(OTPValue, otp);
+                    if (SaveOtpValue == "Success")
+                    {
+                        results = SmsNotification.SendMessage(otp.emailorphone, "Hi User, your OTP is " + OTPValue + " and it's expiry time is 5 minutes.");
+                        string status = results.messages[0].status.ToString();
+                        if (status == "0")
+                        {
+                            SmsStatus = "Message sent successfully.";
+                        }
+                        else
+                        {
+                            string err = results.messages[0].error_text.ToString();
+                            SmsStatus = err;
+                        }
+                        return StatusCode((int)HttpStatusCode.OK, new { SmsStatus });       //results.messages, 
+                    }
+                    else
+                    {
+                        return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Phone number not available" });
+                    }
 
-                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
+                }
+                catch (Exception e)
+                {
+                    string SaveErrorLog = Data.Common.SaveErrorLog("generateOTP", e.Message.ToString());
+                    return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message.ToString() });
+                }
             }
         }
         #endregion
@@ -538,59 +572,59 @@ namespace GolfApplication.Controller
         }
         #endregion
 
-        #region SmsOTP
-        [HttpPut, Route("GenerateSmsOTP")]
-        [AllowAnonymous]
-        public IActionResult SmsOTP([FromBody]GenerateSmsOTP otp)
-        {
-            try
-            {
-                string OTPValue = Common.GenerateOTP();
+        //#region SmsOTP
+        //[HttpPut, Route("GenerateSmsOTP")]
+        //[AllowAnonymous]
+        //public IActionResult SmsOTP([FromBody]GenerateSmsOTP otp)
+        //{
+        //    try
+        //    {
+        //        string OTPValue = Common.GenerateOTP();
 
-                SMSResponse results = new SMSResponse();
+        //        SMSResponse results = new SMSResponse();
 
-                var SmsStatus = "";
+        //        var SmsStatus = "";
 
-                //otp.emailorPhone = "+14087224019";
+        //        //otp.emailorPhone = "+14087224019";
 
-                // string SaveOtpValue = Data.Common.SaveOTP(PhoneNumber, OTPValue, "Phone");
-                string SaveOtpValue = Data.User.GenerateSmsOTP(OTPValue, otp);
+        //        // string SaveOtpValue = Data.Common.SaveOTP(PhoneNumber, OTPValue, "Phone");
+        //        string SaveOtpValue = Data.User.GenerateSmsOTP(OTPValue, otp);
 
-                if (SaveOtpValue == "Success")
-                {
-                    results = SmsNotification.SendMessage(otp.phone, "Hi User, your OTP is " + OTPValue + " and it's expiry time is 5 minutes.");
+        //        if (SaveOtpValue == "Success")
+        //        {
+        //            results = SmsNotification.SendMessage(otp.phone, "Hi User, your OTP is " + OTPValue + " and it's expiry time is 5 minutes.");
 
-                    string status = results.messages[0].status.ToString();
+        //            string status = results.messages[0].status.ToString();
 
-                    if (status == "0")
-                    {
-                        SmsStatus = "Message sent successfully.";
-                    }
-                    else
-                    {
-                        string err = results.messages[0].error_text.ToString();
-                        SmsStatus = err;
-                    }
+        //            if (status == "0")
+        //            {
+        //                SmsStatus = "Message sent successfully.";
+        //            }
+        //            else
+        //            {
+        //                string err = results.messages[0].error_text.ToString();
+        //                SmsStatus = err;
+        //            }
 
 
-                    return StatusCode((int)HttpStatusCode.OK, new { SmsStatus });       //results.messages, 
-                }
+        //            return StatusCode((int)HttpStatusCode.OK, new { SmsStatus });       //results.messages, 
+        //        }
 
-                else
-                {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = "Phone number not available" });
-                }
+        //        else
+        //        {
+        //            return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = "Phone number not available" });
+        //        }
 
-            }
+        //    }
 
-            catch (Exception e)
-            {
-                string SaveErrorLog = Data.Common.SaveErrorLog("SmsOTP", e.Message.ToString());
+        //    catch (Exception e)
+        //    {
+        //        string SaveErrorLog = Data.Common.SaveErrorLog("SmsOTP", e.Message.ToString());
 
-                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message.ToString() });
-            }
-        }
-        #endregion
+        //        return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message.ToString() });
+        //    }
+        //}
+        //#endregion
 
 
         #region updateUserCommunicationinfo

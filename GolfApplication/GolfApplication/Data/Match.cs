@@ -71,21 +71,21 @@ namespace GolfApplication.Data
         #endregion
 
         #region createMatch
-        public static DataTable createMatch([FromBody]createMatch createMatch)
+        public static DataTable createRound([FromBody]createRound createRound)
         {
             try
             {
                 string connectionstring = Common.GetConnectionString();
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("@matchName", createMatch.matchName));
-                parameters.Add(new SqlParameter("@matchRuleId", createMatch.matchRuleId));
-                parameters.Add(new SqlParameter("@matchStartDate",createMatch.matchStartDate.ToString()));
-                parameters.Add(new SqlParameter("@matchEndDate", createMatch.matchEndDate.ToString()));
-                parameters.Add(new SqlParameter("@matchFee", createMatch.matchFee));
-                parameters.Add(new SqlParameter("@createdBy", createMatch.createdBy));
-                parameters.Add(new SqlParameter("@competitionTypeId", createMatch.competitionTypeId));
+                parameters.Add(new SqlParameter("@roundName", createRound.roundName));
+                parameters.Add(new SqlParameter("@roundRuleId", createRound.roundRuleId));
+                parameters.Add(new SqlParameter("@roundStartDate", createRound.roundStartDate.ToString()));
+                parameters.Add(new SqlParameter("@roundEndDate", createRound.roundEndDate.ToString()));
+                parameters.Add(new SqlParameter("@roundFee", createRound.roundFee));
+                parameters.Add(new SqlParameter("@createdBy", createRound.createdBy));
+                parameters.Add(new SqlParameter("@competitionTypeId", createRound.competitionTypeId));
 
-                using (DataTable dt = SqlHelper.ExecuteDataset(connectionstring, CommandType.StoredProcedure, "spCreateMatch", parameters.ToArray()).Tables[0])
+                using (DataTable dt = SqlHelper.ExecuteDataset(connectionstring, CommandType.StoredProcedure, "spCreateRound", parameters.ToArray()).Tables[0])
                 {
                     return dt;
                 }
@@ -95,24 +95,25 @@ namespace GolfApplication.Data
                 throw e;
             }
         }
+        #endregion
 
-        public static string updateMatch([FromBody]createMatch updateMatch)
+        #region updateRound
+        public static string updateRound([FromBody]createRound updateRound)
         {
             try
             {
                 string connectionstring = Common.GetConnectionString();
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("@matchId", updateMatch.matchId));
-                parameters.Add(new SqlParameter("@matchName", updateMatch.matchName));
-                parameters.Add(new SqlParameter("@matchRuleId", updateMatch.matchRuleId));
-                parameters.Add(new SqlParameter("@matchStartDate", updateMatch.matchStartDate));
-                parameters.Add(new SqlParameter("@matchEndDate", updateMatch.matchEndDate));
-                parameters.Add(new SqlParameter("@matchFee", updateMatch.matchFee));
-                //parameters.Add(new SqlParameter("@matchLocation", updateMatch.matchLocation));
-                parameters.Add(new SqlParameter("@matchStatus", updateMatch.matchStatus));
-                parameters.Add(new SqlParameter("@competitionTypeId", updateMatch.competitionTypeId));
-                
-                string rowsAffected = SqlHelper.ExecuteScalar(connectionstring, CommandType.StoredProcedure, "spUpdateMatch", parameters.ToArray()).ToString();
+                parameters.Add(new SqlParameter("@roundId", updateRound.roundId));
+                parameters.Add(new SqlParameter("@roundName", updateRound.roundName));
+                parameters.Add(new SqlParameter("@roundRuleId", updateRound.roundRuleId));
+                parameters.Add(new SqlParameter("@roundStartDate", updateRound.roundStartDate));
+                parameters.Add(new SqlParameter("@roundEndDate", updateRound.roundEndDate));
+                parameters.Add(new SqlParameter("@roundFee", updateRound.roundFee));
+                parameters.Add(new SqlParameter("@roundStatus", updateRound.roundStatus));
+                parameters.Add(new SqlParameter("@competitionTypeId", updateRound.competitionTypeId));
+
+                string rowsAffected = SqlHelper.ExecuteScalar(connectionstring, CommandType.StoredProcedure, "spUpdateRound", parameters.ToArray()).ToString();
                 return rowsAffected;
             }
             catch (Exception e)
@@ -168,16 +169,36 @@ namespace GolfApplication.Data
             }
 
         }
+
+        public static DataSet getRoundById(int roundId)
+        {
+            try
+            {
+                string ConnectionString = Common.GetConnectionString();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("@roundId", roundId));
+                //Execute the query
+                using (DataSet dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spSelectRoundById", parameters.ToArray()))
+                {
+                    return dt;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+
+        }
         #endregion
 
-        #region MatchList
-        public static DataTable getMatchList()
+        #region RoundList
+        public static DataTable getRoundList()
         {
             try
             {
                 string ConnectionString = Common.GetConnectionString();
                 //Execute the query
-                using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spListMatch").Tables[0])
+                using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spListRound").Tables[0])
                 {
                     return dt;
                 }
@@ -344,7 +365,7 @@ namespace GolfApplication.Data
         #endregion
 
 
-        #region getMatchJoinList
+        #region getRoundJoinList
         public static DataTable getMatchJoinList(int matchId, int userId)
         {
             try
@@ -355,6 +376,26 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@userId", userId));
                 
                 using (DataTable dt = SqlHelper.ExecuteDataset(connectionstring, CommandType.StoredProcedure, "spGetMatchJoinList", parameters.ToArray()).Tables[0])
+                {
+                    return dt;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
+        public static DataTable getRoundJoinList(int roundId, int userId)
+        {
+            try
+            {
+                string connectionstring = Common.GetConnectionString();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("@roundId", roundId));
+                parameters.Add(new SqlParameter("@userId", userId));
+
+                using (DataTable dt = SqlHelper.ExecuteDataset(connectionstring, CommandType.StoredProcedure, "spGetRoundJoinList", parameters.ToArray()).Tables[0])
                 {
                     return dt;
                 }
@@ -379,7 +420,7 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@phoneNumber", addParticipants.phoneNumber));
                 parameters.Add(new SqlParameter("@teamId", addParticipants.teamId));
                 parameters.Add(new SqlParameter("@email", addParticipants.email));
-                parameters.Add(new SqlParameter("@userTypeId", addParticipants.userTypeId));
+                //parameters.Add(new SqlParameter("@userTypeId", addParticipants.userTypeId));
 
                 DataTable rowsAffected = SqlHelper.ExecuteDataset(connectionstring, CommandType.StoredProcedure, "spAddParticipants", parameters.ToArray()).Tables[0];
                 return rowsAffected;

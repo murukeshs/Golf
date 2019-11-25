@@ -10,21 +10,18 @@ namespace GolfApplication.Models
         public int matchRuleId { get; set; }
         public string ruleName { get; set; }
     }
-
-    public class createMatch
+    public class createRound
     {
-        public string matchName { get; set; }
-        //public string matchType { get; set; }
-        public string matchCode { get; set; }
-        public string matchRuleId { get; set; }
-        public string matchStartDate { get; set; }
-        public string matchEndDate { get; set; }
-        public decimal matchFee { get; set; }
-        //public string matchLocation { get; set; }
+        public string roundName { get; set; }
+        public string roundCode { get; set; }
+        public string roundRuleId { get; set; }
+        public string roundStartDate { get; set; }
+        public string roundEndDate { get; set; }
+        public decimal roundFee { get; set; }
         public int createdBy { get; set; }
         public int competitionTypeId { get; set; }
-        public int matchId { get; set; }
-        public string matchStatus { get; set; }
+        public int roundId { get; set; }
+        public string roundStatus { get; set; }
         public bool isSaveAndNotify { get; set; }
     }
 
@@ -54,6 +51,24 @@ namespace GolfApplication.Models
         public int createdBy { get; set; }
         public string createdDate { get; set; }
         public string matchStatus { get; set; }
+        public int competitionTypeId { get; set; }
+        public string ruleName { get; set; }
+        public string competitionName { get; set; }
+    }
+    public class RoundList
+    {
+        public int roundId { get; set; }
+        public string roundCode { get; set; }
+        public string roundName { get; set; }
+        //public string matchType { get; set; }
+        public string roundRuleId { get; set; }
+        public string roundStartDate { get; set; }
+        public string roundEndDate { get; set; }
+        public decimal roundFee { get; set; }
+        public string roundLocation { get; set; }
+        public int createdBy { get; set; }
+        public string createdDate { get; set; }
+        public string roundStatus { get; set; }
         public int competitionTypeId { get; set; }
         public string ruleName { get; set; }
         public string competitionName { get; set; }

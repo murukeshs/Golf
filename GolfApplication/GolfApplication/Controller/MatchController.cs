@@ -119,65 +119,63 @@ namespace GolfApplication.Controller
         }
         #endregion
 
-        #region createMatch
-        [HttpPost, Route("createMatch")]
-        public IActionResult createMatch(createMatch createMatch)
+        #region createRound
+        [HttpPost, Route("createRound")]
+        public IActionResult createRound(createRound createRound)
         {
-            if (createMatch.matchStartDate == "" || createMatch.matchStartDate == null)
+            if (createRound.roundStartDate == "" || createRound.roundEndDate == null)
             {
-                return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter match startdate" });
+                return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter round startdate" });
             }
             List<dynamic> Matches = new List<dynamic>();
             try
             {
-                DataTable dt = Data.Match.createMatch(createMatch);
-                if(dt.Rows[0][0].ToString()=="Success")
+                DataTable dt = Data.Match.createRound(createRound);
+                if (dt.Rows[0][0].ToString() == "Success")
                 {
-                    //dynamic Mth = new System.Dynamic.ExpandoObject();
-                    var MatchID = (dt.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["matchId"]);
-                    var MatchCode = (dt.Rows[0]["matchCode"] == DBNull.Value ? "" : dt.Rows[0]["matchCode"]);
+                    var MatchID = (dt.Rows[0]["roundId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["roundId"]);
+                    var MatchCode = (dt.Rows[0]["roundCode"] == DBNull.Value ? "" : dt.Rows[0]["roundCode"]);
                     var CompetitionTypeName = (dt.Rows[0]["competitionTypeName"] == DBNull.Value ? "" : dt.Rows[0]["competitionTypeName"]);
-                    //Matches.Add(Mth);
-                    return StatusCode((int)HttpStatusCode.OK, new { matchId = MatchID, matchCode= MatchCode, competitionTypeName= CompetitionTypeName });
+                    return StatusCode((int)HttpStatusCode.OK, new { matchId = MatchID, matchCode = MatchCode, competitionTypeName = CompetitionTypeName });
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = "Failed to create match" });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Failed to create round" });
                 }
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("createMatch", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
+                string SaveErrorLog = Data.Common.SaveErrorLog("createRound", e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
             }
         }
         #endregion
 
-        #region updateMatch
-        [HttpPut, Route("updateMatch")]
-        public IActionResult updateMatch(createMatch updateMatch)
+        #region updateRound
+        [HttpPut, Route("updateRound")]
+        public IActionResult updateRound(createRound updateRound)
         {
             try
             {
-                int dt =Convert.ToInt32(Data.Match.updateMatch(updateMatch));
+                int dt = Convert.ToInt32(Data.Match.updateRound(updateRound));
 
-                if (dt >=1)
+                if (dt >= 1)
                 {
-                    if(updateMatch.isSaveAndNotify==true)
+                    if (updateRound.isSaveAndNotify == true)
                     {
-                        IActionResult result = sendmatchnotification(updateMatch.matchId);
+                        IActionResult result = sendmatchnotification(updateRound.roundId);
                     }
                     return StatusCode((int)HttpStatusCode.OK, "Updated Successfully");
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = "MatchId Not Found" });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "RoundId Not Found" });
                 }
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("updateMatch", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
+                string SaveErrorLog = Data.Common.SaveErrorLog("updateRound", e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
             }
         }
         #endregion
@@ -208,7 +206,7 @@ namespace GolfApplication.Controller
         }
         #endregion
 
-        #region GetMatchByID
+        #region GetRoundByID
         [HttpGet, Route("getMatchById/{matchId}")]
         public IActionResult getMatchById(int matchId)
         {
@@ -236,9 +234,7 @@ namespace GolfApplication.Controller
                     MatchList.matchStatus = (dt1.Rows[0]["matchStatus"] == DBNull.Value ? "" : dt1.Rows[0]["matchStatus"].ToString());
                     MatchList.competitionTypeId = (dt1.Rows[0]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["competitionTypeId"]);
                     MatchList.competitionName = (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
-
                     //matches.Add(MatchList);
-
                     return StatusCode((int)HttpStatusCode.OK, MatchList);
                 }
                 else
@@ -252,9 +248,47 @@ namespace GolfApplication.Controller
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
             }
         }
+
+        [HttpGet, Route("getRoundById/{roundId}")]
+        public IActionResult getRoundById(int roundId)
+        {
+            try
+            {
+                DataSet ds = Data.Match.getMatchById(roundId);
+                DataTable dt1 = ds.Tables[0];
+                if (dt1.Rows.Count > 0)
+                {
+                    RoundList MatchList = new RoundList();
+                    MatchList.roundId = (dt1.Rows[0]["roundId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["roundId"]);
+                    MatchList.roundCode = (dt1.Rows[0]["roundCode"] == DBNull.Value ? "" : dt1.Rows[0]["roundCode"].ToString());
+                    MatchList.roundName = (dt1.Rows[0]["roundName"] == DBNull.Value ? "" : dt1.Rows[0]["roundName"].ToString());
+                    MatchList.roundRuleId = (dt1.Rows[0]["roundRuleId"] == DBNull.Value ? "" : dt1.Rows[0]["roundRuleId"].ToString());
+                    MatchList.ruleName = (dt1.Rows[0]["ruleName"] == DBNull.Value ? "" : dt1.Rows[0]["ruleName"].ToString());
+                    MatchList.roundStartDate = (dt1.Rows[0]["roundStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["roundStartDate"].ToString());
+                    MatchList.roundEndDate = (dt1.Rows[0]["roundEndDate"] == DBNull.Value ? "" : dt1.Rows[0]["roundEndDate"].ToString());
+                    MatchList.roundFee = (dt1.Rows[0]["roundFee"] == DBNull.Value ? 0 : (decimal)dt1.Rows[0]["roundFee"]);
+                    MatchList.roundLocation = (dt1.Rows[0]["roundLocation"] == DBNull.Value ? "" : dt1.Rows[0]["roundLocation"].ToString());
+                    MatchList.createdBy = (dt1.Rows[0]["createdBy"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["createdBy"]);
+                    MatchList.createdDate = (dt1.Rows[0]["createdDate"] == DBNull.Value ? "" : dt1.Rows[0]["createdDate"].ToString());
+                    MatchList.roundStatus = (dt1.Rows[0]["roundStatus"] == DBNull.Value ? "" : dt1.Rows[0]["roundStatus"].ToString());
+                    MatchList.competitionTypeId = (dt1.Rows[0]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["competitionTypeId"]);
+                    MatchList.competitionName = (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
+                    return StatusCode((int)HttpStatusCode.OK, MatchList);
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "RoundId not found" });
+                }
+            }
+            catch (Exception e)
+            {
+                string SaveErrorLog = Data.Common.SaveErrorLog("getRoundById", e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
+            }
+        }
         #endregion
 
-        #region getMatchesDetailsById
+        #region getRoundsDetailsById
         [HttpGet, Route("getMatchesDetailsById/{matchId}")]
         public IActionResult getMatchesDetailsById(int matchId)
         {
@@ -296,31 +330,75 @@ namespace GolfApplication.Controller
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
             }
         }
-        #endregion
 
-        #region getMatchList
-        [HttpGet, Route("getMatchList")]
-        public IActionResult getMatchList()
+
+
+        [HttpGet, Route("getRoundDetailsById/{roundId}")]
+        public IActionResult getRoundDetailsById(int roundId)
         {
-            List<dynamic> matchList = new List<dynamic>();
+            List<dynamic> TeamsPlayers = new List<dynamic>();
             try
             {
-                DataTable dt = Data.Match.getMatchList();
+                DataSet ds = Data.Match.getRoundById(roundId);
+                DataTable dt1 = ds.Tables[0];
+                DataTable dt2 = ds.Tables[1];
+                if (dt1.Rows.Count > 0)
+                {
+
+                    if (dt2.Rows.Count > 0)
+                    {
+                        for (int i = 0; i < dt2.Rows.Count; i++)
+                        {
+                            dynamic Teams = new System.Dynamic.ExpandoObject();
+                            Teams.teamId = (dt2.Rows[i]["teamId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["teamId"]);
+                            Teams.teamName = (dt2.Rows[i]["teamName"] == DBNull.Value ? "" : dt2.Rows[i]["teamName"].ToString());
+                            Teams.teamIcon = (dt2.Rows[i]["teamIcon"] == DBNull.Value ? "" : dt2.Rows[i]["teamIcon"].ToString());
+                            Teams.createdByName = (dt2.Rows[i]["createdByName"] == DBNull.Value ? "" : dt2.Rows[i]["createdByName"].ToString());
+                            Teams.NoOfPlayers = (dt2.Rows[i]["NoOfPlayers"] == DBNull.Value ? "" : dt2.Rows[i]["NoOfPlayers"].ToString());
+                            Teams.scoreKeeperName = (dt2.Rows[i]["scoreKeeperName"] == DBNull.Value ? "" : dt2.Rows[i]["scoreKeeperName"].ToString());
+                            Teams.matchPlayerList = (dt2.Rows[i]["playerList"] == DBNull.Value ? "" : dt2.Rows[i]["playerList"].ToString());
+
+                            TeamsPlayers.Add(Teams);
+                        }
+                    }
+                    return StatusCode((int)HttpStatusCode.OK, TeamsPlayers);
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "RoundId not found" });
+                }
+            }
+            catch (Exception e)
+            {
+                string SaveErrorLog = Data.Common.SaveErrorLog("getRoundDetailsById", e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
+            }
+        }
+        #endregion
+
+        #region getRoundList
+        [HttpGet, Route("getRoundList")]
+        public IActionResult getRoundList()
+        {
+            List<dynamic> roundList = new List<dynamic>();
+            try
+            {
+                DataTable dt = Data.Match.getRoundList();
 
                 if (dt.Rows.Count > 0)
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        dynamic Matches = new System.Dynamic.ExpandoObject();
+                        dynamic Rounds = new System.Dynamic.ExpandoObject();
 
-                        Matches.matchId = (dt.Rows[i]["matchId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["matchId"]);
-                        Matches.matchCode = (dt.Rows[i]["matchCode"] == DBNull.Value ? "" : dt.Rows[i]["matchCode"].ToString());
-                        Matches.matchName = (dt.Rows[i]["matchName"] == DBNull.Value ? "" : dt.Rows[i]["matchName"].ToString());
-                        Matches.matchStartDate = (dt.Rows[i]["matchStartDate"] == DBNull.Value ? "" : dt.Rows[i]["matchStartDate"].ToString());
-                        Matches.StartDate = (dt.Rows[i]["StartDate"] == DBNull.Value ? "" : dt.Rows[i]["StartDate"].ToString());
-                        Matches.StartTime = (dt.Rows[i]["StartTime"] == DBNull.Value ? "" : dt.Rows[i]["StartTime"].ToString());
-                        Matches.matchFee = (dt.Rows[i]["matchFee"] == DBNull.Value ? 0 : (decimal)dt.Rows[i]["matchFee"]);
-                        
+                        Rounds.roundId = (dt.Rows[i]["roundId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["roundId"]);
+                        Rounds.roundCode = (dt.Rows[i]["roundCode"] == DBNull.Value ? "" : dt.Rows[i]["roundCode"].ToString());
+                        Rounds.roundName = (dt.Rows[i]["roundName"] == DBNull.Value ? "" : dt.Rows[i]["roundName"].ToString());
+                        Rounds.roundStartDate = (dt.Rows[i]["roundStartDate"] == DBNull.Value ? "" : dt.Rows[i]["roundStartDate"].ToString());
+                        Rounds.StartDate = (dt.Rows[i]["StartDate"] == DBNull.Value ? "" : dt.Rows[i]["StartDate"].ToString());
+                        Rounds.StartTime = (dt.Rows[i]["StartTime"] == DBNull.Value ? "" : dt.Rows[i]["StartTime"].ToString());
+                        Rounds.roundFee = (dt.Rows[i]["roundFee"] == DBNull.Value ? 0 : (decimal)dt.Rows[i]["roundFee"]);
+
                         //Matches.matchType = (dt.Rows[i]["matchType"] == DBNull.Value ? "" : dt.Rows[i]["matchType"].ToString());
                         //Matches.matchRuleId = (dt.Rows[i]["matchRuleId"] == DBNull.Value ? "" : dt.Rows[i]["matchRuleId"].ToString());
                         // Matches.ruleName = (dt.Rows[i]["ruleName"] == DBNull.Value ? "" : dt.Rows[i]["ruleName"].ToString());
@@ -331,9 +409,9 @@ namespace GolfApplication.Controller
                         //Matches.matchStatus = (dt.Rows[i]["matchStatus"] == DBNull.Value ? "" : dt.Rows[i]["matchStatus"].ToString());
                         //Matches.competitionTypeId = (dt.Rows[i]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["competitionTypeId"]);
                         //Matches.competitionName = (dt.Rows[i]["competitionName"] == DBNull.Value ? "" : dt.Rows[i]["competitionName"].ToString());
-                        matchList.Add(Matches);
+                        roundList.Add(Rounds);
                     }
-                    return StatusCode((int)HttpStatusCode.OK, matchList);
+                    return StatusCode((int)HttpStatusCode.OK, roundList);
                 }
                 else
                 {
@@ -349,38 +427,36 @@ namespace GolfApplication.Controller
         #endregion
 
         #region getMatchesList
-        [HttpGet, Route("getMatches")]
-        public IActionResult getMatches()
+        [HttpGet, Route("getRounds")]
+        public IActionResult getRounds()
         {
-            List<dynamic> matchList = new List<dynamic>();
+            List<dynamic> roundList = new List<dynamic>();
             try
             {
-                DataTable dt = Data.Match.getMatchList();
+                DataTable dt = Data.Match.getRoundList();
 
                 if (dt.Rows.Count > 0)
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        dynamic Matches = new System.Dynamic.ExpandoObject();
+                        dynamic Rounds = new System.Dynamic.ExpandoObject();
 
-                        Matches.matchCode = (dt.Rows[i]["matchCode"] == DBNull.Value ? "" : dt.Rows[i]["matchCode"].ToString());
-                        Matches.matchName = (dt.Rows[i]["matchName"] == DBNull.Value ? "" : dt.Rows[i]["matchName"].ToString());
-                        Matches.matchStartDate = (dt.Rows[i]["matchStartDate"] == DBNull.Value ? "" : dt.Rows[i]["matchStartDate"].ToString());
-                        Matches.matchFee = (dt.Rows[i]["matchFee"] == DBNull.Value ? 0 : (decimal)dt.Rows[i]["matchFee"]);
-                        Matches.matchId = (dt.Rows[i]["matchId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["matchId"]);
-                        //Matches.matchType = (dt.Rows[i]["matchType"] == DBNull.Value ? "" : dt.Rows[i]["matchType"].ToString());
-                        Matches.matchRuleId = (dt.Rows[i]["matchRuleId"] == DBNull.Value ? "" : dt.Rows[i]["matchRuleId"].ToString());
-                        Matches.ruleName = (dt.Rows[i]["ruleName"] == DBNull.Value ? "" : dt.Rows[i]["ruleName"].ToString());
-                        Matches.matchEndDate = (dt.Rows[i]["matchEndDate"] == DBNull.Value ? "" : dt.Rows[i]["matchEndDate"].ToString());
-                        Matches.matchLocation = (dt.Rows[i]["matchLocation"] == DBNull.Value ? "" : dt.Rows[i]["matchLocation"].ToString());
-                        Matches.createdBy = (dt.Rows[i]["createdBy"] == DBNull.Value ? 0 : (int)dt.Rows[i]["createdBy"]);
-                        Matches.createdDate = (dt.Rows[i]["createdDate"] == DBNull.Value ? "" : dt.Rows[i]["createdDate"].ToString());
-                        Matches.matchStatus = (dt.Rows[i]["matchStatus"] == DBNull.Value ? "" : dt.Rows[i]["matchStatus"].ToString());
-                        Matches.competitionTypeId = (dt.Rows[i]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["competitionTypeId"]);
-                        //Matches.competitionName = (dt.Rows[i]["competitionName"] == DBNull.Value ? "" : dt.Rows[i]["competitionName"].ToString());
-                        matchList.Add(Matches);
+                        Rounds.roundCode = (dt.Rows[i]["roundCode"] == DBNull.Value ? "" : dt.Rows[i]["roundCode"].ToString());
+                        Rounds.roundName = (dt.Rows[i]["roundName"] == DBNull.Value ? "" : dt.Rows[i]["roundName"].ToString());
+                        Rounds.roundStartDate = (dt.Rows[i]["roundStartDate"] == DBNull.Value ? "" : dt.Rows[i]["roundStartDate"].ToString());
+                        Rounds.roundFee = (dt.Rows[i]["roundFee"] == DBNull.Value ? 0 : (decimal)dt.Rows[i]["roundFee"]);
+                        Rounds.roundId = (dt.Rows[i]["roundId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["roundId"]);
+                        Rounds.roundRuleId = (dt.Rows[i]["roundRuleId"] == DBNull.Value ? "" : dt.Rows[i]["roundRuleId"].ToString());
+                        Rounds.ruleName = (dt.Rows[i]["ruleName"] == DBNull.Value ? "" : dt.Rows[i]["ruleName"].ToString());
+                        Rounds.roundEndDate = (dt.Rows[i]["roundEndDate"] == DBNull.Value ? "" : dt.Rows[i]["roundEndDate"].ToString());
+                        Rounds.roundLocation = (dt.Rows[i]["roundLocation"] == DBNull.Value ? "" : dt.Rows[i]["roundLocation"].ToString());
+                        Rounds.createdBy = (dt.Rows[i]["createdBy"] == DBNull.Value ? 0 : (int)dt.Rows[i]["createdBy"]);
+                        Rounds.createdDate = (dt.Rows[i]["createdDate"] == DBNull.Value ? "" : dt.Rows[i]["createdDate"].ToString());
+                        Rounds.roundStatus = (dt.Rows[i]["roundStatus"] == DBNull.Value ? "" : dt.Rows[i]["roundStatus"].ToString());
+                        Rounds.competitionTypeId = (dt.Rows[i]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["competitionTypeId"]);
+                        roundList.Add(Rounds);
                     }
-                    return StatusCode((int)HttpStatusCode.OK, matchList);
+                    return StatusCode((int)HttpStatusCode.OK, roundList);
                 }
                 else
                 {
@@ -389,7 +465,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("getMatchList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("getRounds", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
             }
         }
@@ -595,41 +671,41 @@ namespace GolfApplication.Controller
         #endregion
 
         #region getMatchJoinList
-        [HttpGet, Route("getMatchJoinList")]
-        public IActionResult getMatchJoinList(int matchId ,int userId)
+        [HttpGet, Route("getRoundJoinList")]
+        public IActionResult getRoundJoinList(int roundId ,int userId)
         {
-            List<dynamic> matchJoinlist = new List<dynamic>();
+            List<dynamic> roundJoinlist = new List<dynamic>();
             try
             {
-                DataTable dt = Data.Match.getMatchJoinList(matchId, userId);
+                DataTable dt = Data.Match.getRoundJoinList(roundId, userId);
                 if (dt.Rows.Count>0)
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        dynamic matchjoin = new System.Dynamic.ExpandoObject();
-                        matchjoin.userId = (dt.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["userId"]);
-                        matchjoin.ParticipantName = (dt.Rows[i]["ParticipantName"] == DBNull.Value ? "" : dt.Rows[i]["ParticipantName"].ToString());
-                        matchjoin.ParticipantId = (dt.Rows[i]["ParticipantId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["ParticipantId"]);
-                        matchjoin.matchName = (dt.Rows[i]["matchName"] == DBNull.Value ? "" : dt.Rows[i]["matchName"].ToString());
-                        matchjoin.matchId = (dt.Rows[i]["matchId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["matchId"]);
-                        matchjoin.Type = (dt.Rows[i]["Type"] == DBNull.Value ? "" : dt.Rows[i]["Type"].ToString());
-                        matchjoin.matchFee = (dt.Rows[i]["matchFee"] == DBNull.Value ? 0 : (decimal)dt.Rows[i]["matchFee"]);
-                        matchjoin.CompetitionName = (dt.Rows[i]["CompetitionName"] == DBNull.Value ? "" : dt.Rows[i]["CompetitionName"].ToString());
-                        matchjoin.competitionTypeId = (dt.Rows[i]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["competitionTypeId"]); 
-                        matchjoin.isAllowMatch = (dt.Rows[i]["isAllowMatch"] == DBNull.Value ? "" : dt.Rows[i]["isAllowMatch"]);
-                       // matchjoin.isModerator = (dt.Rows[i]["isModerator"] == DBNull.Value ? "" : dt.Rows[i]["isModerator"]);
-                        matchJoinlist.Add(matchjoin);
+                        dynamic roundjoin = new System.Dynamic.ExpandoObject();
+                        roundjoin.userId = (dt.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["userId"]);
+                        roundjoin.ParticipantName = (dt.Rows[i]["ParticipantName"] == DBNull.Value ? "" : dt.Rows[i]["ParticipantName"].ToString());
+                        roundjoin.ParticipantId = (dt.Rows[i]["ParticipantId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["ParticipantId"]);
+                        roundjoin.roundName = (dt.Rows[i]["roundName"] == DBNull.Value ? "" : dt.Rows[i]["roundName"].ToString());
+                        roundjoin.roundId = (dt.Rows[i]["roundId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["roundId"]);
+                        roundjoin.Type = (dt.Rows[i]["Type"] == DBNull.Value ? "" : dt.Rows[i]["Type"].ToString());
+                        roundjoin.roundFee = (dt.Rows[i]["roundFee"] == DBNull.Value ? 0 : (decimal)dt.Rows[i]["roundFee"]);
+                        roundjoin.CompetitionName = (dt.Rows[i]["CompetitionName"] == DBNull.Value ? "" : dt.Rows[i]["CompetitionName"].ToString());
+                        roundjoin.competitionTypeId = (dt.Rows[i]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["competitionTypeId"]);
+                        roundjoin.isAllowMatch = (dt.Rows[i]["isAllowMatch"] == DBNull.Value ? "" : dt.Rows[i]["isAllowMatch"]);
+                        // matchjoin.isModerator = (dt.Rows[i]["isModerator"] == DBNull.Value ? "" : dt.Rows[i]["isModerator"]);
+                        roundJoinlist.Add(roundjoin);
                     }
-                    return StatusCode((int)HttpStatusCode.OK, matchJoinlist);
+                    return StatusCode((int)HttpStatusCode.OK, roundJoinlist);
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new {ErrorMessage = "No matches available for this user" });
+                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new {ErrorMessage = "No rounds available for this user" });
                 }
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("getMatchJoinList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("getRoundJoinList", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
             }
         }
@@ -640,11 +716,9 @@ namespace GolfApplication.Controller
         [HttpPost, Route("addParticipants")]
         public IActionResult addParticipants(addParticipants addParticipants)
         {
-
             try
             {
                 DataTable dt = Data.Match.addParticipants(addParticipants);
-
                 if (dt.Rows[0][0].ToString()== "Success")
                 {
                     return StatusCode((int)HttpStatusCode.OK, "Participants added successfully");

@@ -229,7 +229,7 @@ namespace GolfApplication.Data
 
             List<SqlParameter> parameters = new List<SqlParameter>();            
             parameters.Add(new SqlParameter("@OTPValue", updatePassword.OTPValue));
-            parameters.Add(new SqlParameter("@email", updatePassword.emailorPhone));
+            parameters.Add(new SqlParameter("@source", updatePassword.emailorPhone));
             parameters.Add(new SqlParameter("@password", encryptPassword));
             parameters.Add(new SqlParameter("@sourceType", updatePassword.sourceType));
             //parameters.Add(new SqlParameter("@source", updatePassword.source));
@@ -248,12 +248,12 @@ namespace GolfApplication.Data
             }
         }
 
-        public static string GenerateSmsOTP(string OTPValue, [FromBody]GenerateSmsOTP otp)
+        public static string GenerateOTP(string OTPValue, [FromBody]generateOTP otp)
         {
            
             List<SqlParameter> parameters = new List<SqlParameter>();
             parameters.Add(new SqlParameter("@OTPValue", OTPValue));
-            parameters.Add(new SqlParameter("@source", otp.phone));
+            parameters.Add(new SqlParameter("@source", otp.emailorphone));
             parameters.Add(new SqlParameter("@type", otp.type));
             try
             {
@@ -268,26 +268,26 @@ namespace GolfApplication.Data
                 throw e;
             }
         }
-        public static string generateEmailOTP(string OTPValue, [FromBody]generateEmailOTP otp)
-        {
+        //public static string generateEmailOTP(string OTPValue, [FromBody]generateOTP otp)
+        //{
 
-            List<SqlParameter> parameters = new List<SqlParameter>();
-            parameters.Add(new SqlParameter("@OTPValue", OTPValue));
-            parameters.Add(new SqlParameter("@source", otp.email));
-            parameters.Add(new SqlParameter("@type", otp.type));
-            try
-            {
-                string ConnectionString = Common.GetConnectionString();
+        //    List<SqlParameter> parameters = new List<SqlParameter>();
+        //    parameters.Add(new SqlParameter("@OTPValue", OTPValue));
+        //    parameters.Add(new SqlParameter("@source", otp.emailorphone));
+        //    parameters.Add(new SqlParameter("@type", otp.type));
+        //    try
+        //    {
+        //        string ConnectionString = Common.GetConnectionString();
 
-                string rowsAffected = SqlHelper.ExecuteScalar(ConnectionString, CommandType.StoredProcedure, "spGenerateOTP", parameters.ToArray()).ToString();
-                return rowsAffected;
-            }
-            catch (Exception e)
-            {
-                //loggerErr.Error(e.Message + " - " + e.StackTrace);
-                throw e;
-            }
-        }
+        //        string rowsAffected = SqlHelper.ExecuteScalar(ConnectionString, CommandType.StoredProcedure, "spGenerateOTP", parameters.ToArray()).ToString();
+        //        return rowsAffected;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        //loggerErr.Error(e.Message + " - " + e.StackTrace);
+        //        throw e;
+        //    }
+        //}
         public static string verifyOTP([FromBody]otpVerify otp)
         {
 

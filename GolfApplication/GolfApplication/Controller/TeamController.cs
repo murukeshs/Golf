@@ -28,9 +28,13 @@ namespace GolfApplication.Controller
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new {  ErrorMessage = "Please enter teamName" });
                 }
-                else if (team.createdBy <= 0 || team.createdBy == null)
+                else if (team.createdBy <= 0 )
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter createdBy" });
+                }
+                else if (team.roundId <= 0 )
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter roundId" });
                 }
                 else
                 {
@@ -85,18 +89,6 @@ namespace GolfApplication.Controller
                 if (updateteam.teamId <= 0 )
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter teamId" });
-                }
-                else if (updateteam.teamName == "" || updateteam.teamName == null)
-                {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter teamName" });
-                }
-                else if (updateteam.teamIcon == "" || updateteam.teamIcon == null)
-                {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter teamIcon" });
-                }
-                else if (updateteam.startingHole < 0 )
-                {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter startingHole" });
                 }
                 else
                 {
@@ -184,7 +176,7 @@ namespace GolfApplication.Controller
                         team.gender = (dt.Rows[i]["gender"] == DBNull.Value ? "" : dt.Rows[i]["gender"].ToString());
                         team.email = (dt.Rows[i]["email"] == DBNull.Value ? "" : dt.Rows[i]["email"].ToString());
                         team.RoleType = (dt.Rows[i]["RoleType"] == DBNull.Value ? "" : dt.Rows[i]["RoleType"].ToString());
-
+                        team.roundId= (int)dt.Rows[i]["roundId"];
                         teamList.Add(team);
                     }
                     return StatusCode((int)HttpStatusCode.OK, teamList);
@@ -225,7 +217,7 @@ namespace GolfApplication.Controller
         [HttpGet, Route("listTeam")]
         public IActionResult listTeam()
         {
-            List<updateTeam> teamList = new List<updateTeam>();
+            List<listTeam> teamList = new List<listTeam>();
             try
             {
                 DataTable dt = Data.Team.listTeam();
@@ -233,7 +225,7 @@ namespace GolfApplication.Controller
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        updateTeam team = new updateTeam();
+                        listTeam team = new listTeam();
 
                         team.teamId = (dt.Rows[i]["teamId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["teamId"]);
                         team.scoreKeeperID = (dt.Rows[i]["scoreKeeperID"] == DBNull.Value ? 0 : (int)dt.Rows[i]["scoreKeeperID"]); 
@@ -245,6 +237,7 @@ namespace GolfApplication.Controller
                         team.startingHole = (dt.Rows[i]["startingHole"] == DBNull.Value ? 0 : (int)dt.Rows[i]["startingHole"]);
                         team.noOfPlayers = (dt.Rows[i]["noOfPlayers"] == DBNull.Value ? 0 : (int)dt.Rows[i]["noOfPlayers"]);
                         team.TeamplayerList= (dt.Rows[i]["playerList"] == DBNull.Value ? "" : dt.Rows[i]["playerList"].ToString());
+                        team.roundId= (dt.Rows[i]["roundId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["roundId"]);
                         teamList.Add(team);
                     }
                     return StatusCode((int)HttpStatusCode.OK, teamList);

@@ -73,8 +73,8 @@ namespace GolfApplication.Models
         public string profileImage { get; set; }
         public string phoneNumber { get; set; }
         public string password { get; set; }
-        //public int countryId { get; set; }
-        //public int stateId { get; set; }
+        public int countryId { get; set; }
+        public int stateId { get; set; }
         public string city { get; set; }
         public string address { get; set; }
         public string pinCode { get; set; }
@@ -115,15 +115,11 @@ namespace GolfApplication.Models
         //public string source { get; set; }
     }
 
-    public class generateEmailOTP
+    public class generateOTP
     {
-        public string email { get; set; }
+        public string emailorphone { get; set; }
         public string type { get; set; }
-    }
-    public class GenerateSmsOTP
-    {
-        public string phone { get; set; }
-        public string type { get; set; }
+        public string sourceType { get; set; }
     }
 
     public class updateUser
