@@ -358,6 +358,7 @@ namespace GolfApplication.Controller
             
         #region updatePassword
         [HttpPut, Route("updatePassword")]
+        [AllowAnonymous]
         public IActionResult updatePassword([FromBody]updatePassword updatePassword)
         {
             try

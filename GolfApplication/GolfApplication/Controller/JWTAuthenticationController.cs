@@ -140,8 +140,6 @@ namespace GolfApplication.Controller
             }
         }
         #endregion
-
-
     }
 
 }
