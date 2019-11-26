@@ -254,7 +254,7 @@ namespace GolfApplication.Controller
         {
             try
             {
-                DataSet ds = Data.Match.getMatchById(roundId);
+                DataSet ds = Data.Match.getRoundById(roundId);
                 DataTable dt1 = ds.Tables[0];
                 if (dt1.Rows.Count > 0)
                 {
@@ -426,7 +426,7 @@ namespace GolfApplication.Controller
         }
         #endregion
 
-        #region getMatchesList
+        #region getRounds
         [HttpGet, Route("getRounds")]
         public IActionResult getRounds()
         {

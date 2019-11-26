@@ -209,7 +209,7 @@ namespace GolfApplication.Data
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("@Email", userlogin.email));
                 parameters.Add(new SqlParameter("@Password", encryptPassword)); 
-                parameters.Add(new SqlParameter("@userTypeid", userlogin.userTypeid));
+                //parameters.Add(new SqlParameter("@userTypeid", userlogin.userTypeid));
 
                 DataSet ds = new DataSet();
                 using (ds = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spLogin", parameters.ToArray()))

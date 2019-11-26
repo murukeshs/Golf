@@ -72,15 +72,15 @@ namespace GolfApplication.Controller
 
                 if (match.Success)
                 {
-                    if(login.userTypeid > 0)
-                    {
+                    //if(login.userTypeid > 0)
+                    //{
                         DataSet ds = Data.User.login(login);
                         DataTable dt0 = ds.Tables[0];
 
                         if (dt0.Rows[0]["ErrorMessage"].ToString() == "Success")
                         {
                             DataTable dt = ds.Tables[1];
-
+                        string isModerator = dt.Rows[0]["userType"].ToString();
                             getUser user = new getUser();
                             user.userId = (dt.Rows[0]["userId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["userId"]);
                             user.firstName = (dt.Rows[0]["firstName"] == DBNull.Value ? "" : dt.Rows[0]["firstName"].ToString());
@@ -106,8 +106,8 @@ namespace GolfApplication.Controller
                             user.userUpdatedDate = (dt.Rows[0]["userUpdatedDate"] == DBNull.Value ? "" : dt.Rows[0]["userUpdatedDate"].ToString());
                             user.isPhoneVerified = (dt.Rows[0]["isPhoneVerified"] == DBNull.Value ? false : (bool)dt.Rows[0]["isPhoneVerified"]);
                             //user.passwordUpdatedDate = (dt.Rows[0]["passwordUpdatedDate"] == DBNull.Value ? "" : dt.Rows[0]["passwordUpdatedDate"].ToString());
-                            user.userWithTypeId = (dt.Rows[0]["userWithTypeId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["userWithTypeId"]);
-                            user.isModerator = (dt.Rows[0]["isModerator"] == DBNull.Value ? false : (bool)dt.Rows[0]["isModerator"]);
+                            //user.userWithTypeId = (dt.Rows[0]["userWithTypeId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["userWithTypeId"]);
+                            user.isModerator = (isModerator.Contains("Moderator"))? true  : false;
                             userList.Add(user);
 
                             var token = GenerateJSONWebToken();
@@ -118,11 +118,11 @@ namespace GolfApplication.Controller
                         {
                             return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = dt0.Rows[0]["ErrorMessage"].ToString() });
                         }
-                    }
-                    else
-                    {
-                        return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter a userTypeId" });
-                    }
+                    //}
+                    //else
+                    //{
+                    //    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter a userTypeId" });
+                    //}
                 }
                 else
                 {
