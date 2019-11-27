@@ -11,7 +11,7 @@ namespace GolfApplication.Models
     {
         public string email { get; set; }
         public string password { get; set; }
-        public int userTypeid { get; set; }
+        //public int userTypeid { get; set; }
     }
 
     public class UserType

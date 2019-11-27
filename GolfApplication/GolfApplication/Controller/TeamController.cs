@@ -176,7 +176,7 @@ namespace GolfApplication.Controller
                         team.gender = (dt.Rows[i]["gender"] == DBNull.Value ? "" : dt.Rows[i]["gender"].ToString());
                         team.email = (dt.Rows[i]["email"] == DBNull.Value ? "" : dt.Rows[i]["email"].ToString());
                         team.RoleType = (dt.Rows[i]["RoleType"] == DBNull.Value ? "" : dt.Rows[i]["RoleType"].ToString());
-                        team.roundId= (int)dt.Rows[i]["roundId"];
+                        //team.roundId= (int)dt.Rows[i]["roundId"];
                         teamList.Add(team);
                     }
                     return StatusCode((int)HttpStatusCode.OK, teamList);
@@ -237,7 +237,7 @@ namespace GolfApplication.Controller
                         team.startingHole = (dt.Rows[i]["startingHole"] == DBNull.Value ? 0 : (int)dt.Rows[i]["startingHole"]);
                         team.noOfPlayers = (dt.Rows[i]["noOfPlayers"] == DBNull.Value ? 0 : (int)dt.Rows[i]["noOfPlayers"]);
                         team.TeamplayerList= (dt.Rows[i]["playerList"] == DBNull.Value ? "" : dt.Rows[i]["playerList"].ToString());
-                        team.roundId= (dt.Rows[i]["roundId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["roundId"]);
+                        //team.roundId= (dt.Rows[i]["roundId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["roundId"]);
                         teamList.Add(team);
                     }
                     return StatusCode((int)HttpStatusCode.OK, teamList);
@@ -315,7 +315,6 @@ namespace GolfApplication.Controller
             catch (Exception e)
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("deleteTeamPlayers", e.Message.ToString());
-
                 return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message.ToString() });
             }
         }

@@ -35,7 +35,7 @@ namespace GolfApplication.Models
         public int noOfPlayers { get; set; }
         public string createdName { get; set; }
         public string TeamplayerList { get; set; }
-        public int roundId { get; set; }
+        //public int roundId { get; set; }
     }
 
     public class getTeam
@@ -47,7 +47,7 @@ namespace GolfApplication.Models
         public string RoleType { get; set; }
         public string profileImage { get; set; }
         public string email { get; set; }
-        public int roundId { get; set; }
+        //public int roundId { get; set; }
     }
 
     public class TeamPlayer

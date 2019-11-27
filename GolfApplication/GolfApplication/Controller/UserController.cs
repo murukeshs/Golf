@@ -147,10 +147,17 @@ namespace GolfApplication.Controller
         {
             try
             {
-                Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
-                System.Text.RegularExpressions.Match match = regex.Match(userUpdate.email);
-                if (match.Success)
+                if (userUpdate.email != null && userUpdate.email != "")
                 {
+                    Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+                    System.Text.RegularExpressions.Match match = regex.Match(userUpdate.email);
+                    if (match.Success ==false)
+                    {
+                        return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter a valid Email" });
+                    }
+                }
+                //if (match.Success)
+                //{
                     string row = Data.User.updateUser(userUpdate);
 
                     if (row == "Success")
@@ -168,11 +175,11 @@ namespace GolfApplication.Controller
                             return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = row });
                         }
                     }
-                }
-                else
-                {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter a valid Email" });
-                }
+                //}
+                //else
+                //{
+                //    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter a valid Email" });
+                //}
             }
             catch (Exception e)
             {

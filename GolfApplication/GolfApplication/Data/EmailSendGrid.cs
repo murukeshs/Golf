@@ -62,7 +62,7 @@ namespace GolfApplication.Data
                 var fromMail = new EmailAddress(from, "");
                 List<EmailAddress> toMail = new List<EmailAddress>();
 
-                EmailAddress e = new EmailAddress("elango@apptomate.co", "");
+                EmailAddress e = new EmailAddress("sunila@apptomate.co", "");
                 toMail.Add(e);
 
                 //foreach (string i in values)

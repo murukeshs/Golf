@@ -15,7 +15,7 @@ namespace GolfApplication.Data
 {
     public class Match
     {
-        #region Upsert MatchRules
+        #region createMatchRules
         public static int createMatchRules(string matchRules)
         {
             try
@@ -33,7 +33,7 @@ namespace GolfApplication.Data
             }
         }
 
-        public static int updateMatchRules([FromBody]MatchRules matchRules)
+        public static int updateRoundRules([FromBody]MatchRules matchRules)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace GolfApplication.Data
             }
         }
 
-        public static DataTable getMatchRulesList()
+        public static DataTable getRoundRulesList()
         {
             try
             {
@@ -123,53 +123,8 @@ namespace GolfApplication.Data
         }
         #endregion
 
-        #region Create  Matchplayer
-        public static string createMatchplayer([FromBody]matchPlayer matchPlayer)
-        {
-            try
-            {
-                string connectionstring = Common.GetConnectionString();
-                List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("@Type", matchPlayer.type));
-                parameters.Add(new SqlParameter("@eventId", matchPlayer.eventId));
-                parameters.Add(new SqlParameter("@teamId", matchPlayer.teamId));
-               // parameters.Add(new SqlParameter("@playerId", matchPlayer.playerId));
-                //parameters.Add(new SqlParameter("@isInvitationSent", matchPlayer.isInvitationSent));
-                //parameters.Add(new SqlParameter("@isInvitationAccept", matchPlayer.isInvitationAccept));
-                //parameters.Add(new SqlParameter("@isPaymentMade", matchPlayer.isPaymentMade));
-                //parameters.Add(new SqlParameter("@createdDate", matchPlayer.createdDate));
-
-                string rowsAffected = SqlHelper.ExecuteScalar(connectionstring, CommandType.StoredProcedure, "spCreateMatchPlayer", parameters.ToArray()).ToString();
-                return rowsAffected;
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-        #endregion
-
+        
         #region getMatchById
-        public static DataSet getMatchById(int matchId)
-        {
-            try
-            {
-                string ConnectionString = Common.GetConnectionString();
-                List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("@matchId", matchId));
-                //Execute the query
-                using (DataSet dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spSelectMatchById", parameters.ToArray()))
-                {
-                    return dt;
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-
-        }
-
         public static DataSet getRoundById(int roundId)
         {
             try
@@ -211,8 +166,8 @@ namespace GolfApplication.Data
         }
         #endregion
 
-        #region acceptMatchInvitation
-        public static string acceptMatchInvitation([FromBody]acceptMatchInvitation acceptMatchInvitation)
+        #region acceptRoundInvitation
+        public static string acceptRoundInvitation([FromBody]acceptMatchInvitation acceptMatchInvitation)
         {
             try
             {
@@ -253,15 +208,15 @@ namespace GolfApplication.Data
 
 
         #region inviteMatch && sendmatchnotification
-        public static DataSet inviteMatch(int matchId)
+        public static DataSet inviteMatch(int roundId)
         {
             try
             {
                 string ConnectionString = Common.GetConnectionString();
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("@matchId", matchId));
+                parameters.Add(new SqlParameter("@roundId", roundId));
                 //Execute the query
-                using (DataSet dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spSelectMatchById", parameters.ToArray()))
+                using (DataSet dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spSelectRoundById", parameters.ToArray()))
                 {
                     return dt;
                 }
@@ -275,10 +230,10 @@ namespace GolfApplication.Data
         #endregion
 
         #region inviteMatch
-        public static string inviteMatch(string emailId, int matchID, string Title, /*int UserID,*/ string matchCode, string matchDate, string competitionName, int NoOfPlayers, string MatchLocation,string CurrentHostedUrl,StringBuilder TeamPlayerList,string MatchRuleName,decimal MatchFee,string filepath)
+        public static string inviteMatch(string emailId, int roundID, string Title, /*int UserID,*/ string roundCode, string roundDate, string competitionName, int NoOfPlayers, string roundLocation,string CurrentHostedUrl,StringBuilder TeamPlayerList,string roundRuleName,decimal roundFee,string filepath)
         {
             //string CurrentURL = CurrentHostedUrl;
-            string link= CurrentHostedUrl + "/api/acceptMatchInvitation"+"?matchId=" +matchID /* "/Type="+typeOf+ "/playerId="+ UserID*/;
+            string link= CurrentHostedUrl + "/api/acceptRoundInvitation" + "?matchId=" + roundID /* "/Type="+typeOf+ "/playerId="+ UserID*/;
             try
             {
                 string res = "";
@@ -291,20 +246,20 @@ namespace GolfApplication.Data
                     Body = sr.ReadToEnd();
                 }
                 Body = Body.Replace("*Title*", Title);
-                Body = Body.Replace("*MatchCode*", matchCode);
-                Body = Body.Replace("*MatchDate*", matchDate);
+                Body = Body.Replace("*RoundCode*", roundCode);
+                Body = Body.Replace("*RoundDate*", roundDate);
                 Body = Body.Replace("*Competitiontype*", competitionName);
                 Body = Body.Replace("*Noofplayers*", NoOfPlayers.ToString());
-                Body = Body.Replace("*matchLocation*", MatchLocation);
+                Body = Body.Replace("*roundLocation*", roundLocation);
                 Body = Body.Replace("*Link*", link);
                 Body = Body.Replace("*TeamsPlayers*", TeamPlayerList.ToString());
-                Body = Body.Replace("*matchrules*", MatchRuleName.ToString());
-                Body = Body.Replace("*matchfee*", MatchFee.ToString());
+                Body = Body.Replace("*roundrules*", roundRuleName.ToString());
+                Body = Body.Replace("*roundfee*", roundFee.ToString());
 
 
 
                 #endregion
-                res = EmailSendGrid.inviteMatchMail("chitrasubburaj30@gmail.com", emailId, "Match Invitation", Body).Result; //and it's expiry time is 5 minutes.
+                res = EmailSendGrid.inviteMatchMail("chitrasubburaj30@gmail.com", emailId, "Round Invitation", Body).Result; //and it's expiry time is 5 minutes.
                 if (res == "Accepted")
                 {
                     result = "Mail sent successfully.";
@@ -326,7 +281,7 @@ namespace GolfApplication.Data
 
 
         #region sendmatchnotification
-        public static string sendmatchnotification(string emailId, string Title, string matchCode, string matchDate, string competitionName, int NoOfPlayers, string MatchLocation,string filepath)
+        public static string sendroundnotification(string emailId, string Title, string roundCode, string roundDate, string competitionName, int NoOfPlayers, string roundLocation, string filepath,string ruleName,decimal roundFee,StringBuilder TeamPlayers)
         {
             try
             {
@@ -340,12 +295,15 @@ namespace GolfApplication.Data
                     Body = sr.ReadToEnd();
                 }
                 Body = Body.Replace("*Title*", Title);
-                Body = Body.Replace("*MatchCode*", matchCode);
-                Body = Body.Replace("*MatchDate*", matchDate);
+                Body = Body.Replace("*RoundCode*", roundCode);
+                Body = Body.Replace("*RoundDate*", roundDate);
                 Body = Body.Replace("*Competitiontype*", competitionName);
-                Body = Body.Replace("*Noofplayers*", NoOfPlayers.ToString());
+                //Body = Body.Replace("*Noofplayers*", NoOfPlayers.ToString());
+                Body = Body.Replace("*roundrules*", ruleName.ToString());
+                Body = Body.Replace("*roundfee*", roundFee.ToString());
+                Body = Body.Replace("*TeamsPlayers*", TeamPlayers.ToString());
                 #endregion
-                res = EmailSendGrid.inviteMatchMail("chitrasubburaj30@gmail.com", emailId, "Match Invitation", Body).Result; //and it's expiry time is 5 minutes.
+                res = EmailSendGrid.inviteMatchMail("chitrasubburaj30@gmail.com", emailId, "Round Invitation", Body).Result; //and it's expiry time is 5 minutes.
                 if (res == "Accepted")
                 {
                     result = "Mail sent successfully.";
@@ -366,26 +324,6 @@ namespace GolfApplication.Data
 
 
         #region getRoundJoinList
-        public static DataTable getMatchJoinList(int matchId, int userId)
-        {
-            try
-            {
-                string connectionstring = Common.GetConnectionString();
-                List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("@matchId", matchId));
-                parameters.Add(new SqlParameter("@userId", userId));
-                
-                using (DataTable dt = SqlHelper.ExecuteDataset(connectionstring, CommandType.StoredProcedure, "spGetMatchJoinList", parameters.ToArray()).Tables[0])
-                {
-                    return dt;
-                }
-            }
-            catch (Exception e)
-            {
-                throw e;
-            }
-        }
-
         public static DataTable getRoundJoinList(int roundId, int userId)
         {
             try
@@ -420,7 +358,7 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@phoneNumber", addParticipants.phoneNumber));
                 parameters.Add(new SqlParameter("@teamId", addParticipants.teamId));
                 parameters.Add(new SqlParameter("@email", addParticipants.email));
-                //parameters.Add(new SqlParameter("@userTypeId", addParticipants.userTypeId));
+                parameters.Add(new SqlParameter("@userTypeId", addParticipants.userTypeId));
 
                 DataTable rowsAffected = SqlHelper.ExecuteDataset(connectionstring, CommandType.StoredProcedure, "spAddParticipants", parameters.ToArray()).Tables[0];
                 return rowsAffected;

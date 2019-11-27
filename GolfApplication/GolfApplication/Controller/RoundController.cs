@@ -22,29 +22,29 @@ namespace GolfApplication.Controller
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class MatchController : ControllerBase
+    public class RoundController : ControllerBase
     {
         #region HostingEnvironment
         private readonly IHostingEnvironment _env;
 
-        public MatchController(IHostingEnvironment env)
+        public RoundController(IHostingEnvironment env)
         {
             _env = env;
         }
         #endregion
 
         #region matchRules
-        [HttpPost, Route("matchRules")]
-        public IActionResult matchRules(matchRule matchRule)
+        [HttpPost, Route("roundRules")]
+        public IActionResult roundRules(matchRule roundRule)
         {
             try
             {
-                if(matchRule.matchRules == "" || matchRule.matchRules == null)
+                if(roundRule.matchRules == "" || roundRule.matchRules == null)
                 {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Please Enter Matchrules" });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Please Enter Roundrules" });
                 }
 
-                int dt = Data.Match.createMatchRules(matchRule.matchRules);
+                int dt = Data.Match.createMatchRules(roundRule.matchRules);
 
                 if (dt >=1)
                 {
@@ -57,18 +57,20 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("matchRules", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("roundRules", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
             }
         }
+        #endregion
 
-        [HttpGet, Route("getMatchRulesList")]
-        public IActionResult getMatchRulesList()
+        #region getRoundRulesList
+        [HttpGet, Route("getRoundRulesList")]
+        public IActionResult getRoundRulesList()
         {
             List<MatchRulesList> ruleList = new List<MatchRulesList>();
             try
             {
-                DataTable dt = Data.Match.getMatchRulesList();
+                DataTable dt = Data.Match.getRoundRulesList();
 
                 if (dt.Rows.Count > 0)
                 {
@@ -88,19 +90,19 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("getMatchRulesList", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("getRoundRulesList", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
             }
         }
         #endregion
 
         #region updateMatchRules
-        [HttpPut, Route("updateMatchRules")]
-        public IActionResult updateMatchRules(MatchRules matchRules)
+        [HttpPut, Route("updateRoundRules")]
+        public IActionResult updateRoundRules(MatchRules roundRules)
         {
             try
             {
-                int dt = Data.Match.updateMatchRules(matchRules);
+                int dt = Data.Match.updateRoundRules(roundRules);
 
                 if (dt>=1)
                 {
@@ -108,12 +110,12 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = "MatchRuleId Not Found" });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = "RoundRuleId Not Found" });
                 }
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("updateMatchRules", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("updateRoundRules", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
             }
         }
@@ -133,10 +135,10 @@ namespace GolfApplication.Controller
                 DataTable dt = Data.Match.createRound(createRound);
                 if (dt.Rows[0][0].ToString() == "Success")
                 {
-                    var MatchID = (dt.Rows[0]["roundId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["roundId"]);
-                    var MatchCode = (dt.Rows[0]["roundCode"] == DBNull.Value ? "" : dt.Rows[0]["roundCode"]);
+                    var roundId = (dt.Rows[0]["roundId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["roundId"]);
+                    var roundCode = (dt.Rows[0]["roundCode"] == DBNull.Value ? "" : dt.Rows[0]["roundCode"]);
                     var CompetitionTypeName = (dt.Rows[0]["competitionTypeName"] == DBNull.Value ? "" : dt.Rows[0]["competitionTypeName"]);
-                    return StatusCode((int)HttpStatusCode.OK, new { matchId = MatchID, matchCode = MatchCode, competitionTypeName = CompetitionTypeName });
+                    return StatusCode((int)HttpStatusCode.OK, new { roundId = roundId, roundCode = roundCode, competitionTypeName = CompetitionTypeName });
                 }
                 else
                 {
@@ -163,7 +165,7 @@ namespace GolfApplication.Controller
                 {
                     if (updateRound.isSaveAndNotify == true)
                     {
-                        IActionResult result = sendmatchnotification(updateRound.roundId);
+                        IActionResult result = sendroundnotification(updateRound.roundId);
                     }
                     return StatusCode((int)HttpStatusCode.OK, "Updated Successfully");
                 }
@@ -179,76 +181,8 @@ namespace GolfApplication.Controller
             }
         }
         #endregion
-
-        #region create MatchPlayer
-        [HttpPost, Route("createMatchplayer")]
-        public IActionResult createMatchplayer(matchPlayer matchPlayer)
-        {
-
-            try
-            {
-                int dt =Convert.ToInt32(Data.Match.createMatchplayer(matchPlayer));
-
-                if (dt >=1)
-                {
-                    return StatusCode((int)HttpStatusCode.OK, "Saved Successfully");
-                }
-                else
-                {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = "MatchId is already present" });
-                }
-            }
-            catch (Exception e)
-            {
-                string SaveErrorLog = Data.Common.SaveErrorLog("createMatchplayer", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = e.Message });
-            }
-        }
-        #endregion
-
+       
         #region GetRoundByID
-        [HttpGet, Route("getMatchById/{matchId}")]
-        public IActionResult getMatchById(int matchId)
-        {
-           // List<MatchList> matches = new List<MatchList>();
-            //List<dynamic> TeamsPlayers = new List<dynamic>();
-            try
-            {
-                DataSet ds = Data.Match.getMatchById(matchId);
-                DataTable dt1 = ds.Tables[0];
-                if (dt1.Rows.Count > 0)
-                {
-                    //dynamic MatchList = new System.Dynamic.ExpandoObject();
-                    MatchList MatchList = new MatchList();
-                    MatchList.matchId = (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
-                    MatchList.matchCode = (dt1.Rows[0]["matchCode"] == DBNull.Value ? "" : dt1.Rows[0]["matchCode"].ToString());
-                    MatchList.matchName = (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
-                    MatchList.matchRuleId = (dt1.Rows[0]["matchRuleId"] == DBNull.Value ? "" : dt1.Rows[0]["matchRuleId"].ToString());
-                    MatchList.ruleName = (dt1.Rows[0]["ruleName"] == DBNull.Value ? "" : dt1.Rows[0]["ruleName"].ToString());
-                    MatchList.matchStartDate = (dt1.Rows[0]["matchStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchStartDate"].ToString());
-                    MatchList.matchEndDate = (dt1.Rows[0]["matchEndDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchEndDate"].ToString());
-                    MatchList.matchFee = (dt1.Rows[0]["matchFee"] == DBNull.Value ? 0 : (decimal)dt1.Rows[0]["matchFee"]);
-                    MatchList.matchLocation = (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
-                    MatchList.createdBy = (dt1.Rows[0]["createdBy"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["createdBy"]);
-                    MatchList.createdDate = (dt1.Rows[0]["createdDate"] == DBNull.Value ? "" : dt1.Rows[0]["createdDate"].ToString());
-                    MatchList.matchStatus = (dt1.Rows[0]["matchStatus"] == DBNull.Value ? "" : dt1.Rows[0]["matchStatus"].ToString());
-                    MatchList.competitionTypeId = (dt1.Rows[0]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["competitionTypeId"]);
-                    MatchList.competitionName = (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
-                    //matches.Add(MatchList);
-                    return StatusCode((int)HttpStatusCode.OK, MatchList);
-                }
-                else
-                {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "MatchId not found" });
-                }
-            }
-            catch (Exception e)
-            {
-                string SaveErrorLog = Data.Common.SaveErrorLog("getMatchById", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
-            }
-        }
-
         [HttpGet, Route("getRoundById/{roundId}")]
         public IActionResult getRoundById(int roundId)
         {
@@ -289,50 +223,6 @@ namespace GolfApplication.Controller
         #endregion
 
         #region getRoundsDetailsById
-        [HttpGet, Route("getMatchesDetailsById/{matchId}")]
-        public IActionResult getMatchesDetailsById(int matchId)
-        {
-            List<dynamic> TeamsPlayers = new List<dynamic>();
-            try
-            {
-                DataSet ds = Data.Match.getMatchById(matchId);
-                DataTable dt1 = ds.Tables[0];
-                DataTable dt2 = ds.Tables[1];
-                if (dt1.Rows.Count > 0)
-                {
-                    
-                    if (dt2.Rows.Count > 0)
-                    {
-                        for (int i = 0; i < dt2.Rows.Count; i++)
-                        {
-                            dynamic Teams = new System.Dynamic.ExpandoObject();
-                            Teams.teamId = (dt2.Rows[i]["teamId"] == DBNull.Value ? 0 : (int)dt2.Rows[i]["teamId"]);
-                            Teams.teamName = (dt2.Rows[i]["teamName"] == DBNull.Value ? "" : dt2.Rows[i]["teamName"].ToString());
-                            Teams.teamIcon = (dt2.Rows[i]["teamIcon"] == DBNull.Value ? "" : dt2.Rows[i]["teamIcon"].ToString());
-                            Teams.createdByName = (dt2.Rows[i]["createdByName"] == DBNull.Value ? "" : dt2.Rows[i]["createdByName"].ToString());
-                            Teams.NoOfPlayers = (dt2.Rows[i]["NoOfPlayers"] == DBNull.Value ? "" : dt2.Rows[i]["NoOfPlayers"].ToString());
-                            Teams.scoreKeeperName = (dt2.Rows[i]["scoreKeeperName"] == DBNull.Value ? "" : dt2.Rows[i]["scoreKeeperName"].ToString());
-                            Teams.matchPlayerList = (dt2.Rows[i]["playerList"] == DBNull.Value ? "" : dt2.Rows[i]["playerList"].ToString());
-
-                            TeamsPlayers.Add(Teams);
-                        }
-                    }
-                    return StatusCode((int)HttpStatusCode.OK, TeamsPlayers);
-                }
-                else
-                {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "MatchId not found" });
-                }
-            }
-            catch (Exception e)
-            {
-                string SaveErrorLog = Data.Common.SaveErrorLog("getMatchesDetailsById", e.Message);
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
-            }
-        }
-
-
-
         [HttpGet, Route("getRoundDetailsById/{roundId}")]
         public IActionResult getRoundDetailsById(int roundId)
         {
@@ -471,13 +361,13 @@ namespace GolfApplication.Controller
         }
         #endregion
 
-        #region acceptMatchInvitation
-        [HttpPut, Route("acceptMatchInvitation")]
-        public IActionResult acceptMatchInvitation(acceptMatchInvitation acceptMatchInvitation)
+        #region acceptRoundInvitation
+        [HttpPut, Route("acceptRoundInvitation")]
+        public IActionResult acceptRoundInvitation(acceptMatchInvitation acceptMatchInvitation)
         {
             try
             {
-                int dt = Convert.ToInt32(Data.Match.acceptMatchInvitation(acceptMatchInvitation));
+                int dt = Convert.ToInt32(Data.Match.acceptRoundInvitation(acceptMatchInvitation));
 
                 if (dt >= 1)
                 {
@@ -490,7 +380,7 @@ namespace GolfApplication.Controller
             }
             catch (Exception e)
             {
-                string SaveErrorLog = Data.Common.SaveErrorLog("acceptMatchInvitation", e.Message);
+                string SaveErrorLog = Data.Common.SaveErrorLog("acceptRoundInvitation", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
             }
         }
@@ -532,12 +422,12 @@ namespace GolfApplication.Controller
         #endregion
 
         #region sendmatchnotification
-        [HttpGet, Route("sendmatchnotification/{matchId}")]
-        public IActionResult sendmatchnotification(int matchId)
+        [HttpGet, Route("sendroundnotification/{roundId}")]
+        public IActionResult sendroundnotification(int roundId)
         {
             try
             {
-                DataSet ds = Data.Match.inviteMatch(matchId);
+                DataSet ds = Data.Match.inviteMatch(roundId);
                 DataTable dt1 = ds.Tables[0];
                 DataTable dt2 = ds.Tables[1];
                 DataTable dt3 = ds.Tables[2];
@@ -549,21 +439,44 @@ namespace GolfApplication.Controller
 
                 if (dt1.Rows.Count > 0)
                 {
-                    int matchID = (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
-                    string matchCode = (dt1.Rows[0]["matchCode"] == DBNull.Value ? "" : dt1.Rows[0]["matchCode"].ToString());
-                    string matchName = (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
-                    string matchDate = (dt1.Rows[0]["matchStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchStartDate"].ToString());
+                    int roundID = (dt1.Rows[0]["roundId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["roundId"]);
+                    string roundCode = (dt1.Rows[0]["roundCode"] == DBNull.Value ? "" : dt1.Rows[0]["roundCode"].ToString());
+                    string roundName = (dt1.Rows[0]["roundName"] == DBNull.Value ? "" : dt1.Rows[0]["roundName"].ToString());
+                    string roundStartDate = (dt1.Rows[0]["roundStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["roundStartDate"].ToString());
                     string CompetitionName = (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
+                    string RuleName = (dt1.Rows[0]["ruleName"] == DBNull.Value ? "" : dt1.Rows[0]["ruleName"].ToString());
+                    decimal roundFee = (dt1.Rows[0]["roundFee"] == DBNull.Value ? 0 : (decimal)dt1.Rows[0]["roundFee"]);
                     int NoOfPlayers = dt2.Rows.Count;
-                    string MatchLocations = (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
+                    string roundLocation = (dt1.Rows[0]["roundLocation"] == DBNull.Value ? "" : dt1.Rows[0]["roundLocation"].ToString());
                     string EmailId = string.Empty;
                     
                     string emails = dt3.Rows[0]["emailList"].ToString();
+                    #region HtmlTemplate Code 
+                    System.Text.StringBuilder sbody = new StringBuilder();
+                    for (int i = 0; i < dt2.Rows.Count; i++)
+                    {
+                        sbody.Append("<table align='center' role='presentation' cellspacing='0' cellpadding='0' border='0' width='100%' style='margin: auto;'>");
+                        sbody.Append("<tr>");
+                        sbody.Append("<td valign='middle' class='' style='background: #fff;'>");
+                        sbody.Append("<table width='88%' style='background: #f5f5f5;padding: 30px;'>");
+                        sbody.Append("<tr>");
+                        sbody.Append("<td style='width:20%'>");
+                        sbody.Append("<img src='https://cdn.dribbble.com/users/2476222/screenshots/6768199/golf_logo_effect1_2x.png' width='50' height='50' style='border-radius: 50%;'>");
+                        sbody.Append("</td>");
+                        sbody.Append("<td style='width: 40%'>" + dt2.Rows[i]["teamName"] + "</td>");
+                        sbody.Append("<td style='width:40%'>No Of Players:" + dt2.Rows[i]["NoOfPlayers"] + "</td>");
+                        sbody.Append("</tr>");
+                        sbody.Append("</table>");
+                        sbody.Append("</td>");
+                        sbody.Append("</tr>");
+                        sbody.Append("</table>");
+                    }
+                    #endregion
                     if (emails.Contains('@'))
                     {
                         emails = emails.TrimStart(',').TrimEnd(',');
                     }
-                    string res = Match.sendmatchnotification(emails, matchName, matchCode, matchDate, CompetitionName, NoOfPlayers, MatchLocations,FilePath);
+                    string res = Match.sendroundnotification(emails, roundName, roundCode, roundStartDate, CompetitionName, NoOfPlayers, roundLocation, FilePath, RuleName, roundFee,sbody);
 
                     if (res == "Mail sent successfully.")
                     {
@@ -576,7 +489,7 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new {ErrorMessage = "MatchId not found" });
+                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new {ErrorMessage = "RoundId not found" });
                 }
             }
             catch (Exception e)
@@ -587,13 +500,13 @@ namespace GolfApplication.Controller
         }
         #endregion
 
-        #region inviteMatch
-        [HttpGet, Route("inviteMatch/{matchId}")]
-        public IActionResult inviteMatch(int matchId)
+        #region inviteRound
+        [HttpGet, Route("inviteRound/{roundId}")]
+        public IActionResult inviteRound(int roundId)
         {
             try
             {
-                DataSet ds = Data.Match.inviteMatch(matchId);
+                DataSet ds = Data.Match.inviteMatch(roundId);
                 DataTable dt1 = ds.Tables[0];
                 DataTable dt2 = ds.Tables[1];
                 DataTable dt3 = ds.Tables[2];
@@ -605,15 +518,15 @@ namespace GolfApplication.Controller
 
                 if (dt1.Rows.Count > 0)
                 {
-                    int matchID = (dt1.Rows[0]["matchId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["matchId"]);
-                    string matchCode = (dt1.Rows[0]["matchCode"] == DBNull.Value ? "" : dt1.Rows[0]["matchCode"].ToString());
-                    string matchName = (dt1.Rows[0]["matchName"] == DBNull.Value ? "" : dt1.Rows[0]["matchName"].ToString());
-                    string matchDate = (dt1.Rows[0]["matchStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["matchStartDate"].ToString());
-                    string CompetitionName = (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
+                    int roundID = (dt1.Rows[0]["roundId"] == DBNull.Value ? 0 : (int)dt1.Rows[0]["roundId"]);
+                    string roundCode = (dt1.Rows[0]["roundCode"] == DBNull.Value ? "" : dt1.Rows[0]["roundCode"].ToString());
+                    string roundName = (dt1.Rows[0]["roundName"] == DBNull.Value ? "" : dt1.Rows[0]["roundName"].ToString());
+                    string roundStartDate = (dt1.Rows[0]["roundStartDate"] == DBNull.Value ? "" : dt1.Rows[0]["roundStartDate"].ToString());
+                    string competitionName = (dt1.Rows[0]["competitionName"] == DBNull.Value ? "" : dt1.Rows[0]["competitionName"].ToString());
                     int NoOfPlayers = dt2.Rows.Count;
-                    string MatchLocations = (dt1.Rows[0]["matchLocation"] == DBNull.Value ? "" : dt1.Rows[0]["matchLocation"].ToString());
+                    string roundLocation = (dt1.Rows[0]["roundLocation"] == DBNull.Value ? "" : dt1.Rows[0]["roundLocation"].ToString());
                     string RuleName = (dt1.Rows[0]["ruleName"] == DBNull.Value ? "" : dt1.Rows[0]["ruleName"].ToString());
-                    decimal MatchFee = (dt1.Rows[0]["matchFee"] == DBNull.Value ? 0 : (decimal)dt1.Rows[0]["matchFee"]);
+                    decimal roundFee = (dt1.Rows[0]["roundFee"] == DBNull.Value ? 0 : (decimal)dt1.Rows[0]["roundFee"]);
                     string EmailId = string.Empty;
 
                     string CurrentHostedUrl = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, Request.PathBase);
@@ -644,7 +557,7 @@ namespace GolfApplication.Controller
                     if (emails.Contains('@'))
                     {
                         emails = emails.TrimStart(',').TrimEnd(',');
-                        result = Match.inviteMatch(emails, matchID, matchName, /*playerID,*/ matchCode, matchDate, CompetitionName, NoOfPlayers, MatchLocations, CurrentHostedUrl, sbody,RuleName,MatchFee, FilePath);
+                        result = Match.inviteMatch(emails, roundID, roundName, /*playerID,*/ roundCode, roundStartDate, competitionName, NoOfPlayers, roundLocation, CurrentHostedUrl, sbody,RuleName,roundFee, FilePath);
                     }
                     
                    
@@ -659,7 +572,7 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new {ErrorMessage = "MatchId not found" });
+                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new {ErrorMessage = "RoundId not found" });
                 }
             }
             catch (Exception e)
@@ -670,7 +583,7 @@ namespace GolfApplication.Controller
         }
         #endregion
 
-        #region getMatchJoinList
+        #region getRoundJoinList
         [HttpGet, Route("getRoundJoinList")]
         public IActionResult getRoundJoinList(int roundId ,int userId)
         {
@@ -710,7 +623,6 @@ namespace GolfApplication.Controller
             }
         }
         #endregion
-
 
         #region addParticipants
         [HttpPost, Route("addParticipants")]

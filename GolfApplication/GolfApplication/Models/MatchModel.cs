@@ -25,7 +25,7 @@ namespace GolfApplication.Models
         public bool isSaveAndNotify { get; set; }
     }
 
-    public class matchPlayer
+    public class roundPlayer
     {
         public string type { get; set; }
         public int eventId { get; set; }
