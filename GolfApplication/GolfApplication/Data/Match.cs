@@ -122,7 +122,6 @@ namespace GolfApplication.Data
             }
         }
         #endregion
-
         
         #region getMatchById
         public static DataSet getRoundById(int roundId)
@@ -206,7 +205,6 @@ namespace GolfApplication.Data
         }
         #endregion
 
-
         #region inviteMatch && sendmatchnotification
         public static DataSet inviteMatch(int roundId)
         {
@@ -279,7 +277,6 @@ namespace GolfApplication.Data
         }
         #endregion
 
-
         #region sendmatchnotification
         public static string sendroundnotification(string emailId, string Title, string roundCode, string roundDate, string competitionName, int NoOfPlayers, string roundLocation, string filepath,string ruleName,decimal roundFee,StringBuilder TeamPlayers)
         {
@@ -321,7 +318,6 @@ namespace GolfApplication.Data
             }
         }
         #endregion
-
 
         #region getRoundJoinList
         public static DataTable getRoundJoinList(int roundId, int userId)

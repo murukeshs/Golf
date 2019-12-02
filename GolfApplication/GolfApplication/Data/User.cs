@@ -31,42 +31,6 @@ namespace GolfApplication.Data
 
         }
 
-
-        //public static string createUser(string firstName, string lastName, string email, string gender, string dob, string profileImage, string phoneNumber, string password, int countryId, int stateId, string city, string address, string pinCode, bool isEmailNotification, bool isSMSNotification, bool isPublicProfile, string userTypeId)//([FromBody]createUser userCreate)
-        //{
-        //    try
-        //    {
-        //        string ConnectionString = Common.GetConnectionString();
-
-        //        List<SqlParameter> parameters = new List<SqlParameter>();
-        //        parameters.Add(new SqlParameter("@firstName", firstName));
-        //        parameters.Add(new SqlParameter("@lastName", lastName));
-        //        parameters.Add(new SqlParameter("@email", email));
-        //        parameters.Add(new SqlParameter("@gender", gender));
-        //        parameters.Add(new SqlParameter("@dob", Convert.ToDateTime(dob)));
-        //        parameters.Add(new SqlParameter("@profileImage", profileImage));
-        //        parameters.Add(new SqlParameter("@phoneNumber", phoneNumber));
-        //        parameters.Add(new SqlParameter("@password", password));
-        //        parameters.Add(new SqlParameter("@countryId", countryId));
-        //        parameters.Add(new SqlParameter("@stateId", stateId));
-        //        parameters.Add(new SqlParameter("@city", city));
-        //        parameters.Add(new SqlParameter("@address", address));
-        //        parameters.Add(new SqlParameter("@pinCode", pinCode));
-        //        parameters.Add(new SqlParameter("@isEmailNotification", isEmailNotification));
-        //        parameters.Add(new SqlParameter("@isSMSNotification", isSMSNotification));
-        //        parameters.Add(new SqlParameter("@isPublicProfile", isPublicProfile));
-        //        parameters.Add(new SqlParameter("@userTypeId", userTypeId));
-
-        //        string rowsAffected = SqlHelper.ExecuteScalar(ConnectionString, CommandType.StoredProcedure, "spCreateUser", parameters.ToArray()).ToString();
-        //        return rowsAffected;
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        throw e;
-        //    }
-        //}
-
-
         public static DataTable createUser([FromBody]createUser userCreate)
         {
             try

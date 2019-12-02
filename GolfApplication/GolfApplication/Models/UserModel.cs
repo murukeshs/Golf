@@ -103,7 +103,6 @@ namespace GolfApplication.Models
        public string type { get; set; }
        public string sourceType { get; set; }
        //public string source { get; set; }
-
     }
 
     public class updatePassword
@@ -141,7 +140,6 @@ namespace GolfApplication.Models
     {
         public static string fileurl;
     }
-
 
     public class  matchRule
     {

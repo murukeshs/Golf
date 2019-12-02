@@ -76,7 +76,7 @@ namespace GolfApplication.Models
 
     public class MatchRulesList
     {
-        public int matchRuleId { get; set; }
+        public int roundRuleId { get; set; }
         public string ruleName { get; set; }
     }
 
