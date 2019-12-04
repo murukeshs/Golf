@@ -7,7 +7,7 @@ namespace GolfApplication.Models
 {
     public class MatchRules
     {
-        public int matchRuleId { get; set; }
+        public int roundRuleId { get; set; }
         public string ruleName { get; set; }
     }
     public class createRound
@@ -102,5 +102,10 @@ namespace GolfApplication.Models
         public string phoneNumber { get; set; }
         public int teamId { get; set; }
         public string userTypeId { get; set; }
+    }
+    public class SaveRoundPlayer
+    {
+        public string userId { get; set; }
+        public int roundId { get; set; }
     }
 }

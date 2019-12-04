@@ -124,7 +124,7 @@ namespace GolfApplication.Controller
         {
             try
             {
-                 if (teamId <= 0 || teamId == null)
+                 if (teamId <= 0 )
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter teamId" });
                 }                
@@ -155,20 +155,34 @@ namespace GolfApplication.Controller
         [HttpGet, Route("selectTeamById")]
         public IActionResult selectTeamById(int teamId)
         {
-            List<getTeam> teamList = new List<getTeam>();
+            //List<getTeam> teamList = new List<getTeam>();
+            List<dynamic> teamList = new List<dynamic>();
             try
             {
                 DataSet ds = Data.Team.selectTeamById(teamId);
-                string dt0 = ds.Tables[0].Rows[0]["status"].ToString();                
-                List<updateTeam> teamDetailsList = new List<updateTeam>();
-
+                string dt0 = ds.Tables[0].Rows[0]["status"].ToString();
+                //List<updateTeam> teamDetailsList = new List<updateTeam>();
+                dynamic teamDetails = new System.Dynamic.ExpandoObject();
                 if (dt0 == "TeamPlayers")
                 {
+                    DataTable dt2 = ds.Tables[2];
+                    //updateTeam teamDetails = new updateTeam();
+                    
+                    teamDetails.teamId = (dt2.Rows[0]["teamId"] == DBNull.Value ? 0 : (int)dt2.Rows[0]["teamId"]);
+                    //team.scoreKeeperID = (dt2.Rows[0]["scoreKeeperID"] == DBNull.Value ? 0 : (int)dt.Rows[0]["scoreKeeperID"]);
+                    teamDetails.teamName = (dt2.Rows[0]["teamName"] == DBNull.Value ? "" : dt2.Rows[0]["teamName"].ToString());
+                    teamDetails.teamIcon = (dt2.Rows[0]["teamIcon"] == DBNull.Value ? "" : dt2.Rows[0]["teamIcon"].ToString());
+                    teamDetails.CreatedOn = (dt2.Rows[0]["createdOn"] == DBNull.Value ? "" : dt2.Rows[0]["createdOn"].ToString());
+                    teamDetails.createdBy = (dt2.Rows[0]["createdBy"] == DBNull.Value ? 0 : (int)dt2.Rows[0]["createdBy"]);
+                    teamDetails.createdByName = (dt2.Rows[0]["createdByName"] == DBNull.Value ? "" : dt2.Rows[0]["createdByName"]);
+                    teamDetails.startingHole = (dt2.Rows[0]["startingHole"] == DBNull.Value ? 0 : (int)dt2.Rows[0]["startingHole"]);
+                    //teamList.Add(teamDetails);
+
                     DataTable dt = ds.Tables[1];
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
-                        getTeam team = new getTeam();
-
+                        //getTeam team = new getTeam();
+                        dynamic team = new System.Dynamic.ExpandoObject();
                         team.teamPlayerListId = (int)dt.Rows[i]["teamPlayerListId"];
                         team.teamId = (int)dt.Rows[i]["teamId"];
                         team.playerName = (dt.Rows[i]["playerName"] == DBNull.Value ? "" : dt.Rows[i]["playerName"].ToString());
@@ -176,10 +190,11 @@ namespace GolfApplication.Controller
                         team.gender = (dt.Rows[i]["gender"] == DBNull.Value ? "" : dt.Rows[i]["gender"].ToString());
                         team.email = (dt.Rows[i]["email"] == DBNull.Value ? "" : dt.Rows[i]["email"].ToString());
                         team.RoleType = (dt.Rows[i]["RoleType"] == DBNull.Value ? "" : dt.Rows[i]["RoleType"].ToString());
-                        //team.roundId= (int)dt.Rows[i]["roundId"];
+                        team.nickName = (dt.Rows[i]["nickName"] == DBNull.Value ? "" : dt.Rows[i]["nickName"].ToString());
                         teamList.Add(team);
                     }
-                    return StatusCode((int)HttpStatusCode.OK, teamList);
+                    teamDetails.TeamPlayerDetails = teamList;
+                    return StatusCode((int)HttpStatusCode.OK, teamDetails);
                 }
                 else if (dt0 == "TeamDetails")
                 {
@@ -288,27 +303,38 @@ namespace GolfApplication.Controller
         [HttpDelete, Route("deleteTeamPlayers")]
         public IActionResult deleteTeamPlayers(int teamPlayerListId)
         {
+            List<dynamic> teamList = new List<dynamic>();
             try
             {
-                if (teamPlayerListId <= 0 || teamPlayerListId == null)
+                if (teamPlayerListId <= 0 )
                 {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter teamPlayerListId" });
+                    return StatusCode((int)HttpStatusCode.BadRequest, new {ErrorMessage = "Please enter proper teamPlayerListId" });
                 }
-                //else if (updateBy <= 0 || updateBy == null)
-                //{
-                //    return StatusCode((int)HttpStatusCode.BadRequest, new { error = new { message = "Please enter updated By value" } });
-                //}
                 else
                 {
-                    string row = Data.Team.deleteTeamPlayers(teamPlayerListId);
+                    DataSet ds  = Data.Team.deleteTeamPlayers(teamPlayerListId);
 
-                    if (row == "Success")
+                    if (ds.Tables[0].Rows[0][0].ToString() == "Success")
                     {
-                        return StatusCode((int)HttpStatusCode.OK, "Deleted Successfully");
+                        DataTable dt = ds.Tables[1];
+                        for (int i = 0; i < dt.Rows.Count; i++)
+                        {
+                            dynamic team = new System.Dynamic.ExpandoObject();
+                            team.teamPlayerListId = (int)dt.Rows[i]["teamPlayerListId"];
+                            team.teamId = (int)dt.Rows[i]["teamId"];
+                            team.playerName = (dt.Rows[i]["playerName"] == DBNull.Value ? "" : dt.Rows[i]["playerName"].ToString());
+                            team.profileImage = (dt.Rows[i]["profileImage"] == DBNull.Value ? "" : dt.Rows[i]["profileImage"].ToString());
+                            team.gender = (dt.Rows[i]["gender"] == DBNull.Value ? "" : dt.Rows[i]["gender"].ToString());
+                            team.email = (dt.Rows[i]["email"] == DBNull.Value ? "" : dt.Rows[i]["email"].ToString());
+                            team.RoleType = (dt.Rows[i]["RoleType"] == DBNull.Value ? "" : dt.Rows[i]["RoleType"].ToString());
+                            team.nickName = (dt.Rows[i]["nickName"] == DBNull.Value ? "" : dt.Rows[i]["nickName"].ToString());
+                            teamList.Add(team);
+                        }
+                        return StatusCode((int)HttpStatusCode.OK, teamList);
                     }
                     else
                     {
-                        return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = "Team player is already enrolled" });
+                        return StatusCode((int)HttpStatusCode.InternalServerError, new {ErrorMessage = "Team player is already Paid Fee" });
                     }
                 }
             }

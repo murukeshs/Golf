@@ -15,6 +15,8 @@ using SendGrid.Helpers.Mail;
 using System.Text;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using static Nexmo.Api.SMS;
+
 
 namespace GolfApplication.Controller
 {
@@ -39,12 +41,12 @@ namespace GolfApplication.Controller
         {
             try
             {
-                if(roundRule.matchRules == "" || roundRule.matchRules == null)
+                if(roundRule.roundRules == "" || roundRule.roundRules == null)
                 {
                     return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Please Enter Roundrules" });
                 }
 
-                int dt = Data.Match.createMatchRules(roundRule.matchRules);
+                int dt = Data.Match.createMatchRules(roundRule);
 
                 if (dt >=1)
                 {
@@ -425,17 +427,19 @@ namespace GolfApplication.Controller
             }
         }
         #endregion
-
+        
         #region sendroundnotification
         [HttpGet, Route("sendroundnotification/{roundId}")]
         public IActionResult sendroundnotification(int roundId)
         {
+            SMSResponse results = new SMSResponse();
             try
             {
                 DataSet ds = Data.Match.inviteMatch(roundId);
                 DataTable dt1 = ds.Tables[0];
                 DataTable dt2 = ds.Tables[1];
                 DataTable dt3 = ds.Tables[2];
+                DataTable dt4 = ds.Tables[3];
 
                 var FilePath = _env.WebRootPath + Path.DirectorySeparatorChar.ToString()
                + "EmailTemplates"
@@ -456,6 +460,8 @@ namespace GolfApplication.Controller
                     string EmailId = string.Empty;
                     
                     string emails = dt3.Rows[0]["emailList"].ToString();
+                    string phone = null;//dt4.Rows[0]["PhoneList"].ToString();
+
                     #region HtmlTemplate Code 
                     System.Text.StringBuilder sbody = new StringBuilder();
                     for (int i = 0; i < dt2.Rows.Count; i++)
@@ -478,13 +484,27 @@ namespace GolfApplication.Controller
                     }
                     #endregion
                     string res = string.Empty;
+                    string SmsResult = string.Empty;
                     if (emails.Contains('@'))
                     {
                         emails = emails.TrimStart(',').TrimEnd(',');
                         res = Match.sendroundnotification(emails, roundName, roundCode, roundStartDate, CompetitionName, NoOfPlayers, roundLocation, FilePath, RuleName, roundFee, sbody);
                     }
-                    //string res = Match.sendroundnotification(emails, roundName, roundCode, roundStartDate, CompetitionName, NoOfPlayers, roundLocation, FilePath, RuleName, roundFee,sbody);
-
+                    if(phone !=null)
+                    {
+                        var SmsStatus = "";
+                        results = SmsNotification.SendMessageNotification(phone, "Hi User, your are invited to "+roundName+ " CompetitionName is " + CompetitionName+" and Location is "+roundLocation+"");
+                        string status = results.messages[0].status.ToString();
+                        if (status == "0")
+                        {
+                            SmsStatus = "Sms Message sent successfully.";
+                        }
+                        else
+                        {
+                            string err = results.messages[0].error_text.ToString();
+                            SmsStatus = err;
+                        }
+                    }
                     if (res == "Mail sent successfully.")
                     {
                         return StatusCode((int)HttpStatusCode.OK, "Invitations Sent Successfully");
@@ -493,6 +513,7 @@ namespace GolfApplication.Controller
                     {
                         return StatusCode((int)HttpStatusCode.Forbidden, "Mail Sending Failed");
                     }
+
                 }
                 else
                 {
@@ -511,12 +532,14 @@ namespace GolfApplication.Controller
         [HttpGet, Route("inviteRound/{roundId}")]
         public IActionResult inviteRound(int roundId)
         {
+            SMSResponse results = new SMSResponse();
             try
             {
                 DataSet ds = Data.Match.inviteMatch(roundId);
                 DataTable dt1 = ds.Tables[0];
                 DataTable dt2 = ds.Tables[1];
                 DataTable dt3 = ds.Tables[2];
+                DataTable dt4 = ds.Tables[3];
 
                 var FilePath = _env.WebRootPath + Path.DirectorySeparatorChar.ToString()
                + "EmailTemplates"
@@ -539,6 +562,8 @@ namespace GolfApplication.Controller
                     string CurrentHostedUrl = string.Format("{0}://{1}{2}", Request.Scheme, Request.Host, Request.PathBase);
 
                     string emails = dt3.Rows[0]["emailList"].ToString();
+                    string phone = null; //dt4.Rows[0]["PhoneList"].ToString();
+
                     string result = string.Empty;
                     #region HtmlTemplate Code 
                     System.Text.StringBuilder sbody = new StringBuilder();
@@ -566,8 +591,21 @@ namespace GolfApplication.Controller
                         emails = emails.TrimStart(',').TrimEnd(',');
                         result = Match.inviteMatch(emails, roundID, roundName, /*playerID,*/ roundCode, roundStartDate, competitionName, NoOfPlayers, roundLocation, CurrentHostedUrl, sbody,RuleName,roundFee, FilePath);
                     }
-                    
-                   
+                    if (phone != null)
+                    {
+                        var SmsStatus = "";
+                        results = SmsNotification.SendMessageNotification(phone, "Hi User, your are invited to " + roundName + " CompetitionName is " + competitionName + " and Location is " + roundLocation + "");
+                        string status = results.messages[0].status.ToString();
+                        if (status == "0")
+                        {
+                            SmsStatus = "Sms Message sent successfully.";
+                        }
+                        else
+                        {
+                            string err = results.messages[0].error_text.ToString();
+                            SmsStatus = err;
+                        }
+                    }
                     if (result == "Mail sent successfully.")
                     {
                         return StatusCode((int)HttpStatusCode.OK, "Invitations Sent Successfully");
@@ -659,6 +697,114 @@ namespace GolfApplication.Controller
             {
                 string SaveErrorLog = Data.Common.SaveErrorLog("addParticipants", e.Message);
                 return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
+            }
+        }
+        #endregion
+
+        #region SaveRoundPlayer
+        [HttpPost, Route("SaveRoundPlayer")]
+        public IActionResult SaveRoundPlayer(SaveRoundPlayer roundPlayers)
+        {
+            try
+            {
+                if (roundPlayers.roundId <= 0 )
+                {
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Please Enter RoundID" });
+                }
+                else if(roundPlayers.userId == "")
+                {
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Please Enter UserID" });
+                }
+                int dt = Data.Match.SaveRoundPlayer(roundPlayers);
+
+                if (dt >= 1)
+                {
+                    return StatusCode((int)HttpStatusCode.OK, "Saved Successfully");
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Failed" });
+                }
+            }
+            catch (Exception e)
+            {
+                string SaveErrorLog = Data.Common.SaveErrorLog("SaveRoundPlayer", e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
+            }
+        }
+        #endregion
+
+        #region GetRoundPlayers
+        [HttpGet, Route("GetRoundPlayers")]
+        public IActionResult GetRoundPlayers(int roundId)
+        {
+            List<dynamic> RoundPlayersList = new List<dynamic>();
+            try
+            {
+                DataTable dt = Data.Match.GetRoundPlayers(roundId);
+
+                if (dt.Rows.Count > 0)
+                {
+                    for (int i = 0; i < dt.Rows.Count; i++)
+                    {
+                        dynamic RoundPlayers = new System.Dynamic.ExpandoObject();
+
+                        RoundPlayers.userId = (int)dt.Rows[i]["userId"];
+                        RoundPlayers.playerName = (dt.Rows[i]["playerName"] == DBNull.Value ? "" : dt.Rows[i]["playerName"].ToString());
+                        RoundPlayers.gender = (dt.Rows[i]["gender"] == DBNull.Value ? "" : dt.Rows[i]["gender"].ToString());
+                        RoundPlayers.email = (dt.Rows[i]["email"] == DBNull.Value ? "" : dt.Rows[i]["email"].ToString());
+                        RoundPlayers.profileImage = (dt.Rows[i]["profileImage"] == DBNull.Value ? "" : dt.Rows[i]["profileImage"].ToString());
+                        RoundPlayers.nickName = (dt.Rows[i]["nickName"] == DBNull.Value ? "" : dt.Rows[i]["nickName"].ToString());
+                        RoundPlayers.isPublicProfile = (dt.Rows[i]["isPublicProfile"] == DBNull.Value ? "" : dt.Rows[i]["isPublicProfile"].ToString());
+                        RoundPlayersList.Add(RoundPlayers);
+                    }
+                    return StatusCode((int)HttpStatusCode.OK, RoundPlayersList);
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new { }); //412: Precondition Failed when "no data available"
+                }
+            }
+            catch (Exception e)
+            {
+                string SaveErrorLog = Data.Common.SaveErrorLog("getRoundList", e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
+            }
+        }
+        #endregion
+
+        #region DeleteRoundPlayer
+        [HttpDelete, Route("DeleteRoundPlayer")]
+        public IActionResult DeleteRoundPlayer(SaveRoundPlayer saveRoundPlayer )
+        {
+            try
+            {
+                if (saveRoundPlayer.roundId <= 0)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter RoundID" });
+                }
+                else if(saveRoundPlayer.userId == "")
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter UserID" });
+                }
+                else
+                {
+                    string row = Data.Match.DeleteRoundPlayer(saveRoundPlayer);
+
+                    if (row == "Success")
+                    {
+                        return StatusCode((int)HttpStatusCode.OK, "Deleted Successfully");
+                    }
+                    else
+                    {
+                        return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = "Deletion not completed" });
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                string SaveErrorLog = Data.Common.SaveErrorLog("DeleteRoundPlayer", e.Message.ToString());
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message.ToString() });
             }
         }
         #endregion

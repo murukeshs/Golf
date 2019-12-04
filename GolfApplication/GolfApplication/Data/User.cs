@@ -56,7 +56,7 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@isSMSNotification", userCreate.isSMSNotification));
                 parameters.Add(new SqlParameter("@isPublicProfile", userCreate.isPublicProfile));
                 parameters.Add(new SqlParameter("@userTypeId", userCreate.userTypeId));
-                
+                parameters.Add(new SqlParameter("@nickName", userCreate.nickName));
                 using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spCreateUser", parameters.ToArray()).Tables[0])
                 {
                     return dt;
@@ -96,6 +96,7 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@isSMSNotification", userCreate.isSMSNotification));
                 parameters.Add(new SqlParameter("@isPublicProfile", userCreate.isPublicProfile));
                 parameters.Add(new SqlParameter("@userTypeId", userCreate.userTypeId));
+                parameters.Add(new SqlParameter("@nickName", userCreate.nickName));
 
                 string rowsAffected = SqlHelper.ExecuteScalar(ConnectionString, CommandType.StoredProcedure, "spUpdateUser", parameters.ToArray()).ToString();
                 return rowsAffected;
@@ -325,5 +326,46 @@ namespace GolfApplication.Data
             }
 
         }
+
+
+        public static DataTable inviteParticipant([FromBody]createUser inviteParticipant)
+        {
+            try
+            {
+                string ConnectionString = Common.GetConnectionString();
+
+                //var encryptPassword = Common.EncryptData(userCreate.password);
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("@firstName", inviteParticipant.firstName));
+                parameters.Add(new SqlParameter("@lastName", inviteParticipant.lastName));
+                parameters.Add(new SqlParameter("@email", inviteParticipant.email));
+                parameters.Add(new SqlParameter("@gender", inviteParticipant.gender));
+                parameters.Add(new SqlParameter("@phoneNumber", inviteParticipant.phoneNumber));
+                parameters.Add(new SqlParameter("@isEmailNotification", inviteParticipant.isEmailNotification));
+                parameters.Add(new SqlParameter("@isSMSNotification", inviteParticipant.isSMSNotification));
+
+
+                parameters.Add(new SqlParameter("@dob", null));
+                parameters.Add(new SqlParameter("@profileImage", null));
+                parameters.Add(new SqlParameter("@password", null));
+                parameters.Add(new SqlParameter("@countryId", null));
+                parameters.Add(new SqlParameter("@stateId", null));
+                parameters.Add(new SqlParameter("@city", null));
+                parameters.Add(new SqlParameter("@address", null));
+                parameters.Add(new SqlParameter("@pinCode", null));
+                parameters.Add(new SqlParameter("@isPublicProfile", inviteParticipant.isPublicProfile));
+                parameters.Add(new SqlParameter("@userTypeId", ""));
+                parameters.Add(new SqlParameter("@nickName", null));
+                using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spCreateUser", parameters.ToArray()).Tables[0])
+                {
+                    return dt;
+                }
+            }
+            catch (Exception e)
+            {
+                throw e;
+            }
+        }
+
     }
 }

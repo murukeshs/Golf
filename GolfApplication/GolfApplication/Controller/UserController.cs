@@ -270,7 +270,7 @@ namespace GolfApplication.Controller
                     user.isPublicProfile = (dt.Rows[0]["isPublicProfile"] == DBNull.Value ? false : (bool)dt.Rows[0]["isPublicProfile"]);
                     user.userUpdatedDate = (dt.Rows[0]["userUpdatedDate"] == DBNull.Value ? "" : dt.Rows[0]["userUpdatedDate"].ToString());
                     user.isPhoneVerified = (dt.Rows[0]["isPhoneVerified"] == DBNull.Value ? false : (bool)dt.Rows[0]["isPhoneVerified"]);
-                    //user.passwordUpdatedDate = (dt.Rows[0]["passwordUpdatedDate"] == DBNull.Value ? "" : dt.Rows[0]["passwordUpdatedDate"].ToString());
+                    user.nickName = (dt.Rows[0]["nickName"] == DBNull.Value ? "" : dt.Rows[0]["nickName"].ToString());
                     userList.Add(user);
 
                     return StatusCode((int)HttpStatusCode.OK, user);
@@ -341,6 +341,7 @@ namespace GolfApplication.Controller
                         user.isPhoneVerified = (dt.Rows[i]["isPhoneVerified"] == DBNull.Value ? false : (bool)dt.Rows[i]["isPhoneVerified"]);
                         user.userTypeId = (dt.Rows[i]["userTypeId"] == DBNull.Value ? "" : dt.Rows[i]["userTypeId"].ToString());
                         user.userType = (dt.Rows[i]["userType"] == DBNull.Value ? "" : dt.Rows[i]["userType"].ToString());
+                        user.nickName = (dt.Rows[i]["nickName"] == DBNull.Value ? "" : dt.Rows[i]["nickName"].ToString());
                         userList.Add(user);
 
                     }
@@ -473,12 +474,13 @@ namespace GolfApplication.Controller
                 {
                     string OTPValue = Common.GenerateOTP();
                     SMSResponse results = new SMSResponse();
-                    var SmsStatus = "";
                     //otp.emailorPhone = "+14087224019";
-                    // string SaveOtpValue = Data.Common.SaveOTP(PhoneNumber, OTPValue, "Phone");
+                     //string SaveOtpValue = Data.Common.SaveOTP(PhoneNumber, OTPValue, "Phone");
                     string SaveOtpValue = Data.User.GenerateOTP(OTPValue, otp);
+                    //var SmsStatus = "";
                     if (SaveOtpValue == "Success")
                     {
+                        var SmsStatus = "";
                         results = SmsNotification.SendMessage(otp.emailorphone, "Hi User, your OTP is " + OTPValue + " and it's expiry time is 5 minutes.");
                         string status = results.messages[0].status.ToString();
                         if (status == "0")
@@ -496,7 +498,6 @@ namespace GolfApplication.Controller
                     {
                         return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Phone number not available" });
                     }
-
                 }
                 catch (Exception e)
                 {
@@ -691,6 +692,8 @@ namespace GolfApplication.Controller
                         getPlayers.profileImage = (dt.Rows[i]["profileImage"] == DBNull.Value ? "" : dt.Rows[i]["profileImage"].ToString());
                         getPlayers.userType = (dt.Rows[i]["userType"] == DBNull.Value ? "" : dt.Rows[i]["userType"].ToString());
                         getPlayers.isScoreKeeper = (dt.Rows[i]["isScoreKeeper"] == DBNull.Value ? "" : dt.Rows[i]["isScoreKeeper"].ToString());
+                        getPlayers.nickName = (dt.Rows[i]["nickName"] == DBNull.Value ? "" : dt.Rows[i]["nickName"].ToString());
+                        getPlayers.isPublicProfile = (dt.Rows[i]["isPublicProfile"] == DBNull.Value ? "" : dt.Rows[i]["isPublicProfile"].ToString());
                         //string userType = (dt.Rows[i]["userType"] == DBNull.Value ? "" : dt.Rows[i]["userType"].ToString());
                         //string[] strArray = userType.Split(',');
                         //List<string> myList = strArray.ToList();
@@ -712,5 +715,79 @@ namespace GolfApplication.Controller
         }
         #endregion
 
+        #region inviteParticipant
+        [HttpPost, Route("inviteParticipant")]
+        [AllowAnonymous]
+        public IActionResult inviteParticipant(createUser inviteParticipant)
+        {
+            try
+            {
+                if (inviteParticipant.firstName == "" || inviteParticipant.firstName == null)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter First Name" });
+                }
+                else if (inviteParticipant.lastName == "" || inviteParticipant.lastName == null)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter LastName" });
+                }
+                else if (inviteParticipant.email == "" || inviteParticipant.email == "string" || inviteParticipant.email == null)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter Email" });
+                }
+                else if (inviteParticipant.phoneNumber == "" || inviteParticipant.phoneNumber == null)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter phonenumber" });
+                }
+                else if (inviteParticipant.gender == "" || inviteParticipant.gender == null)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter gender" });
+                }
+                else if (inviteParticipant.isEmailNotification == false && inviteParticipant.isSMSNotification == false)
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter mode of invitation" });
+                }
+                
+                Regex regex = new Regex(@"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$");
+                System.Text.RegularExpressions.Match match = regex.Match(inviteParticipant.email);
+
+                if (match.Success)
+                {
+                    DataTable dt = Data.User.inviteParticipant(inviteParticipant);
+                    string Response = dt.Rows[0][0].ToString();
+                    if (Response == "Success")
+                    {
+                        return StatusCode((int)HttpStatusCode.OK, new { userId = dt.Rows[0][1].ToString() });
+                    }
+                    else
+                    {
+                        if (Response.Contains("UQ__tblUser__AB6E61648296FE35"))  // Check Duplicate Key For Email
+                        {
+                            return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = "Email Id  is already exists" });
+                        }
+                        if (Response.Contains("UQ__tblUser__4849DA0168C6999A"))   // Check Duplicate Key for Phone
+                        {
+                            return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = "PhoneNo  is already exists" });
+                        }
+                        else
+                        {
+                            return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = Response });
+                        }
+
+                    }
+
+                }
+                else
+                {
+                    return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter a valid Email" });
+                }
+            }
+            catch (Exception e)
+            {
+                string SaveErrorLog = Data.Common.SaveErrorLog("inviteParticipant", e.Message);
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = e.Message });
+            }
+        }
+
+        #endregion
     }
 }

@@ -125,7 +125,7 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@teamId", teamPlayer.teamId));
                 parameters.Add(new SqlParameter("@scoreKeeperID", teamPlayer.scoreKeeperID));
                 parameters.Add(new SqlParameter("@playerId", teamPlayer.playerId));
-
+                parameters.Add(new SqlParameter("@roundId", teamPlayer.roundId));
                 using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spCreateTeamPlayers", parameters.ToArray()).Tables[0])
                 {
                     return dt;
@@ -138,26 +138,21 @@ namespace GolfApplication.Data
             }
         }
 
-        public static string deleteTeamPlayers(int teamPlayerListId)
+        public static DataSet deleteTeamPlayers(int teamPlayerListId)
         {
             try
             {
                 string ConnectionString = Common.GetConnectionString();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("@teamPlayerListId", teamPlayerListId));
-                //parameters.Add(new SqlParameter("@updateBy", updateBy));
-
-                using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spDeleteTeamPlayers", parameters.ToArray()).Tables[0])
+               
+                using (DataSet dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spDeleteTeamPlayers", parameters.ToArray()))
                 {
-                    string rowsAffected = dt.Rows[0]["Status"].ToString();
-                    return rowsAffected;
+                    return dt;
                 }
-                //int rowsAffected = SqlHelper.ExecuteNonQuery(ConnectionString, CommandType.StoredProcedure, "spDeleteTeamPlayers", parameters.ToArray());
-                //return rowsAffected;
             }
             catch (Exception e)
             {
-                //loggerErr.Error(e.Message + " - " + e.StackTrace);
                 throw e;
             }
         }

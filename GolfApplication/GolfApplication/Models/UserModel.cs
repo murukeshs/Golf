@@ -45,6 +45,7 @@ namespace GolfApplication.Models
         [DefaultValue(false)]
         public bool? isPublicProfile { get; set; }
         public string userTypeId { get; set; }
+        public string nickName { get; set; }
     }
 
     public class getUser : createUser
@@ -94,6 +95,7 @@ namespace GolfApplication.Models
         public bool? isEmailVerified { get; set; }
         [DefaultValue(false)]
         public bool? isPhoneVerified { get; set; }
+        public string nickName { get; set; }
     }
 
     public class otpVerify
@@ -143,6 +145,6 @@ namespace GolfApplication.Models
 
     public class  matchRule
     {
-       public string matchRules{ get; set; }
+       public string roundRules{ get; set; }
     }
 }

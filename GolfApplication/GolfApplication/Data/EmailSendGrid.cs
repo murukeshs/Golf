@@ -65,6 +65,8 @@ namespace GolfApplication.Data
                 EmailAddress e = new EmailAddress("sunila@apptomate.co", "");
                 toMail.Add(e);
 
+                //Don't Delete these lines 
+
                 //foreach (string i in values)
                 //{
                 //    EmailAddress e = new EmailAddress(i, "");
