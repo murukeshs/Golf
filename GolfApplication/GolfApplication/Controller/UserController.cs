@@ -317,8 +317,8 @@ namespace GolfApplication.Controller
                         }
 
                         user.userId = (int)dt.Rows[i]["userId"];
-                        user.firstName = (dt.Rows[i]["firstName"] == DBNull.Value ? "" : dt.Rows[i]["firstName"].ToString());
-                        user.lastName = (dt.Rows[i]["lastName"] == DBNull.Value ? "" : dt.Rows[i]["lastName"].ToString());
+                        user.firstName = (dt.Rows[i]["userName"] == DBNull.Value ? "" : dt.Rows[i]["userName"].ToString());
+                        //user.lastName = (dt.Rows[i]["lastName"] == DBNull.Value ? "" : dt.Rows[i]["lastName"].ToString());
                         user.gender = (dt.Rows[i]["gender"] == DBNull.Value ? "" : dt.Rows[i]["gender"].ToString());
                         user.dob = (dt.Rows[i]["dob"] == DBNull.Value ? "" : dt.Rows[i]["dob"].ToString());
                         user.email = (dt.Rows[i]["email"] == DBNull.Value ? "" : dt.Rows[i]["email"].ToString());
@@ -634,7 +634,6 @@ namespace GolfApplication.Controller
         //}
         //#endregion
 
-
         #region updateUserCommunicationinfo
         [AllowAnonymous]
         [HttpPut, Route("updateUserCommunicationinfo")]
@@ -718,18 +717,18 @@ namespace GolfApplication.Controller
         #region inviteParticipant
         [HttpPost, Route("inviteParticipant")]
         [AllowAnonymous]
-        public IActionResult inviteParticipant(createUser inviteParticipant)
+        public IActionResult inviteParticipant(inviteParticipants inviteParticipant)
         {
+            SMSResponse results = new SMSResponse();
+            string res = string.Empty;
+            var SmsStatus = "";
             try
             {
                 if (inviteParticipant.firstName == "" || inviteParticipant.firstName == null)
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter First Name" });
                 }
-                else if (inviteParticipant.lastName == "" || inviteParticipant.lastName == null)
-                {
-                    return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter LastName" });
-                }
+               
                 else if (inviteParticipant.email == "" || inviteParticipant.email == "string" || inviteParticipant.email == null)
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter Email" });
@@ -756,7 +755,34 @@ namespace GolfApplication.Controller
                     string Response = dt.Rows[0][0].ToString();
                     if (Response == "Success")
                     {
-                        return StatusCode((int)HttpStatusCode.OK, new { userId = dt.Rows[0][1].ToString() });
+                        if (inviteParticipant.isSMSNotification == true)
+                        {
+                            
+                            results = SmsNotification.SendMessage(inviteParticipant.phoneNumber, "Congratulations"+ inviteParticipant.firstName + ", your are invited for Golf Match");
+                            string status = results.messages[0].status.ToString();
+                            if (status == "0")
+                            {
+                                SmsStatus = "Sms sent successfully.";
+                            }
+                            else
+                            {
+                                string err = results.messages[0].error_text.ToString();
+                                SmsStatus = err;
+                            }
+                        }
+                        else if(inviteParticipant.isEmailNotification == true)
+                        {
+                            res = EmailSendGrid.Mail("chitrasubburaj30@gmail.com", inviteParticipant.email, "Invitation", "Congratulations" + inviteParticipant.firstName + ", your are invited for Golf Match").Result; //and it's expiry time is 5 minutes.
+                            if (res == "Accepted")
+                            {
+                                SmsStatus = "Mail sent successfully.";
+                            }
+                            else
+                            {
+                                SmsStatus = "Bad Request";
+                            }
+                        }
+                        return StatusCode((int)HttpStatusCode.OK, new { userId = dt.Rows[0][1].ToString(),Message= SmsStatus });
                     }
                     else
                     {

@@ -328,7 +328,7 @@ namespace GolfApplication.Data
         }
 
 
-        public static DataTable inviteParticipant([FromBody]createUser inviteParticipant)
+        public static DataTable inviteParticipant([FromBody]inviteParticipants inviteParticipant)
         {
             try
             {
@@ -353,7 +353,7 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@city", null));
                 parameters.Add(new SqlParameter("@address", null));
                 parameters.Add(new SqlParameter("@pinCode", null));
-                parameters.Add(new SqlParameter("@isPublicProfile", inviteParticipant.isPublicProfile));
+                parameters.Add(new SqlParameter("@isPublicProfile", false));
                 parameters.Add(new SqlParameter("@userTypeId", ""));
                 parameters.Add(new SqlParameter("@nickName", null));
                 using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spCreateUser", parameters.ToArray()).Tables[0])

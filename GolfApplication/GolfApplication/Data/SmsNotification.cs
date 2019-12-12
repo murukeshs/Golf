@@ -71,7 +71,7 @@ namespace GolfApplication.Data
                     //ApiSecret = "xFT1BuHaxN6wzA8M"
                 });
 
-                string[] ToList = to.Split(", ");
+                string[] ToList = to.Split(",");
                 foreach (string too in ToList)
                 {
                      results = client.SMS.Send(new SMS.SMSRequest

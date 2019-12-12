@@ -167,7 +167,7 @@ namespace GolfApplication.Controller
                 {
                     DataTable dt2 = ds.Tables[2];
                     //updateTeam teamDetails = new updateTeam();
-                    
+                   
                     teamDetails.teamId = (dt2.Rows[0]["teamId"] == DBNull.Value ? 0 : (int)dt2.Rows[0]["teamId"]);
                     //team.scoreKeeperID = (dt2.Rows[0]["scoreKeeperID"] == DBNull.Value ? 0 : (int)dt.Rows[0]["scoreKeeperID"]);
                     teamDetails.teamName = (dt2.Rows[0]["teamName"] == DBNull.Value ? "" : dt2.Rows[0]["teamName"].ToString());
@@ -176,6 +176,7 @@ namespace GolfApplication.Controller
                     teamDetails.createdBy = (dt2.Rows[0]["createdBy"] == DBNull.Value ? 0 : (int)dt2.Rows[0]["createdBy"]);
                     teamDetails.createdByName = (dt2.Rows[0]["createdByName"] == DBNull.Value ? "" : dt2.Rows[0]["createdByName"]);
                     teamDetails.startingHole = (dt2.Rows[0]["startingHole"] == DBNull.Value ? 0 : (int)dt2.Rows[0]["startingHole"]);
+                    teamDetails.scoreKeeperId = (dt2.Rows[0]["scoreKeeperId"] == DBNull.Value ? 0 : (int)dt2.Rows[0]["scoreKeeperId"]);
                     //teamList.Add(teamDetails);
 
                     DataTable dt = ds.Tables[1];
@@ -183,6 +184,7 @@ namespace GolfApplication.Controller
                     {
                         //getTeam team = new getTeam();
                         dynamic team = new System.Dynamic.ExpandoObject();
+                        team.userId = (dt.Rows[i]["userId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["userId"]);
                         team.teamPlayerListId = (int)dt.Rows[i]["teamPlayerListId"];
                         team.teamId = (int)dt.Rows[i]["teamId"];
                         team.playerName = (dt.Rows[i]["playerName"] == DBNull.Value ? "" : dt.Rows[i]["playerName"].ToString());
@@ -191,6 +193,7 @@ namespace GolfApplication.Controller
                         team.email = (dt.Rows[i]["email"] == DBNull.Value ? "" : dt.Rows[i]["email"].ToString());
                         team.RoleType = (dt.Rows[i]["RoleType"] == DBNull.Value ? "" : dt.Rows[i]["RoleType"].ToString());
                         team.nickName = (dt.Rows[i]["nickName"] == DBNull.Value ? "" : dt.Rows[i]["nickName"].ToString());
+                        team.isChecked = (dt.Rows[i]["isChecked"] == DBNull.Value ? false : dt.Rows[i]["isChecked"]);
                         teamList.Add(team);
                     }
                     teamDetails.TeamPlayerDetails = teamList;

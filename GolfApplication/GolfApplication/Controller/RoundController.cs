@@ -206,6 +206,10 @@ namespace GolfApplication.Controller
         {
             try
             {
+                //var myList = new List<KeyValuePair<string, dynamic>>();
+                //myList.Add(new KeyValuePair<string, dynamic>("@roundId", roundId));
+
+                //DataSet ds = Data.dbConnections.GetDataSetByID("spSelectRoundById", myList);
                 DataSet ds = Data.Match.getRoundById(roundId);
                 DataTable dt1 = ds.Tables[0];
                 if (dt1.Rows.Count > 0)
@@ -382,7 +386,7 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage = /*"Failed to update"*/"PlayerId Not Found" });
+                    return StatusCode((int)HttpStatusCode.Forbidden, new {ErrorMessage ="PlayerId Not Found" });
                 }
             }
             catch (Exception e)
@@ -472,7 +476,15 @@ namespace GolfApplication.Controller
                         sbody.Append("<table width='88%' style='background: #f5f5f5;padding: 30px;'>");
                         sbody.Append("<tr>");
                         sbody.Append("<td style='width:20%'>");
-                        sbody.Append("<img src='https://cdn.dribbble.com/users/2476222/screenshots/6768199/golf_logo_effect1_2x.png' width='50' height='50' style='border-radius: 50%;'>");
+                        string icon = dt2.Rows[i]["teamIcon"].ToString();
+                        if (icon == null || icon == "")
+                        {
+                            sbody.Append("<img src='https://cdn.dribbble.com/users/2476222/screenshots/6768199/golf_logo_effect1_2x.png' width='50' height='50' style='border-radius: 50%;'>");
+                        }
+                        else
+                        {
+                            sbody.Append("<img src=" + icon + " width='50' height='50' style='border-radius: 50%;'>");
+                        }
                         sbody.Append("</td>");
                         sbody.Append("<td style='width: 40%'>" + dt2.Rows[i]["teamName"] + "</td>");
                         sbody.Append("<td style='width:40%'>No Of Players:" + dt2.Rows[i]["NoOfPlayers"] + "</td>");
@@ -493,7 +505,7 @@ namespace GolfApplication.Controller
                     if(phone !=null)
                     {
                         var SmsStatus = "";
-                        results = SmsNotification.SendMessageNotification(phone, "Hi User, your are invited to "+roundName+ " CompetitionName is " + CompetitionName+" and Location is "+roundLocation+"");
+                        results = SmsNotification.SendMessageNotification(phone, "Hi , your are invited to "+roundName+ " CompetitionName is " + CompetitionName+" and Location is "+roundLocation+"");
                         string status = results.messages[0].status.ToString();
                         if (status == "0")
                         {
@@ -556,6 +568,7 @@ namespace GolfApplication.Controller
                     int NoOfPlayers = dt2.Rows.Count;
                     string roundLocation = (dt1.Rows[0]["roundLocation"] == DBNull.Value ? "" : dt1.Rows[0]["roundLocation"].ToString());
                     string RuleName = (dt1.Rows[0]["ruleName"] == DBNull.Value ? "" : dt1.Rows[0]["ruleName"].ToString());
+                    string type = (dt1.Rows[0]["type"] == DBNull.Value ? "" : dt1.Rows[0]["type"].ToString());
                     decimal roundFee = (dt1.Rows[0]["roundFee"] == DBNull.Value ? 0 : (decimal)dt1.Rows[0]["roundFee"]);
                     string EmailId = string.Empty;
 
@@ -575,7 +588,15 @@ namespace GolfApplication.Controller
                             sbody.Append("<table width='88%' style='background: #f5f5f5;padding: 30px;'>");
                             sbody.Append("<tr>");
                             sbody.Append("<td style='width:20%'>");
+                            string icon = dt2.Rows[i]["teamIcon"].ToString();
+                            if (icon==null || icon == "")
+                            {
                             sbody.Append("<img src='https://cdn.dribbble.com/users/2476222/screenshots/6768199/golf_logo_effect1_2x.png' width='50' height='50' style='border-radius: 50%;'>");
+                            }
+                            else
+                            {
+                            sbody.Append("<img src="+icon+" width='50' height='50' style='border-radius: 50%;'>");
+                            }
                             sbody.Append("</td>");
                             sbody.Append("<td style='width: 40%'>" + dt2.Rows[i]["teamName"] + "</td>");
                             sbody.Append("<td style='width:40%'>No Of Players:" + dt2.Rows[i]["NoOfPlayers"] + "</td>");
@@ -589,12 +610,12 @@ namespace GolfApplication.Controller
                     if (emails.Contains('@'))
                     {
                         emails = emails.TrimStart(',').TrimEnd(',');
-                        result = Match.inviteMatch(emails, roundID, roundName, /*playerID,*/ roundCode, roundStartDate, competitionName, NoOfPlayers, roundLocation, CurrentHostedUrl, sbody,RuleName,roundFee, FilePath);
+                        result = Match.inviteMatch(emails, roundID, roundName, roundCode, roundStartDate, competitionName, NoOfPlayers, roundLocation, CurrentHostedUrl, sbody,RuleName,roundFee, FilePath,type);
                     }
                     if (phone != null)
                     {
                         var SmsStatus = "";
-                        results = SmsNotification.SendMessageNotification(phone, "Hi User, your are invited to " + roundName + " CompetitionName is " + competitionName + " and Location is " + roundLocation + "");
+                        results = SmsNotification.SendMessageNotification(phone, "Hi , your are invited to " + roundName + " CompetitionName is " + competitionName + " and Location is " + roundLocation + "");
                         string status = results.messages[0].status.ToString();
                         if (status == "0")
                         {
@@ -632,13 +653,9 @@ namespace GolfApplication.Controller
         [HttpGet, Route("getRoundJoinList")]
         public IActionResult getRoundJoinList(int roundId ,int userId)
         {
-            if (roundId <=0)
+            if (roundId <=0 && userId <= 0)
             {
-                return StatusCode((int)HttpStatusCode.OK, "Please Enter RoundId");
-            }
-            else if(userId <=0)
-            {
-                return StatusCode((int)HttpStatusCode.Forbidden, "Please Enter userId");
+                return StatusCode((int)HttpStatusCode.OK, "Please Enter RoundId or userId");
             }
             List<dynamic> roundJoinlist = new List<dynamic>();
             try
@@ -659,6 +676,7 @@ namespace GolfApplication.Controller
                         roundjoin.CompetitionName = (dt.Rows[i]["CompetitionName"] == DBNull.Value ? "" : dt.Rows[i]["CompetitionName"].ToString());
                         roundjoin.competitionTypeId = (dt.Rows[i]["competitionTypeId"] == DBNull.Value ? 0 : (int)dt.Rows[i]["competitionTypeId"]);
                         roundjoin.isAllowRound = (dt.Rows[i]["isAllowMatch"] == DBNull.Value ? "" : dt.Rows[i]["isAllowMatch"]);
+                        roundjoin.teamName = (dt.Rows[i]["teamName"] == DBNull.Value ? "" : dt.Rows[i]["teamName"]);
                         // matchjoin.isModerator = (dt.Rows[i]["isModerator"] == DBNull.Value ? "" : dt.Rows[i]["isModerator"]);
                         roundJoinlist.Add(roundjoin);
                     }
@@ -741,14 +759,14 @@ namespace GolfApplication.Controller
             List<dynamic> RoundPlayersList = new List<dynamic>();
             try
             {
-                DataTable dt = Data.Match.GetRoundPlayers(roundId);
-
+                DataSet ds = Data.Match.GetRoundPlayers(roundId);
+                DataTable dt = ds.Tables[0];
+                //DataTable dt1 = ds.Tables[1];
                 if (dt.Rows.Count > 0)
-                {
+                { 
                     for (int i = 0; i < dt.Rows.Count; i++)
                     {
                         dynamic RoundPlayers = new System.Dynamic.ExpandoObject();
-
                         RoundPlayers.userId = (int)dt.Rows[i]["userId"];
                         RoundPlayers.playerName = (dt.Rows[i]["playerName"] == DBNull.Value ? "" : dt.Rows[i]["playerName"].ToString());
                         RoundPlayers.gender = (dt.Rows[i]["gender"] == DBNull.Value ? "" : dt.Rows[i]["gender"].ToString());
@@ -756,6 +774,7 @@ namespace GolfApplication.Controller
                         RoundPlayers.profileImage = (dt.Rows[i]["profileImage"] == DBNull.Value ? "" : dt.Rows[i]["profileImage"].ToString());
                         RoundPlayers.nickName = (dt.Rows[i]["nickName"] == DBNull.Value ? "" : dt.Rows[i]["nickName"].ToString());
                         RoundPlayers.isPublicProfile = (dt.Rows[i]["isPublicProfile"] == DBNull.Value ? "" : dt.Rows[i]["isPublicProfile"].ToString());
+                        RoundPlayers.isChecked = (dt.Rows[i]["isChecked"] == DBNull.Value ? false : dt.Rows[i]["isChecked"]);
                         RoundPlayersList.Add(RoundPlayers);
                     }
                     return StatusCode((int)HttpStatusCode.OK, RoundPlayersList);
@@ -775,29 +794,29 @@ namespace GolfApplication.Controller
 
         #region DeleteRoundPlayer
         [HttpDelete, Route("DeleteRoundPlayer")]
-        public IActionResult DeleteRoundPlayer(SaveRoundPlayer saveRoundPlayer )
+        public IActionResult DeleteRoundPlayer(int userId ,int roundId)
         {
             try
             {
-                if (saveRoundPlayer.roundId <= 0)
+                if (roundId <= 0)
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter RoundID" });
                 }
-                else if(saveRoundPlayer.userId == "")
+                else if(userId <=0)
                 {
                     return StatusCode((int)HttpStatusCode.BadRequest, new { ErrorMessage = "Please enter UserID" });
                 }
                 else
                 {
-                    string row = Data.Match.DeleteRoundPlayer(saveRoundPlayer);
+                    DataTable dt = Data.Match.DeleteRoundPlayer(userId,roundId);
 
-                    if (row == "Success")
+                    if (dt.Rows[0]["Status"].ToString() == "Success")
                     {
                         return StatusCode((int)HttpStatusCode.OK, "Deleted Successfully");
                     }
                     else
                     {
-                        return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = "Deletion not completed" });
+                        return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = "Player is already added in following teams"+"'"+ dt.Rows[0]["teamName"].ToString()+"',"+"So try deleting from teams first"});
                     }
                 }
             }

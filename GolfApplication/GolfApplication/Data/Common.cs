@@ -41,14 +41,7 @@ namespace GolfApplication.Data
         }
         #endregion
 
-        //#region Get Current URL
-        //public static string MyMethod(Microsoft.AspNetCore.Http.HttpContext context)
-        //{
-        //    var host = $"{context.Request.Scheme}://{context.Request.Host}";
-        //    return host;
-        //}
-        //#endregion
-
+        
         #region ErrorLog
         public static string SaveErrorLog(string FunctionName, string ErrorMessage)
         {
@@ -227,6 +220,18 @@ namespace GolfApplication.Data
 
                 throw e;
             }
+        }
+        #endregion
+
+        #region getFromEmail
+        public static string FromEmail()
+        {
+            IConfigurationBuilder builder = new ConfigurationBuilder();
+            builder.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json"));
+
+            IConfigurationRoot configuration = builder.Build();
+            var fromMail = configuration.GetSection("FromEmail").GetSection("fromMail").Value;
+            return fromMail;
         }
         #endregion
     }

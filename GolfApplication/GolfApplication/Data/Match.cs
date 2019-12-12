@@ -173,11 +173,11 @@ namespace GolfApplication.Data
             {
                 string connectionstring = Common.GetConnectionString();
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("@matchId", acceptMatchInvitation.matchId));
+                parameters.Add(new SqlParameter("@roundId", acceptMatchInvitation.roundId));
                 parameters.Add(new SqlParameter("@Type", acceptMatchInvitation.Type));
                 parameters.Add(new SqlParameter("@playerId", acceptMatchInvitation.playerId));
 
-                string rowsAffected = SqlHelper.ExecuteScalar(connectionstring, CommandType.StoredProcedure, "spAcceptMatch", parameters.ToArray()).ToString();
+                string rowsAffected = SqlHelper.ExecuteScalar(connectionstring, CommandType.StoredProcedure, "spAcceptRound", parameters.ToArray()).ToString();
                 return rowsAffected;
             }
             catch (Exception e)
@@ -228,24 +228,12 @@ namespace GolfApplication.Data
         }
         #endregion
 
-        #region getFromEmail
-        public static string FromEmail()
-        {
-            IConfigurationBuilder builder = new ConfigurationBuilder();
-            builder.AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), "appsettings.json"));
-
-            IConfigurationRoot configuration = builder.Build();
-            var fromMail = configuration.GetSection("FromEmail").GetSection("fromMail").Value;
-            return fromMail;
-        }
-        #endregion
-
         #region inviteMatch
-        public static string inviteMatch(string emailId, int roundID, string Title, /*int UserID,*/ string roundCode, string roundDate, string competitionName, int NoOfPlayers, string roundLocation,string CurrentHostedUrl,StringBuilder TeamPlayerList,string roundRuleName,decimal roundFee,string filepath)
+        public static string inviteMatch(string emailId, int roundID, string Title, /*int UserID,*/ string roundCode, string roundDate, string competitionName, int NoOfPlayers, string roundLocation,string CurrentHostedUrl,StringBuilder TeamPlayerList,string roundRuleName,decimal roundFee,string filepath,string type)
         {
-            string from = FromEmail();
+            string from = Common.FromEmail();
             //string CurrentURL = CurrentHostedUrl;
-            string link= CurrentHostedUrl + "/api/acceptRoundInvitation" + "?matchId=" + roundID /* "/Type="+typeOf+ "/playerId="+ UserID*/;
+            string link= CurrentHostedUrl + "/api/acceptRoundInvitation" + "?roundId=" + roundID + "&Type=" + type /*+ "playerId=" + UserID*/;
             try
             {
                 string res = "";
@@ -292,7 +280,7 @@ namespace GolfApplication.Data
         #region sendmatchnotification
         public static string sendroundnotification(string emailId, string Title, string roundCode, string roundDate, string competitionName, int NoOfPlayers, string roundLocation, string filepath,string ruleName,decimal roundFee,StringBuilder TeamPlayers)
         {
-            string from = FromEmail();
+            string from = Common.FromEmail();
             try
             {
                 string res = "";
@@ -400,7 +388,7 @@ namespace GolfApplication.Data
         #endregion
 
         #region GetRoundPlayers
-        public static DataTable GetRoundPlayers(int roundId)
+        public static DataSet GetRoundPlayers(int roundId)
         {
             try
             {
@@ -408,7 +396,7 @@ namespace GolfApplication.Data
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("@roundId", roundId));
                 //Execute the query
-                using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spGetRoundPlayer", parameters.ToArray()).Tables[0])
+                using (DataSet dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spGetRoundPlayer", parameters.ToArray()))
                 {
                     return dt;
                 }
@@ -421,19 +409,20 @@ namespace GolfApplication.Data
         }
         #endregion
 
-        public static string DeleteRoundPlayer(SaveRoundPlayer saveRoundPlayer)
+        #region delete RoundPlayers
+        public static DataTable DeleteRoundPlayer(int userId,int roundId)
         {
             try
             {
                 string ConnectionString = Common.GetConnectionString();
                 List<SqlParameter> parameters = new List<SqlParameter>();
-                parameters.Add(new SqlParameter("@roundId", saveRoundPlayer.roundId));
-                parameters.Add(new SqlParameter("@userId", saveRoundPlayer.userId));
+                parameters.Add(new SqlParameter("@roundId", roundId));
+                parameters.Add(new SqlParameter("@userId", userId));
 
                 using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spDeleteRoundPlayer", parameters.ToArray()).Tables[0])
                 {
-                    string rowsAffected = dt.Rows[0]["Status"].ToString();
-                    return rowsAffected;
+                    //string rowsAffected = dt.Rows[0]["Status"].ToString();
+                    return dt;
                 }
             }
             catch (Exception e)
@@ -442,5 +431,6 @@ namespace GolfApplication.Data
                 throw e;
             }
         }
+        #endregion
     }
 }

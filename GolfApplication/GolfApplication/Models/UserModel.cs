@@ -59,6 +59,7 @@ namespace GolfApplication.Models
         public bool? isEmailVerified { get; set; }
         [DefaultValue(false)]
         public bool? isPhoneVerified { get; set; }
+        [DefaultValue(false)]
         public bool? isModerator { get; set; }
     }
 
@@ -146,5 +147,18 @@ namespace GolfApplication.Models
     public class  matchRule
     {
        public string roundRules{ get; set; }
+    }
+    public class inviteParticipants
+    {
+        public string firstName { get; set; }
+        public string lastName { get; set; }
+        public string email { get; set; }
+        public string gender { get; set; }
+        public string phoneNumber { get; set; }
+        [DefaultValue(false)]
+        public bool? isEmailNotification { get; set; }
+        [DefaultValue(false)]
+        public bool? isSMSNotification { get; set; }
+        
     }
 }
