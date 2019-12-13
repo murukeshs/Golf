@@ -140,9 +140,9 @@ namespace GolfApplication
             }
 
             //For JWTAuthentication
-            app.UseAuthentication();
+            //app.UseAuthentication();
             app.UseCors("AllowAll");
-            app.UseAuthentication();
+            //app.UseAuthentication();
             app.UseHttpsRedirection();
             //app.UseStaticFiles();
             app.UseCookiePolicy();
@@ -169,7 +169,7 @@ namespace GolfApplication
                 await next.Invoke();
             });
 
-            app.UseAuthentication();
+            //app.UseAuthentication();
 
         }
     }

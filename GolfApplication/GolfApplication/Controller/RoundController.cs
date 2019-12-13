@@ -178,7 +178,6 @@ namespace GolfApplication.Controller
             try
             {
                 int dt = Convert.ToInt32(Data.Match.updateRound(updateRound));
-
                 if (dt >= 1)
                 {
                     if (updateRound.isSaveAndNotify == true)
@@ -206,10 +205,6 @@ namespace GolfApplication.Controller
         {
             try
             {
-                //var myList = new List<KeyValuePair<string, dynamic>>();
-                //myList.Add(new KeyValuePair<string, dynamic>("@roundId", roundId));
-
-                //DataSet ds = Data.dbConnections.GetDataSetByID("spSelectRoundById", myList);
                 DataSet ds = Data.Match.getRoundById(roundId);
                 DataTable dt1 = ds.Tables[0];
                 if (dt1.Rows.Count > 0)
@@ -523,7 +518,7 @@ namespace GolfApplication.Controller
                     }
                     else
                     {
-                        return StatusCode((int)HttpStatusCode.Forbidden, "Mail Sending Failed");
+                        return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Mail Sending Failed" } );
                     }
 
                 }
@@ -633,7 +628,7 @@ namespace GolfApplication.Controller
                     }
                     else
                     {
-                        return StatusCode((int)HttpStatusCode.Forbidden, "Mail Sending Failed");
+                        return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Mail Sending Failed" });
                     }
                 }
                 else

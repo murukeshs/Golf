@@ -12,7 +12,7 @@ namespace GolfApplication.Data
 {
     public class User
     {
-
+        #region GetUserTypes
         public static DataTable GetUserType()
         {
             try
@@ -30,7 +30,9 @@ namespace GolfApplication.Data
             }
 
         }
+        #endregion
 
+        #region CreateUSer
         public static DataTable createUser([FromBody]createUser userCreate)
         {
             try
@@ -67,7 +69,9 @@ namespace GolfApplication.Data
                 throw e;
             }
         }
+        #endregion
 
+        #region updateUser
         public static string updateUser([FromBody]createUser userCreate)
         {
             try
@@ -106,7 +110,9 @@ namespace GolfApplication.Data
                 throw e;
             }
         }
+        #endregion
 
+        #region deleteUser
         public static int deleteUser(int userID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -124,7 +130,9 @@ namespace GolfApplication.Data
                 throw e;
             }
         }
+        #endregion
 
+        #region selectUserByID
         public static DataTable selectUserById(int userID)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -144,7 +152,9 @@ namespace GolfApplication.Data
                 throw e;
             }
         }
+        #endregion
 
+        #region listUser
         public static DataTable listUser(string Search, string userType)
         {
             try
@@ -164,7 +174,9 @@ namespace GolfApplication.Data
                 throw e;
             }
         }
+        #endregion
 
+        #region login
         public static DataSet login([FromBody]Login userlogin)
         {
             try
@@ -187,7 +199,9 @@ namespace GolfApplication.Data
                 throw e;
             }
         }
+        #endregion
 
+        #region updatePassword
         public static string updatePassword([FromBody]updatePassword updatePassword)
         {
             var encryptPassword = Common.EncryptData(updatePassword.password);
@@ -212,7 +226,9 @@ namespace GolfApplication.Data
                 throw e;
             }
         }
+        #endregion
 
+        #region GenerateOTP
         public static string GenerateOTP(string OTPValue, [FromBody]generateOTP otp)
         {
            
@@ -233,6 +249,9 @@ namespace GolfApplication.Data
                 throw e;
             }
         }
+        #endregion
+
+        //#region generateEmailOTP
         //public static string generateEmailOTP(string OTPValue, [FromBody]generateOTP otp)
         //{
 
@@ -253,6 +272,9 @@ namespace GolfApplication.Data
         //        throw e;
         //    }
         //}
+        //#endregion
+
+        #region verifyOTP
         public static string verifyOTP([FromBody]otpVerify otp)
         {
 
@@ -276,7 +298,9 @@ namespace GolfApplication.Data
                 throw e;
             }
         }
+        #endregion
 
+        #region updateUserCommunicationinfo
         public static int updateUserCommunicationinfo([FromBody]updateUser user)
         {
             List<SqlParameter> parameters = new List<SqlParameter>();
@@ -301,7 +325,9 @@ namespace GolfApplication.Data
                 throw e;
             }
         }
-        
+        #endregion
+
+        #region getPlayersList
         public static DataTable getPlayerList(string Search)
         {
             try
@@ -326,8 +352,9 @@ namespace GolfApplication.Data
             }
 
         }
-
-
+        #endregion
+         
+        #region inviteParticipant
         public static DataTable inviteParticipant([FromBody]inviteParticipants inviteParticipant)
         {
             try
@@ -366,6 +393,6 @@ namespace GolfApplication.Data
                 throw e;
             }
         }
-
+        #endregion
     }
 }
