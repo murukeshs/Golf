@@ -159,6 +159,8 @@ namespace GolfApplication.Models
         public bool? isEmailNotification { get; set; }
         [DefaultValue(false)]
         public bool? isSMSNotification { get; set; }
-        
+        public int userTypeId { get; set; }
+        public int roundId { get; set; }
+        public string nickName { get; set; }
     }
 }

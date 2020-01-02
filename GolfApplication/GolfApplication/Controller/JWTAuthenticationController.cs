@@ -80,7 +80,7 @@ namespace GolfApplication.Controller
                         if (dt0.Rows[0]["ErrorMessage"].ToString() == "Success")
                         {
                             DataTable dt = ds.Tables[1];
-                        string isModerator = dt.Rows[0]["userType"].ToString();
+                            string isModerator = dt.Rows[0]["userType"].ToString();
                             getUser user = new getUser();
                             user.userId = (dt.Rows[0]["userId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["userId"]);
                             user.firstName = (dt.Rows[0]["firstName"] == DBNull.Value ? "" : dt.Rows[0]["firstName"].ToString());

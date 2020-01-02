@@ -191,10 +191,13 @@ namespace GolfApplication.Controller
                         team.profileImage = (dt.Rows[i]["profileImage"] == DBNull.Value ? "" : dt.Rows[i]["profileImage"].ToString());
                         team.gender = (dt.Rows[i]["gender"] == DBNull.Value ? "" : dt.Rows[i]["gender"].ToString());
                         team.email = (dt.Rows[i]["email"] == DBNull.Value ? "" : dt.Rows[i]["email"].ToString());
+                        team.phoneNumber = (dt.Rows[i]["phoneNumber"] == DBNull.Value ? "" : dt.Rows[i]["phoneNumber"].ToString());
                         team.RoleType = (dt.Rows[i]["RoleType"] == DBNull.Value ? "" : dt.Rows[i]["RoleType"].ToString());
                         team.nickName = (dt.Rows[i]["nickName"] == DBNull.Value ? "" : dt.Rows[i]["nickName"].ToString());
+                        team.isPublicProfile = (dt.Rows[i]["isPublicProfile"] == DBNull.Value ? false : dt.Rows[i]["isPublicProfile"]);
                         team.isChecked = (dt.Rows[i]["isChecked"] == DBNull.Value ? false : dt.Rows[i]["isChecked"]);
-                        teamList.Add(team);
+                        team.isScoreKeeper = (dt.Rows[i]["RoleType"].ToString() == "Score Keeper" ? true : false);
+                        teamList.Add(team); 
                     }
                     teamDetails.TeamPlayerDetails = teamList;
                     return StatusCode((int)HttpStatusCode.OK, teamDetails);
@@ -287,6 +290,7 @@ namespace GolfApplication.Controller
                 if (dt.Rows[0]["ErrorMessage"].ToString() == "Success")
                 {
                     return StatusCode((int)HttpStatusCode.OK, "Team Players created Successfully");
+
                 }
                 else
                 {

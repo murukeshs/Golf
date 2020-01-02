@@ -688,6 +688,7 @@ namespace GolfApplication.Controller
                         getPlayers.playerName = (dt.Rows[i]["playerName"] == DBNull.Value ? "" : dt.Rows[i]["playerName"].ToString());
                         getPlayers.gender = (dt.Rows[i]["gender"] == DBNull.Value ? "" : dt.Rows[i]["gender"].ToString());
                         getPlayers.email = (dt.Rows[i]["email"] == DBNull.Value ? "" : dt.Rows[i]["email"].ToString());
+                        getPlayers.phoneNumber = (dt.Rows[i]["phoneNumber"] == DBNull.Value ? "" : dt.Rows[i]["phoneNumber"].ToString());
                         getPlayers.profileImage = (dt.Rows[i]["profileImage"] == DBNull.Value ? "" : dt.Rows[i]["profileImage"].ToString());
                         getPlayers.userType = (dt.Rows[i]["userType"] == DBNull.Value ? "" : dt.Rows[i]["userType"].ToString());
                         getPlayers.isScoreKeeper = (dt.Rows[i]["isScoreKeeper"] == DBNull.Value ? "" : dt.Rows[i]["isScoreKeeper"].ToString());
@@ -770,7 +771,7 @@ namespace GolfApplication.Controller
                                 SmsStatus = err;
                             }
                         }
-                        else if(inviteParticipant.isEmailNotification == true)
+                        if (inviteParticipant.isEmailNotification == true)
                         {
                             res = EmailSendGrid.Mail("chitrasubburaj30@gmail.com", inviteParticipant.email, "Invitation", "Congratulations" + inviteParticipant.firstName + ", your are invited for Golf Match").Result; //and it's expiry time is 5 minutes.
                             if (res == "Accepted")

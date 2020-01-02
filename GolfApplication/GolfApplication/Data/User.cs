@@ -367,23 +367,14 @@ namespace GolfApplication.Data
                 parameters.Add(new SqlParameter("@lastName", inviteParticipant.lastName));
                 parameters.Add(new SqlParameter("@email", inviteParticipant.email));
                 parameters.Add(new SqlParameter("@gender", inviteParticipant.gender));
+                parameters.Add(new SqlParameter("@nickName", inviteParticipant.nickName));
                 parameters.Add(new SqlParameter("@phoneNumber", inviteParticipant.phoneNumber));
                 parameters.Add(new SqlParameter("@isEmailNotification", inviteParticipant.isEmailNotification));
                 parameters.Add(new SqlParameter("@isSMSNotification", inviteParticipant.isSMSNotification));
+                parameters.Add(new SqlParameter("@roundId", inviteParticipant.roundId));
+                parameters.Add(new SqlParameter("@userTypeId", inviteParticipant.userTypeId));
 
-
-                parameters.Add(new SqlParameter("@dob", null));
-                parameters.Add(new SqlParameter("@profileImage", null));
-                parameters.Add(new SqlParameter("@password", null));
-                parameters.Add(new SqlParameter("@countryId", null));
-                parameters.Add(new SqlParameter("@stateId", null));
-                parameters.Add(new SqlParameter("@city", null));
-                parameters.Add(new SqlParameter("@address", null));
-                parameters.Add(new SqlParameter("@pinCode", null));
-                parameters.Add(new SqlParameter("@isPublicProfile", false));
-                parameters.Add(new SqlParameter("@userTypeId", ""));
-                parameters.Add(new SqlParameter("@nickName", null));
-                using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spCreateUser", parameters.ToArray()).Tables[0])
+                using (DataTable dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spInviteParticipant", parameters.ToArray()).Tables[0])
                 {
                     return dt;
                 }

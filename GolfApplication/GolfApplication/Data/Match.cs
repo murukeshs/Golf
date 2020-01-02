@@ -388,13 +388,14 @@ namespace GolfApplication.Data
         #endregion
 
         #region GetRoundPlayers
-        public static DataSet GetRoundPlayers(int roundId)
+        public static DataSet GetRoundPlayers(int roundId,string action)
         {
             try
             {
                 string ConnectionString = Common.GetConnectionString();
                 List<SqlParameter> parameters = new List<SqlParameter>();
                 parameters.Add(new SqlParameter("@roundId", roundId));
+                parameters.Add(new SqlParameter("@action", action));
                 //Execute the query
                 using (DataSet dt = SqlHelper.ExecuteDataset(ConnectionString, CommandType.StoredProcedure, "spGetRoundPlayer", parameters.ToArray()))
                 {

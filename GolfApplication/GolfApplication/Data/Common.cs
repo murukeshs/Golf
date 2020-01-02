@@ -186,20 +186,6 @@ namespace GolfApplication.Data
             {
                 string res = "";
                 var result = "";
-                //#region Form Content Body
-                //String Body = string.Empty;
-
-                //string filename = @"UserInvitation.html";
-                //string filePath = Directory.GetCurrentDirectory(); 
-                //using (System.IO.StreamReader sr = new System.IO.StreamReader(filePath+"//EmailTemplates//"+ filename))
-                //{
-                //    Body = sr.ReadToEnd();
-                //}
-                //Body = Body.Replace("*keycode*", OTPValue.ToString());
-                //Body = Body.Replace("*Type*",Type );
-                //Body = Body.Replace("*Product Name*", "Golf"); 
-                //Body = Body.Replace("*invite_sender_name*", "Golf Team");
-                //#endregion
                 res = EmailSendGrid.Mail("chitrasubburaj30@gmail.com", emailid, "OTP Verification", "Hello, your OTP is " + OTPValue + " and for verify type is '" + Type + "' ").Result; //and it's expiry time is 5 minutes.
                 if (res == "Accepted")
                 {

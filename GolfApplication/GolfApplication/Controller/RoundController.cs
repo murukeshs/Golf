@@ -87,7 +87,7 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new { });  // 412: Precondition Failed when "no data available"
+                    return StatusCode((int)HttpStatusCode.OK, ruleList);  //  "no data available"
                 }
             }
             catch (Exception e)
@@ -311,7 +311,7 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new { }); //412: Precondition Failed when "no data available"
+                    return StatusCode((int)HttpStatusCode.OK, roundList); // "no data available"
                 }
             }
             catch (Exception e)
@@ -356,7 +356,7 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new { }); //412: Precondition Failed when "no data available"
+                    return StatusCode((int)HttpStatusCode.OK, roundList); // "no data available"
                 }
             }
             catch (Exception e)
@@ -415,7 +415,7 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new { }); //412: Precondition Failed when "no data available"
+                    return StatusCode((int)HttpStatusCode.OK, typeList); // "no data available"
                 }
 
             }
@@ -460,7 +460,7 @@ namespace GolfApplication.Controller
                     
                     string emails = dt3.Rows[0]["emailList"].ToString();
                     string phone = null;//dt4.Rows[0]["PhoneList"].ToString();
-
+                    string SmsStatus = "";
                     #region HtmlTemplate Code 
                     System.Text.StringBuilder sbody = new StringBuilder();
                     for (int i = 0; i < dt2.Rows.Count; i++)
@@ -499,7 +499,7 @@ namespace GolfApplication.Controller
                     }
                     if(phone !=null)
                     {
-                        var SmsStatus = "";
+                        
                         results = SmsNotification.SendMessageNotification(phone, "Hi , your are invited to "+roundName+ " CompetitionName is " + CompetitionName+" and Location is "+roundLocation+"");
                         string status = results.messages[0].status.ToString();
                         if (status == "0")
@@ -512,13 +512,17 @@ namespace GolfApplication.Controller
                             SmsStatus = err;
                         }
                     }
-                    if (res == "Mail sent successfully.")
+                    if (res == "Mail sent successfully." || SmsStatus == "Sms Message sent successfully.") // Once Phone is working change || to && 
                     {
                         return StatusCode((int)HttpStatusCode.OK, "Invitations Sent Successfully");
                     }
+                    else if(emails==null || phone==null)   // Once Phone is working change || to && 
+                    {
+                        return StatusCode((int)HttpStatusCode.OK, "Invitations Sent Successfully"); // new { ErrorMessage = "Email or Phone is Null" } 
+                    }
                     else
                     {
-                        return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Mail Sending Failed" } );
+                        return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Invitations Sent Successfully" } );
                     }
 
                 }
@@ -571,6 +575,7 @@ namespace GolfApplication.Controller
 
                     string emails = dt3.Rows[0]["emailList"].ToString();
                     string phone = null; //dt4.Rows[0]["PhoneList"].ToString();
+                    string SmsStatus = "";
 
                     string result = string.Empty;
                     #region HtmlTemplate Code 
@@ -609,7 +614,7 @@ namespace GolfApplication.Controller
                     }
                     if (phone != null)
                     {
-                        var SmsStatus = "";
+                        
                         results = SmsNotification.SendMessageNotification(phone, "Hi , your are invited to " + roundName + " CompetitionName is " + competitionName + " and Location is " + roundLocation + "");
                         string status = results.messages[0].status.ToString();
                         if (status == "0")
@@ -622,9 +627,13 @@ namespace GolfApplication.Controller
                             SmsStatus = err;
                         }
                     }
-                    if (result == "Mail sent successfully.")
+                    if (result == "Mail sent successfully." || SmsStatus == "Sms Message sent successfully.")
                     {
                         return StatusCode((int)HttpStatusCode.OK, "Invitations Sent Successfully");
+                    }
+                    else if(emails==null || phone ==null)
+                    {
+                        return StatusCode((int)HttpStatusCode.OK, "Invitations Sent Successfully"); //new { ErrorMessage = "Email or Phone is Null" }
                     }
                     else
                     {
@@ -749,12 +758,12 @@ namespace GolfApplication.Controller
 
         #region GetRoundPlayers
         [HttpGet, Route("GetRoundPlayers")]
-        public IActionResult GetRoundPlayers(int roundId)
+        public IActionResult GetRoundPlayers(int roundId,string action)
         {
             List<dynamic> RoundPlayersList = new List<dynamic>();
             try
             {
-                DataSet ds = Data.Match.GetRoundPlayers(roundId);
+                DataSet ds = Data.Match.GetRoundPlayers(roundId, action);
                 DataTable dt = ds.Tables[0];
                 //DataTable dt1 = ds.Tables[1];
                 if (dt.Rows.Count > 0)
@@ -766,6 +775,7 @@ namespace GolfApplication.Controller
                         RoundPlayers.playerName = (dt.Rows[i]["playerName"] == DBNull.Value ? "" : dt.Rows[i]["playerName"].ToString());
                         RoundPlayers.gender = (dt.Rows[i]["gender"] == DBNull.Value ? "" : dt.Rows[i]["gender"].ToString());
                         RoundPlayers.email = (dt.Rows[i]["email"] == DBNull.Value ? "" : dt.Rows[i]["email"].ToString());
+                        RoundPlayers.phoneNumber = (dt.Rows[i]["phoneNumber"] == DBNull.Value ? "" : dt.Rows[i]["phoneNumber"].ToString());
                         RoundPlayers.profileImage = (dt.Rows[i]["profileImage"] == DBNull.Value ? "" : dt.Rows[i]["profileImage"].ToString());
                         RoundPlayers.nickName = (dt.Rows[i]["nickName"] == DBNull.Value ? "" : dt.Rows[i]["nickName"].ToString());
                         RoundPlayers.isPublicProfile = (dt.Rows[i]["isPublicProfile"] == DBNull.Value ? "" : dt.Rows[i]["isPublicProfile"].ToString());
@@ -776,7 +786,7 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    return StatusCode((int)HttpStatusCode.PreconditionFailed, new { }); //412: Precondition Failed when "no data available"
+                    return StatusCode((int)HttpStatusCode.OK, RoundPlayersList); // "no data available"
                 }
             }
             catch (Exception e)
@@ -804,7 +814,6 @@ namespace GolfApplication.Controller
                 else
                 {
                     DataTable dt = Data.Match.DeleteRoundPlayer(userId,roundId);
-
                     if (dt.Rows[0]["Status"].ToString() == "Success")
                     {
                         return StatusCode((int)HttpStatusCode.OK, "Deleted Successfully");
