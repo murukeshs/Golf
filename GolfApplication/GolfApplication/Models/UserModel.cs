@@ -144,7 +144,7 @@ namespace GolfApplication.Models
         public static string fileurl;
     }
 
-    public class  matchRule
+    public class  roundRule
     {
        public string roundRules{ get; set; }
     }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace GolfApplication.Models
 {
-    public class MatchRules
+    public class roundRules
     {
         public int roundRuleId { get; set; }
         public string ruleName { get; set; }
@@ -37,24 +37,24 @@ namespace GolfApplication.Models
         //public string createdDate { get; set; }
     }
 
-    public class MatchList
-    {
-        public int matchId { get; set; }
-        public string matchCode { get; set; }
-        public string matchName { get; set; }
-        //public string matchType { get; set; }
-        public string matchRuleId { get; set; }
-        public string matchStartDate { get; set; }
-        public string matchEndDate { get; set; }
-        public decimal matchFee { get; set; }
-        public string matchLocation { get; set; }
-        public int createdBy { get; set; }
-        public string createdDate { get; set; }
-        public string matchStatus { get; set; }
-        public int competitionTypeId { get; set; }
-        public string ruleName { get; set; }
-        public string competitionName { get; set; }
-    }
+    //public class MatchList
+    //{
+    //    public int matchId { get; set; }
+    //    public string matchCode { get; set; }
+    //    public string matchName { get; set; }
+    //    //public string matchType { get; set; }
+    //    public string matchRuleId { get; set; }
+    //    public string matchStartDate { get; set; }
+    //    public string matchEndDate { get; set; }
+    //    public decimal matchFee { get; set; }
+    //    public string matchLocation { get; set; }
+    //    public int createdBy { get; set; }
+    //    public string createdDate { get; set; }
+    //    public string matchStatus { get; set; }
+    //    public int competitionTypeId { get; set; }
+    //    public string ruleName { get; set; }
+    //    public string competitionName { get; set; }
+    //}
     public class RoundList
     {
         public int roundId { get; set; }

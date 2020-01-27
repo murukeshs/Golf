@@ -14,10 +14,10 @@ using Microsoft.Extensions.Configuration;
 
 namespace GolfApplication.Data
 {
-    public class Match
+    public class Round
     {
         #region createMatchRules
-        public static int createMatchRules(matchRule roundRules)
+        public static int createMatchRules(roundRule roundRules)
         {
             try
             {
@@ -34,7 +34,7 @@ namespace GolfApplication.Data
             }
         }
 
-        public static int updateRoundRules([FromBody]MatchRules matchRules)
+        public static int updateRoundRules([FromBody]roundRules matchRules)
         {
             try
             {
@@ -71,7 +71,7 @@ namespace GolfApplication.Data
         }
         #endregion
 
-        #region createMatch
+        #region createRound
         public static DataTable createRound([FromBody]createRound createRound)
         {
             try

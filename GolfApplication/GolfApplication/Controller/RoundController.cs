@@ -35,9 +35,9 @@ namespace GolfApplication.Controller
         }
         #endregion
 
-        #region matchRules
+        #region roundRules
         [HttpPost, Route("roundRules")]
-        public IActionResult roundRules(matchRule roundRule)
+        public IActionResult roundRules(roundRule roundRule)
         {
             try
             {
@@ -46,7 +46,7 @@ namespace GolfApplication.Controller
                     return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Please Enter Roundrules" });
                 }
 
-                int dt = Data.Match.createMatchRules(roundRule);
+                int dt = Data.Round.createMatchRules(roundRule);
 
                 if (dt >=1)
                 {
@@ -72,7 +72,7 @@ namespace GolfApplication.Controller
             List<MatchRulesList> ruleList = new List<MatchRulesList>();
             try
             {
-                DataTable dt = Data.Match.getRoundRulesList();
+                DataTable dt = Data.Round.getRoundRulesList();
 
                 if (dt.Rows.Count > 0)
                 {
@@ -98,13 +98,13 @@ namespace GolfApplication.Controller
         }
         #endregion
 
-        #region updateMatchRules
+        #region updateRoundRules
         [HttpPut, Route("updateRoundRules")]
-        public IActionResult updateRoundRules(MatchRules roundRules)
+        public IActionResult updateRoundRules(roundRules roundRules)
         {
             try
             {
-                int dt = Data.Match.updateRoundRules(roundRules);
+                int dt = Data.Round.updateRoundRules(roundRules);
 
                 if (dt>=1)
                 {
@@ -150,7 +150,7 @@ namespace GolfApplication.Controller
             List<dynamic> Matches = new List<dynamic>();
             try
             {
-                DataTable dt = Data.Match.createRound(createRound);
+                DataTable dt = Data.Round.createRound(createRound);
                 if (dt.Rows[0][0].ToString() == "Success")
                 {
                     var roundId = (dt.Rows[0]["roundId"] == DBNull.Value ? 0 : (int)dt.Rows[0]["roundId"]);
@@ -177,7 +177,7 @@ namespace GolfApplication.Controller
         {
             try
             {
-                int dt = Convert.ToInt32(Data.Match.updateRound(updateRound));
+                int dt = Convert.ToInt32(Data.Round.updateRound(updateRound));
                 if (dt >= 1)
                 {
                     if (updateRound.isSaveAndNotify == true)
@@ -205,7 +205,7 @@ namespace GolfApplication.Controller
         {
             try
             {
-                DataSet ds = Data.Match.getRoundById(roundId);
+                DataSet ds = Data.Round.getRoundById(roundId);
                 DataTable dt1 = ds.Tables[0];
                 if (dt1.Rows.Count > 0)
                 {
@@ -246,7 +246,7 @@ namespace GolfApplication.Controller
             List<dynamic> TeamsPlayers = new List<dynamic>();
             try
             {
-                DataSet ds = Data.Match.getRoundById(roundId);
+                DataSet ds = Data.Round.getRoundById(roundId);
                 DataTable dt1 = ds.Tables[0];
                 DataTable dt2 = ds.Tables[1];
                 if (dt1.Rows.Count > 0)
@@ -290,7 +290,7 @@ namespace GolfApplication.Controller
             List<dynamic> roundList = new List<dynamic>();
             try
             {
-                DataTable dt = Data.Match.getRoundList();
+                DataTable dt = Data.Round.getRoundList();
 
                 if (dt.Rows.Count > 0)
                 {
@@ -329,7 +329,7 @@ namespace GolfApplication.Controller
             List<dynamic> roundList = new List<dynamic>();
             try
             {
-                DataTable dt = Data.Match.getRoundList();
+                DataTable dt = Data.Round.getRoundList();
 
                 if (dt.Rows.Count > 0)
                 {
@@ -373,7 +373,7 @@ namespace GolfApplication.Controller
         {
             try
             {
-                int dt = Convert.ToInt32(Data.Match.acceptRoundInvitation(acceptMatchInvitation));
+                int dt = Convert.ToInt32(Data.Round.acceptRoundInvitation(acceptMatchInvitation));
 
                 if (dt >= 1)
                 {
@@ -399,7 +399,7 @@ namespace GolfApplication.Controller
             List<CompetitionType> typeList = new List<CompetitionType>();
             try
             {
-                DataTable dt = Data.Match.getCompetitionType();
+                DataTable dt = Data.Round.getCompetitionType();
                 if (dt.Rows.Count > 0)
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
@@ -434,7 +434,7 @@ namespace GolfApplication.Controller
             SMSResponse results = new SMSResponse();
             try
             {
-                DataSet ds = Data.Match.inviteMatch(roundId);
+                DataSet ds = Data.Round.inviteMatch(roundId);
                 DataTable dt1 = ds.Tables[0];
                 DataTable dt2 = ds.Tables[1];
                 DataTable dt3 = ds.Tables[2];
@@ -495,7 +495,7 @@ namespace GolfApplication.Controller
                     if (emails.Contains('@'))
                     {
                         emails = emails.TrimStart(',').TrimEnd(',');
-                        res = Match.sendroundnotification(emails, roundName, roundCode, roundStartDate, CompetitionName, NoOfPlayers, roundLocation, FilePath, RuleName, roundFee, sbody);
+                        res = Round.sendroundnotification(emails, roundName, roundCode, roundStartDate, CompetitionName, NoOfPlayers, roundLocation, FilePath, RuleName, roundFee, sbody);
                     }
                     if(phone !=null)
                     {
@@ -546,7 +546,7 @@ namespace GolfApplication.Controller
             SMSResponse results = new SMSResponse();
             try
             {
-                DataSet ds = Data.Match.inviteMatch(roundId);
+                DataSet ds = Data.Round.inviteMatch(roundId);
                 DataTable dt1 = ds.Tables[0];
                 DataTable dt2 = ds.Tables[1];
                 DataTable dt3 = ds.Tables[2];
@@ -610,7 +610,7 @@ namespace GolfApplication.Controller
                     if (emails.Contains('@'))
                     {
                         emails = emails.TrimStart(',').TrimEnd(',');
-                        result = Match.inviteMatch(emails, roundID, roundName, roundCode, roundStartDate, competitionName, NoOfPlayers, roundLocation, CurrentHostedUrl, sbody,RuleName,roundFee, FilePath,type);
+                        result = Round.inviteMatch(emails, roundID, roundName, roundCode, roundStartDate, competitionName, NoOfPlayers, roundLocation, CurrentHostedUrl, sbody,RuleName,roundFee, FilePath,type);
                     }
                     if (phone != null)
                     {
@@ -664,7 +664,7 @@ namespace GolfApplication.Controller
             List<dynamic> roundJoinlist = new List<dynamic>();
             try
             {
-                DataTable dt = Data.Match.getRoundJoinList(roundId, userId);
+                DataTable dt = Data.Round.getRoundJoinList(roundId, userId);
                 if (dt.Rows.Count>0)
                 {
                     for (int i = 0; i < dt.Rows.Count; i++)
@@ -705,7 +705,7 @@ namespace GolfApplication.Controller
         {
             try
             {
-                DataTable dt = Data.Match.addParticipants(addParticipants);
+                DataTable dt = Data.Round.addParticipants(addParticipants);
                 if (dt.Rows[0][0].ToString()== "Success")
                 {
                     return StatusCode((int)HttpStatusCode.OK, "Participants added successfully");
@@ -737,7 +737,7 @@ namespace GolfApplication.Controller
                 {
                     return StatusCode((int)HttpStatusCode.Forbidden, new { ErrorMessage = "Please Enter UserID" });
                 }
-                int dt = Data.Match.SaveRoundPlayer(roundPlayers);
+                int dt = Data.Round.SaveRoundPlayer(roundPlayers);
 
                 if (dt >= 1)
                 {
@@ -763,7 +763,7 @@ namespace GolfApplication.Controller
             List<dynamic> RoundPlayersList = new List<dynamic>();
             try
             {
-                DataSet ds = Data.Match.GetRoundPlayers(roundId, action);
+                DataSet ds = Data.Round.GetRoundPlayers(roundId, action);
                 DataTable dt = ds.Tables[0];
                 //DataTable dt1 = ds.Tables[1];
                 if (dt.Rows.Count > 0)
@@ -813,14 +813,14 @@ namespace GolfApplication.Controller
                 }
                 else
                 {
-                    DataTable dt = Data.Match.DeleteRoundPlayer(userId,roundId);
+                    DataTable dt = Data.Round.DeleteRoundPlayer(userId,roundId);
                     if (dt.Rows[0]["Status"].ToString() == "Success")
                     {
                         return StatusCode((int)HttpStatusCode.OK, "Deleted Successfully");
                     }
                     else
                     {
-                        return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = "Player is already added in following teams"+"'"+ dt.Rows[0]["teamName"].ToString()+"',"+"So try deleting from teams first"});
+                        return StatusCode((int)HttpStatusCode.InternalServerError, new { ErrorMessage = "Player is already present in team"+"'"+ dt.Rows[0]["teamName"].ToString()+"',"+"So cannot be deleted"});
                     }
                 }
             }
