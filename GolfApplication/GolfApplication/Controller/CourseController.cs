@@ -252,7 +252,7 @@ namespace GolfApplication.Controller
                 string Response = dt.Rows[0][0].ToString();
                 if (Response == "Success")
                 {
-                    return StatusCode((int)HttpStatusCode.OK, new { scoreCardId = dt.Rows[0][0].ToString() , slopeId  = dt.Rows[0][1].ToString() });
+                    return StatusCode((int)HttpStatusCode.OK, new { scoreCardId = dt.Rows[0][1].ToString() , slopeId  = dt.Rows[0][2].ToString() });
                 }
                 else
                 {
